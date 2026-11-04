@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มรายงานผลตัวชี้วัดรายไตรมาส (KPI Dashboard Report)</title>
+    <!-- Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for live graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2canvas for Exporting as Image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #004b87;
+            --primary-light: #0077b6;
+            --primary-gradient: linear-gradient(135deg, #003057 0%, #005691 60%, #0088cc 100%);
+            --navy: #002b49;
+            --card-bg: #f8fbfe;
+            --card-border: #d4e5f5;
+            --accent-gold: linear-gradient(180deg, #ffe599 0%, #f6b26b 100%);
+            --accent-blue-card: linear-gradient(135deg, #00529b 0%, #007ac1 100%);
+            --text-main: #1c2e40;
+            --text-muted: #5c768d;
+            --bg-page: #edf4fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Control Panel / Toolbar (Not printed) */
+        .toolbar {
+            width: 100%;
+            max-width: 1400px;
+            background: #ffffff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 50, 100, 0.08);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .select-input, .btn {
+            font-family: 'Prompt', sans-serif;
+            font-size: 14px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #ccdbe8;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .select-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 75, 135, 0.15);
+        }
+
+        .btn {
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: #003666;
+        }
+
+        .btn-success {
+            background: #198754;
+            color: #ffffff;
+            border-color: #198754;
+        }
+        .btn-success:hover {
+            background: #146c43;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: #f0f7fc;
+        }
+
+        /* The Slide Canvas (16:9 Presentation Format) */
+        #report-canvas {
+            width: 100%;
+            max-width: 1400px;
+            min-height: 820px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 40, 80, 0.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #c9dff0;
+            position: relative;
+        }
+
+        /* Top Header Banner */
+        .header-banner {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #ffcc00;
+            position: relative;
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .title-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .input-inline {
+            background: transparent;
+            border: 1px dashed transparent;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            outline: none;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .input-inline:hover, .input-inline:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-sub {
+            font-size: 14px;
+            font-weight: 400;
+            color: #d8ecf8;
+        }
+
+        .header-vision {
+            text-align: right;
+            font-size: 13px;
+            color: #cce4f7;
+            font-style: italic;
+            padding-left: 20px;
+            border-left: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        /* KPI Metadata Strip (Weight, Criteria, Levels 1-5) */
+        .meta-strip {
+            background: #f0f7fd;
+            border-bottom: 1px solid var(--card-border);
+            padding: 12px 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .meta-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 6px 14px;
+            border-radius: 10px;
+            border: 1px solid #d0e2f2;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.04);
+        }
+
+        .meta-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .meta-input {
+            width: 60px;
+            padding: 4px 6px;
+            border: 1px solid #c0d8ec;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--navy);
+            background: #fafcfe;
+        }
+
+        .meta-levels-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .level-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 68px;
+        }
+
+        .level-header {
+            background: #005691;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+            padding: 2px 0;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .level-input {
+            width: 100%;
+            border: 1px solid #005691;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            padding: 3px 2px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #003366;
+            background: #ffffff;
+        }
+
+        /* Main Content Layout (Grid 3 Columns) */
+        .main-body {
+            display: grid;
+            grid-template-columns: 1fr 1.25fr 1fr;
+            gap: 18px;
+            padding: 20px 28px;
+            flex: 1;
+        }
+
+        /* Column Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 3px 10px rgba(0, 50, 100, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e1eef8;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .card-header-icon {
+            font-size: 18px;
+        }
+
+        /* Left Column: Input Target & Summary */
+        .stat-block {
+            background: #ffffff;
+            border: 1px solid #d8e8f5;
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-value-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .stat-input {
+            flex: 1;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            border: 1px solid transparent;
+            border-bottom: 2px solid #b8d5ee;
+            padding: 4px 6px;
+            border-radius: 4px;
+            background: transparent;
+            font-family: 'Prompt', sans-serif;
+            text-align: right;
+            transition: all 0.2s;
+        }
+
+        .stat-input:hover, .stat-input:focus {
+            background: #f2f8fd;
+            border-color: var(--primary);
+        }
+
+        .stat-unit {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Middle Column: Quarterly Table */
+        .quarter-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+
+        .quarter-table th {
+            background: #005691;
+            color: #ffffff;
+            padding: 8px 6px;
+            font-weight: 500;
+            text-align: center;
+            font-size: 12px;
+            border: 1px solid #004575;
+        }
+
+        .quarter-table td {
+            border: 1px solid #e1ecf5;
+            padding: 6px 6px;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        .quarter-table td:first-child {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+            background: #f7fafc;
+        }
+
+        .tbl-input {
+            width: 100%;
+            border: 1px solid transparent;
+            background: transparent;
+            font-family: 'Prompt', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: right;
+            color: var(--navy);
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .tbl-input:hover, .tbl-input:focus {
+            background: #eef6fd;
+            border-color: #9ac2e6;
+            outline: none;
+        }
+
+        .quarter-table tr.total-row {
+            background: #e8f3fc;
+            font-weight: 700;
+        }
+
+        .quarter-table tr.total-row td {
+            border-top: 2px solid #b8d5ee;
+            color: var(--primary);
+        }
+
+        /* Right Column: Dynamic Summary Evaluation Cards */
+        .eval-card-gold {
+            background: var(--accent-gold);
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(246, 178, 107, 0.25);
+            border: 1px solid #f9cb9c;
+        }
+
+        .eval-card-gold .eval-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #663b00;
+        }
+
+        .eval-card-gold .eval-score {
+            font-size: 32px;
+            font-weight: 800;
+            color: #003366;
+            letter-spacing: 0.5px;
+        }
+
+        .eval-card-blue {
+            background: var(--accent-blue-card);
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 4px 12px rgba(0, 122, 193, 0.25);
+        }
+
+        .eval-card-blue .eval-val {
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .eval-card-blue .eval-sub {
+            font-size: 13px;
+            text-align: center;
+            color: #d4eaf8;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid #e1ebf4;
+        }
+
+        .detail-row .detail-val {
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        /* Chart Container */
+        .chart-box {
+            background: #ffffff;
+            border: 1px solid #dbe9f5;
+            border-radius: 10px;
+            padding: 10px;
+            height: 180px;
+            position: relative;
+        }
+
+        /* Footer */
+        .footer-banner {
+            background: #f0f6fa;
+            border-top: 1px solid #dce8f2;
+            padding: 10px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Print Media Style */
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+            }
+            .toolbar {
+                display: none;
+            }
+            #report-canvas {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Action Toolbar -->
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <label for="template-preset">📑 แม่แบบด่วน:</label>
+            <select id="template-preset" class="select-input" onchange="loadPreset(this.value)">
+                <option value="1.1">ตัวชี้วัดที่ 1.1: ร้อยละการรับชำระหนี้ต่อยอดหนี้ที่ครบกำหนด</option>
+                <option value="1.2.1">ตัวชี้วัดที่ 1.2.1: หนี้ค้างชำระไม่เกิน 1 ปี</option>
+                <option value="1.2.2">ตัวชี้วัดที่ 1.2.2: หนี้ค้างชำระเกิน 1 ปี</option>
+                <option value="custom">-- กำหนดเอง (Custom) --</option>
+            </select>
+
+            <label for="quarter-focus" style="margin-left: 10px;">📅 รายงานถึงไตรมาส:</label>
+            <select id="quarter-focus" class="select-input" onchange="setQuarterFocus(this.value)">
+                <option value="4">ทั้งปี (ไตรมาส 1 - 4)</option>
+                <option value="1">ไตรมาสที่ 1</option>
+                <option value="2">ไตรมาสที่ 2</option>
+                <option value="3" selected>ไตรมาสที่ 3</option>
+            </select>
+        </div>
+
+        <div class="toolbar-group">
+            <button class="btn btn-outline" onclick="loadSampleData()">📊 โหลดข้อมูลตัวอย่าง</button>
+            <button class="btn btn-outline" onclick="clearData()">🧹 ล้างข้อมูล</button>
+            <button class="btn btn-primary" onclick="exportImage()">📸 ส่งออกเป็นรูปภาพ (PNG)</button>
+            <button class="btn btn-success" onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button>
+        </div>
+    </div>
+
+    <!-- The 16:9 Presentation Canvas -->
+    <div id="report-canvas">
+
+        <!-- Header -->
+        <div class="header-banner">
+            <div class="header-title-box">
+                <div class="header-icon">📊</div>
+                <div class="title-inputs">
+                    <input type="text" id="topic-heading" class="input-inline" value="ด้านที่ 1 การเงิน | ตัวชี้วัดที่ 1.1">
+                    <input type="text" id="topic-subheading" class="input-inline input-sub" value="ร้อยละของการรับชำระหนี้ต่อยอดหนี้ที่ครบกำหนดชำระ">
+                </div>
+            </div>
+            <div class="header-vision">
+                บริหารการเงิน<br>เพื่อความยั่งยืน
+            </div>
+        </div>
+
+        <!-- KPI Metadata Strip -->
+        <div class="meta-strip">
+            <div class="meta-pill">
+                <span class="meta-label">🏷️ ตัวชี้วัดที่:</span>
+                <input type="text" id="kpi-code" class="meta-input" value="1.1" style="width: 50px;">
+            </div>
+
+            <div class="meta-pill">
+                <span class="meta-label">🎯 หน่วยวัด:</span>
+                <input type="text" id="kpi-unit" class="meta-input" value="ร้อยละ" style="width: 70px;">
+            </div>
+
+            <div class="meta-pill">
+                <span class="meta-label">⚖️ ค่าน้ำหนัก:</span>
+                <input type="number" id="kpi-weight" class="meta-input" value="10" oninput="calculateAll()">
+            </div>
+
+            <div class="meta-pill">
+                <span class="meta-label">📏 ค่าเกณฑ์วัด:</span>
+                <input type="text" id="kpi-criteria" class="meta-input" value="-/+ 2.5" style="width: 75px;">
+            </div>
+
+            <!-- Scoring Rubric (Levels 1 - 5) -->
+            <div class="meta-levels-group">
+                <span style="font-size: 12px; font-weight: 600; color: #555; margin-right: 4px;">เกณฑ์:</span>
+                <div class="level-box">
+                    <div class="level-header">ระดับ 1</div>
+                    <input type="number" id="level-1" class="level-input" value="87" oninput="calculateAll()">
+                </div>
+                <div class="level-box">
+                    <div class="level-header">ระดับ 2</div>
+                    <input type="number" id="level-2" class="level-input" value="89" oninput="calculateAll()">
+                </div>
+                <div class="level-box">
+                    <div class="level-header">ระดับ 3</div>
+                    <input type="number" id="level-3" class="level-input" value="91" oninput="calculateAll()">
+                </div>
+                <div class="level-box">
+                    <div class="level-header">ระดับ 4</div>
+                    <input type="number" id="level-4" class="level-input" value="93" oninput="calculateAll()">
+                </div>
+                <div class="level-box">
+                    <div class="level-header">ระดับ 5</div>
+                    <input type="number" id="level-5" class="level-input" value="95" oninput="calculateAll()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Body (3 Columns) -->
+        <div class="main-body">
+
+            <!-- Column 1: Financial Baseline & Targets -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-icon">💰</span>
+                    <span>เป้าหมายและข้อมูลต้นงวด</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">ยอดหนี้ที่ครบกำหนด / เป้าหมายต้นปี</span>
+                    <div class="stat-value-row">
+                        <input type="text" id="baseline-amount" class="stat-input" value="144,727,337.44" oninput="formatNumberInput(this); calculateAll();">
+                        <span class="stat-unit">บาท</span>
+                    </div>
+                </div>
+
+                <div class="stat-block" style="background: #fbfdff;">
+                    <span class="stat-label">ยอดชำระคืนสะสมล่าสุด</span>
+                    <div class="stat-value-row">
+                        <input type="text" id="current-collected" class="stat-input" value="0.00" readonly style="color: #0077b6;">
+                        <span class="stat-unit">บาท</span>
+                    </div>
+                </div>
+
+                <div class="stat-block" style="background: #fbfdff;">
+                    <span class="stat-label">ยอดหนี้คงเหลือ</span>
+                    <div class="stat-value-row">
+                        <input type="text" id="remaining-amount" class="stat-input" value="0.00" readonly style="color: #d9534f;">
+                        <span class="stat-unit">บาท</span>
+                    </div>
+                </div>
+
+                <div style="font-size: 11px; color: #7f99b0; margin-top: auto;">
+                    * ยอดจะคำนวณอัตโนมัติตามข้อมูลที่กรอกในแต่ละไตรมาส
+                </div>
+            </div>
+
+            <!-- Column 2: Quarterly Performance Table -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-icon">📋</span>
+                    <span>ผลการดำเนินงานรายไตรมาส</span>
+                </div>
+
+                <table class="quarter-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">ไตรมาส</th>
+                            <th>ยอดครบกำหนด (บาท)</th>
+                            <th>รับชำระคืน (บาท)</th>
+                            <th>รับชำระสะสม (บาท)</th>
+                            <th style="width: 65px;">ร้อยละ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Q1 -->
+                        <tr id="row-q1">
+                            <td>1</td>
+                            <td><input type="text" id="target-q1" class="tbl-input" value="14,472,733.74" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td><input type="text" id="actual-q1" class="tbl-input" value="14,531,500.00" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td id="cum-q1" style="font-weight: 600;">14,531,500.00</td>
+                            <td id="pct-q1" style="font-weight: 600; color: #005691;">100.41%</td>
+                        </tr>
+                        <!-- Q2 -->
+                        <tr id="row-q2">
+                            <td>2</td>
+                            <td><input type="text" id="target-q2" class="tbl-input" value="28,945,467.48" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td><input type="text" id="actual-q2" class="tbl-input" value="28,770,000.00" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td id="cum-q2" style="font-weight: 600;">43,301,500.00</td>
+                            <td id="pct-q2" style="font-weight: 600; color: #005691;">99.39%</td>
+                        </tr>
+                        <!-- Q3 -->
+                        <tr id="row-q3">
+                            <td>3</td>
+                            <td><input type="text" id="target-q3" class="tbl-input" value="43,418,201.22" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td><input type="text" id="actual-q3" class="tbl-input" value="41,250,000.00" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td id="cum-q3" style="font-weight: 600;">84,551,500.00</td>
+                            <td id="pct-q3" style="font-weight: 600; color: #005691;">95.01%</td>
+                        </tr>
+                        <!-- Q4 -->
+                        <tr id="row-q4">
+                            <td>4</td>
+                            <td><input type="text" id="target-q4" class="tbl-input" value="" placeholder="-" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td><input type="text" id="actual-q4" class="tbl-input" value="" placeholder="-" oninput="formatNumberInput(this); calculateAll();"></td>
+                            <td id="cum-q4" style="font-weight: 600;">-</td>
+                            <td id="pct-q4" style="font-weight: 600; color: #005691;">-</td>
+                        </tr>
+                        <!-- Total -->
+                        <tr class="total-row">
+                            <td>รวม</td>
+                            <td id="total-target">86,836,402.44</td>
+                            <td id="total-actual">84,551,500.00</td>
+                            <td id="total-cum">84,551,500.00</td>
+                            <td id="total-pct" style="color: #003666;">97.37%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Trend Chart inside table card -->
+                <div class="chart-box">
+                    <canvas id="quarterChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Column 3: Summary & Automatic Scoring -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-icon">🏆</span>
+                    <span>สรุปผลการประเมิน</span>
+                </div>
+
+                <!-- Blue Card: Overall Achievement % -->
+                <div class="eval-card-blue">
+                    <span class="eval-sub">ร้อยละผลการดำเนินงานสะสม</span>
+                    <div class="eval-val" id="eval-percent">97.37%</div>
+                </div>
+
+                <!-- Gold Card: Calculated KPI Score (1.0000 - 5.0000) -->
+                <div class="eval-card-gold">
+                    <div class="eval-title">
+                        <div>ระดับ</div>
+                        <div style="font-size: 13px; font-weight: 500; color: #885500;">คะแนนที่ได้</div>
+                    </div>
+                    <div class="eval-score" id="eval-score">5.0000</div>
+                </div>
+
+                <!-- Summary Details Box -->
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="detail-row">
+                        <span>ยอดครบกำหนดสะสม:</span>
+                        <span class="detail-val" id="detail-target-sum">86,836,402.44 บาท</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>รับชำระสะสม:</span>
+                        <span class="detail-val" id="detail-actual-sum">84,551,500.00 บาท</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>คะแนนถ่วงน้ำหนัก:</span>
+                        <span class="detail-val" id="detail-weighted-score">5.0000 / 10</span>
+                    </div>
+                </div>
+
+                <!-- Evaluation Note -->
+                <div style="background: #eef6fc; border-radius: 8px; padding: 10px; font-size: 12px; color: #004575; line-height: 1.5;">
+                    📌 <strong>การประเมิน:</strong> ผลการดำเนินงาน <span id="eval-comparison">สูงกว่าระดับ 5</span> ตามเกณฑ์ที่กำหนด
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-banner">
+            <span>สำนักงานคณะกรรมการข้าราชการครูและบุคลากรทางการศึกษา (ก.ค.ศ.)</span>
+            <span>คุณภาพการบริหาร เพื่อครู เพื่ออนาคตการศึกษาไทย</span>
+        </div>
+
+    </div>
+
+    <script>
+        let chartInstance = null;
+
+        // KPI Presets
+        const presets = {
+            "1.1": {
+                heading: "ด้านที่ 1 การเงิน | ตัวชี้วัดที่ 1.1",
+                subheading: "ร้อยละของการรับชำระหนี้ต่อยอดหนี้ที่ครบกำหนดชำระ",
+                code: "1.1",
+                unit: "ร้อยละ",
+                weight: 10,
+                criteria: "-/+ 2.5",
+                levels: [87, 89, 91, 93, 95],
+                baseline: "144,727,337.44"
+            },
+            "1.2.1": {
+                heading: "ด้านที่ 1 การเงิน | ตัวชี้วัดที่ 1.2 การจัดเก็บหนี้ค้างชำระ",
+                subheading: "ตัวชี้วัดย่อย 1.2.1 หนี้ค้างชำระไม่เกิน 1 ปี",
+                code: "1.2.1",
+                unit: "ร้อยละ",
+                weight: 10,
+                criteria: "-/+ 2.5",
+                levels: [87, 89, 91, 93, 95],
+                baseline: "380,598.79"
+            },
+            "1.2.2": {
+                heading: "ด้านที่ 1 การเงิน | ตัวชี้วัดที่ 1.2 การจัดเก็บหนี้ค้างชำระ",
+                subheading: "ตัวชี้วัดย่อย 1.2.2 หนี้ค้างชำระเกิน 1 ปี",
+                code: "1.2.2",
+                unit: "ร้อยละ",
+                weight: 5,
+                criteria: "2.5",
+                levels: [55, 60, 65, 70, 75],
+                baseline: "238,167.86"
+            }
+        };
+
+        function parseNum(val) {
+            if (!val) return 0;
+            return parseFloat(String(val).replace(/,/g, '')) || 0;
+        }
+
+        function formatNum(val, decimals = 2) {
+            if (val === null || val === undefined || isNaN(val)) return "-";
+            return val.toLocaleString('en-US', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            });
+        }
+
+        function formatNumberInput(input) {
+            let caretPos = input.selectionStart;
+            let raw = input.value.replace(/[^0-9.]/g, '');
+            let parts = raw.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            if (parts.length > 2) parts = [parts[0], parts.slice(1).join('')];
+            input.value = parts.join('.');
+        }
+
+        function loadPreset(key) {
+            if (key === "custom") return;
+            const p = presets[key];
+            if (!p) return;
+
+            document.getElementById('topic-heading').value = p.heading;
+            document.getElementById('topic-subheading').value = p.subheading;
+            document.getElementById('kpi-code').value = p.code;
+            document.getElementById('kpi-unit').value = p.unit;
+            document.getElementById('kpi-weight').value = p.weight;
+            document.getElementById('kpi-criteria').value = p.criteria;
+            document.getElementById('level-1').value = p.levels[0];
+            document.getElementById('level-2').value = p.levels[1];
+            document.getElementById('level-3').value = p.levels[2];
+            document.getElementById('level-4').value = p.levels[3];
+            document.getElementById('level-5').value = p.levels[4];
+            document.getElementById('baseline-amount').value = p.baseline;
+
+            calculateAll();
+        }
+
+        function setQuarterFocus(qNum) {
+            qNum = parseInt(qNum);
+            for (let i = 1; i <= 4; i++) {
+                const row = document.getElementById(`row-q${i}`);
+                const targetInput = document.getElementById(`target-q${i}`);
+                const actualInput = document.getElementById(`actual-q${i}`);
+                
+                if (i > qNum) {
+                    row.style.opacity = '0.4';
+                    targetInput.disabled = true;
+                    actualInput.disabled = true;
+                } else {
+                    row.style.opacity = '1';
+                    targetInput.disabled = false;
+                    actualInput.disabled = false;
+                }
+            }
+            calculateAll();
+        }
+
+        function calculateAll() {
+            const qFocus = parseInt(document.getElementById('quarter-focus').value) || 4;
+            const baseline = parseNum(document.getElementById('baseline-amount').value);
+            const weight = parseNum(document.getElementById('kpi-weight').value);
+
+            const levels = [
+                parseNum(document.getElementById('level-1').value),
+                parseNum(document.getElementById('level-2').value),
+                parseNum(document.getElementById('level-3').value),
+                parseNum(document.getElementById('level-4').value),
+                parseNum(document.getElementById('level-5').value)
+            ];
+
+            let sumTarget = 0;
+            let sumActual = 0;
+            let cumActual = 0;
+
+            let chartLabels = [];
+            let chartActuals = [];
+            let chartTargets = [];
+
+            for (let i = 1; i <= 4; i++) {
+                const targetInput = document.getElementById(`target-q${i}`);
+                const actualInput = document.getElementById(`actual-q${i}`);
+                const cumCell = document.getElementById(`cum-q${i}`);
+                const pctCell = document.getElementById(`pct-q${i}`);
+
+                if (i <= qFocus && targetInput.value.trim() !== "" && actualInput.value.trim() !== "") {
+                    const target = parseNum(targetInput.value);
+                    const actual = parseNum(actualInput.value);
+
+                    sumTarget += target;
+                    sumActual += actual;
+                    cumActual += actual;
+
+                    const pct = target > 0 ? (actual / target) * 100 : 0;
+
+                    cumCell.innerText = formatNum(cumActual);
+                    pctCell.innerText = formatNum(pct) + '%';
+
+                    chartLabels.push(`ไตรมาส ${i}`);
+                    chartActuals.push(pct);
+                    chartTargets.push(100);
+                } else if (i > qFocus) {
+                    cumCell.innerText = "-";
+                    pctCell.innerText = "-";
+                } else {
+                    cumCell.innerText = "-";
+                    pctCell.innerText = "-";
+                }
+            }
+
+            // Update Totals
+            const totalPct = sumTarget > 0 ? (sumActual / sumTarget) * 100 : 0;
+
+            document.getElementById('total-target').innerText = formatNum(sumTarget);
+            document.getElementById('total-actual').innerText = formatNum(sumActual);
+            document.getElementById('total-cum').innerText = formatNum(sumActual);
+            document.getElementById('total-pct').innerText = formatNum(totalPct) + '%';
+
+            // Left Box
+            document.getElementById('current-collected').value = formatNum(sumActual);
+            document.getElementById('remaining-amount').value = formatNum(Math.max(0, baseline - sumActual));
+
+            // Right Box
+            document.getElementById('eval-percent').innerText = formatNum(totalPct) + '%';
+            document.getElementById('detail-target-sum').innerText = formatNum(sumTarget) + ' บาท';
+            document.getElementById('detail-actual-sum').innerText = formatNum(sumActual) + ' บาท';
+
+            // Calculate Score (1.0000 to 5.0000) using Rubric
+            const score = computeRubricScore(totalPct, levels);
+            document.getElementById('eval-score').innerText = score.toFixed(4);
+
+            const weighted = (score * (weight / 5)).toFixed(4); // based on max 5
+            document.getElementById('detail-weighted-score').innerText = `${weighted} / ${weight}`;
+
+            // Comparison Text
+            let note = "";
+            if (totalPct >= levels[4]) {
+                note = `เทียบเท่าระดับ 5 (ผลงาน ${formatNum(totalPct)}% เกินเป้าหมาย)`;
+            } else if (totalPct >= levels[3]) {
+                note = `อยู่ในช่วงระดับ 4 - 5 (ผลงาน ${formatNum(totalPct)}%)`;
+            } else if (totalPct >= levels[2]) {
+                note = `อยู่ในช่วงระดับ 3 - 4 (ผลงาน ${formatNum(totalPct)}%)`;
+            } else if (totalPct >= levels[1]) {
+                note = `อยู่ในช่วงระดับ 2 - 3 (ผลงาน ${formatNum(totalPct)}%)`;
+            } else if (totalPct >= levels[0]) {
+                note = `อยู่ในช่วงระดับ 1 - 2 (ผลงาน ${formatNum(totalPct)}%)`;
+            } else {
+                note = `ต่ำกว่าระดับ 1 (ผลงาน ${formatNum(totalPct)}% ต่ำกว่าเกณฑ์ขั้นต่ำ)`;
+            }
+            document.getElementById('eval-comparison').innerText = note;
+
+            // Update Chart
+            updateChart(chartLabels, chartActuals, chartTargets);
+        }
+
+        function computeRubricScore(val, L) {
+            if (val <= 0) return 0.0000;
+            if (val < L[0]) {
+                return Math.max(0, val / L[0]);
+            }
+            if (val < L[1]) {
+                return 1.0 + ((val - L[0]) / (L[1] - L[0]));
+            }
+            if (val < L[2]) {
+                return 2.0 + ((val - L[1]) / (L[2] - L[1]));
+            }
+            if (val < L[3]) {
+                return 3.0 + ((val - L[2]) / (L[3] - L[2]));
+            }
+            if (val < L[4]) {
+                return 4.0 + ((val - L[3]) / (L[4] - L[3]));
+            }
+            return 5.0000;
+        }
+
+        function updateChart(labels, actuals, targets) {
+            const ctx = document.getElementById('quarterChart').getContext('2d');
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.length ? labels : ['ไตรมาส 1', 'ไตรมาส 2', 'ไตรมาส 3', 'ไตรมาส 4'],
+                    datasets: [
+                        {
+                            label: 'ผลการดำเนินงาน (%)',
+                            data: actuals,
+                            borderColor: '#005691',
+                            backgroundColor: 'rgba(0, 86, 145, 0.15)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#ffcc00',
+                            pointBorderColor: '#005691',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'เป้าหมาย 100%',
+                            data: labels.map(() => 100),
+                            borderColor: '#e63946',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { family: 'Prompt', size: 10 }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 60,
+                            max: 120,
+                            ticks: {
+                                callback: val => val + '%',
+                                font: { family: 'Prompt', size: 10 }
+                            },
+                            grid: { color: '#ebf2f7' }
+                        },
+                        x: {
+                            ticks: { font: { family: 'Prompt', size: 10 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadSampleData() {
+            document.getElementById('target-q1').value = "14,472,733.74";
+            document.getElementById('actual-q1').value = "14,531,500.00";
+            document.getElementById('target-q2').value = "28,945,467.48";
+            document.getElementById('actual-q2').value = "28,770,000.00";
+            document.getElementById('target-q3').value = "43,418,201.22";
+            document.getElementById('actual-q3').value = "41,250,000.00";
+            document.getElementById('target-q4').value = "";
+            document.getElementById('actual-q4').value = "";
+            calculateAll();
+        }
+
+        function clearData() {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`target-q${i}`).value = "";
+                document.getElementById(`actual-q${i}`).value = "";
+            }
+            calculateAll();
+        }
+
+        function exportImage() {
+            const canvasEl = document.getElementById('report-canvas');
+            const originalShadow = canvasEl.style.boxShadow;
+            canvasEl.style.boxShadow = 'none';
+
+            html2canvas(canvasEl, {
+                scale: 2, // High resolution (Retina/Print quality)
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                canvasEl.style.boxShadow = originalShadow;
+                const link = document.createElement('a');
+                const kpi = document.getElementById('kpi-code').value || 'kpi';
+                link.download = `รายงาน_ตัวชี้วัด_${kpi}_ไตรมาส_${document.getElementById('quarter-focus').value}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            setQuarterFocus(3);
+            calculateAll();
+        };
+    </script>
+</body>
+</html>

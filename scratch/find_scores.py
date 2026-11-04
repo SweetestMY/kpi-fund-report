@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+with open('ตัวชี้วัดที่ 3.3.html', 'r', encoding='utf-8') as f:
+    text = f.read()
+
+lines = text.splitlines()
+for i, l in enumerate(lines):
+    if 'ระดับ 5' in l:
+        print(f"L{i+1}: {l.strip()[:100]}")

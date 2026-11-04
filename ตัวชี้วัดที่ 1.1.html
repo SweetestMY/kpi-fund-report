@@ -1,0 +1,2925 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มรายงานผลตัวชี้วัดที่ 1.1 ร้อยละการรับชำระหนี้ (KPI Presentation Dashboard)</title>
+    <!-- Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #004b87;
+            --primary-dark: #003057;
+            --primary-light: #0077b6;
+            --primary-gradient: linear-gradient(135deg, #002b49 0%, #004b87 50%, #0077b6 100%);
+            --navy: #00223a;
+            --card-border: #c8dced;
+            --accent-gold: #ffcc00;
+            --accent-gold-gradient: linear-gradient(135deg, #f6b26b 0%, #e69138 100%);
+            --text-dark: #1a2a3a;
+            --text-muted: #536b82;
+            --bg-page: #eef4fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            padding: 16px;
+            min-height: 100vh;
+            overflow-x: auto;
+            box-sizing: border-box;
+        }
+
+        /* Responsive Slide Page Wrapper - Preserves 16:9 Presentation Format & Prevents Clipping */
+        .page-wrapper {
+            width: 100%;
+            max-width: 1560px;
+            min-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Toolbar Top Controls (Screen Only) */
+        .toolbar-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 2px;
+        }
+
+        .toolbar {
+            background: #ffffff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 45, 90, 0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .select-input, .btn {
+            font-family: 'Prompt', sans-serif;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #c0d5e8;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .select-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 75, 135, 0.15);
+        }
+
+        .btn {
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary { background: #005691; color: #fff; border-color: #004575; }
+        .btn-primary:hover { background: #003e6b; }
+        .btn-success { background: #198754; color: #fff; border-color: #146c43; }
+        .btn-success:hover { background: #146c43; }
+        .btn-outline { background: #ffffff; color: #005691; border-color: #005691; }
+        .btn-outline:hover { background: #eef6fc; }
+        .btn-tool {
+            background: #f0f6fa;
+            color: #003666;
+            border: 1px solid #c2d8eb;
+            padding: 5px 10px;
+            font-size: 12.5px;
+            border-radius: 6px;
+        }
+        .btn-tool:hover {
+            background: #e1eef8;
+            border-color: #005691;
+        }
+        .btn-tool:active {
+            background: #005691;
+            color: #ffffff;
+        }
+
+        .quarter-active-badge {
+            background: #005691;
+            color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 700;
+        }
+
+        /* Format Control Bar (Font size, Alignment, Styling) */
+        .format-bar {
+            background: #ffffff;
+            border: 1px solid #d4e4f2;
+            border-radius: 10px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0, 45, 90, 0.04);
+            font-size: 12px;
+        }
+
+        .format-title {
+            font-weight: 700;
+            color: #005691;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .format-sep {
+            width: 1px;
+            height: 20px;
+            background: #d4e4f2;
+            margin: 0 2px;
+        }
+
+        .active-target-pill {
+            font-size: 11.5px;
+            color: #55728d;
+            background: #f0f6fa;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid #d0e2f0;
+            max-width: 260px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Font Size Indicator Badge */
+        .font-size-badge {
+            background: #003666;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 12.5px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            min-width: 44px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 30, 60, 0.2);
+            display: inline-block;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* Tool Popups (Highlight & Symbol Picker) */
+        .tool-popup-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: #ffffff;
+            border: 1.5px solid #9ec5e8;
+            border-radius: 10px;
+            padding: 10px 12px;
+            box-shadow: 0 8px 24px rgba(0, 45, 90, 0.18);
+            z-index: 10000;
+            min-width: 240px;
+            animation: fadeInPopup 0.15s ease;
+        }
+
+        @keyframes fadeInPopup {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .popup-menu-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #004b87;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #e2edf7;
+            padding-bottom: 3px;
+        }
+
+        .color-dots-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .color-dot-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1.5px solid #cbd5e1;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .color-dot-btn:hover {
+            transform: scale(1.18);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-dot-btn.clear-dot {
+            background: #ffffff;
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* Symbol Picker Grid */
+        .symbol-category {
+            margin-bottom: 8px;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+        }
+
+        .sym-tile {
+            width: 32px;
+            height: 32px;
+            background: #f4f8fc;
+            border: 1px solid #cfe0ef;
+            border-radius: 6px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            outline: none;
+        }
+
+        .sym-tile:hover {
+            background: #005691;
+            color: #ffffff;
+            border-color: #003e6b;
+            transform: scale(1.15);
+            box-shadow: 0 2px 6px rgba(0, 45, 90, 0.25);
+        }
+
+        /* Contenteditable Focus/Hover Styling (NO display override so table cells stay intact!) */
+        [contenteditable="true"] {
+            outline: none;
+            cursor: text;
+            transition: background 0.15s, box-shadow 0.15s;
+            border-radius: 4px;
+            padding: 1px 4px;
+            min-height: 1.2em;
+        }
+
+        [contenteditable="true"]:hover {
+            background: rgba(0, 119, 182, 0.08);
+            box-shadow: 0 0 0 1px rgba(0, 119, 182, 0.35);
+        }
+
+        [contenteditable="true"]:focus {
+            background: #ffffff !important;
+            box-shadow: 0 0 0 2px #0077b6 !important;
+            color: #002b49 !important;
+        }
+
+        /* Slide Canvas (16:9 Presentation Format) */
+        #report-canvas {
+            width: 100%;
+            max-width: 1560px;
+            min-height: 840px;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 35, 70, 0.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #bcd4e6;
+            position: relative;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3.5px solid var(--accent-gold);
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .header-icon-box {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+        }
+
+        .main-heading {
+            font-size: 25px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            letter-spacing: -0.2px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .sub-heading {
+            font-size: 14.5px;
+            font-weight: 400;
+            color: #d6e8f7;
+            line-height: 1.35;
+            white-space: normal;
+        }
+
+        .header-slogan {
+            text-align: right;
+            font-size: 14.5px;
+            color: #ffffff;
+            padding-left: 20px;
+            border-left: 2px solid rgba(255, 204, 0, 0.5);
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.4;
+            flex-shrink: 0;
+            min-width: 175px;
+            white-space: nowrap;
+        }
+
+        /* KPI Metadata Strip (Option 2: Executive Ocean & Emerald) */
+        .meta-strip {
+            background: #f4f8fc;
+            border-bottom: 2px solid #d3e2ef;
+            padding: 8px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .meta-pills-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #ffffff;
+            padding: 3.5px 8px;
+            border-radius: 8px;
+            border: 1.5px solid #c8dbee;
+            box-shadow: 0 1px 3px rgba(0, 40, 80, 0.04);
+            font-size: 12.5px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .meta-pill .pill-lbl {
+            font-weight: 700;
+            color: #004d80;
+            font-size: 12px;
+        }
+
+        .meta-pill .pill-val {
+            font-weight: 800;
+            color: #001f3f;
+            min-width: 20px;
+            text-align: center;
+            font-size: 13.5px;
+        }
+
+        /* Rubric Levels Group: Option 2 (Executive Ocean & Emerald) */
+        .meta-levels-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 3.5px;
+            background: #ffffff;
+            padding: 3px 6px;
+            border-radius: 8px;
+            border: 1.5px solid #c8dbee;
+            box-shadow: 0 1px 3px rgba(0, 40, 80, 0.04);
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .rubric-lbl {
+            font-size: 13px;
+            font-weight: 800;
+            color: #002244;
+            margin-right: 2px;
+            white-space: nowrap;
+        }
+
+        .level-chip {
+            display: inline-flex;
+            flex-direction: column;
+            min-width: 50px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            border: 1.5px solid #475569;
+            background: #ffffff;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+
+        .level-chip:hover {
+            transform: translateY(-2px);
+        }
+
+        .level-chip .l-head {
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            padding: 2px 3px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+
+        .level-chip .l-val {
+            background: #ffffff;
+            font-size: 14.5px;
+            font-weight: 800;
+            text-align: center;
+            padding: 2px 3px;
+            color: #001f3f;
+        }
+            padding: 4px 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .level-chip .l-val {
+            background: #ffffff;
+            font-size: 16px;
+            font-weight: 800;
+            text-align: center;
+            padding: 4px 6px;
+        }
+
+        /* Level 1: เทากรมท่า Slate Navy */
+        .level-chip.chip-l1, .meta-levels-group .level-chip:nth-of-type(1) { border-color: #475569; }
+        .level-chip.chip-l1 .l-head, .meta-levels-group .level-chip:nth-of-type(1) .l-head { background: linear-gradient(180deg, #64748b 0%, #475569 100%); }
+        .level-chip.chip-l1 .l-val, .meta-levels-group .level-chip:nth-of-type(1) .l-val { color: #334155; }
+
+        /* Level 2: น้ำเงินคลาสสิก Classic Navy */
+        .level-chip.chip-l2, .meta-levels-group .level-chip:nth-of-type(2) { border-color: #1e40af; }
+        .level-chip.chip-l2 .l-head, .meta-levels-group .level-chip:nth-of-type(2) .l-head { background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%); }
+        .level-chip.chip-l2 .l-val, .meta-levels-group .level-chip:nth-of-type(2) .l-val { color: #1e3a8a; }
+
+        /* Level 3: ฟ้าครามสดใส Vivid Cyan */
+        .level-chip.chip-l3, .meta-levels-group .level-chip:nth-of-type(3) { border-color: #0284c7; }
+        .level-chip.chip-l3 .l-head, .meta-levels-group .level-chip:nth-of-type(3) .l-head { background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); }
+        .level-chip.chip-l3 .l-val, .meta-levels-group .level-chip:nth-of-type(3) .l-val { color: #0369a1; }
+
+        /* Level 4: เขียวมรกต Teal Emerald */
+        .level-chip.chip-l4, .meta-levels-group .level-chip:nth-of-type(4) { border-color: #0d9488; }
+        .level-chip.chip-l4 .l-head, .meta-levels-group .level-chip:nth-of-type(4) .l-head { background: linear-gradient(180deg, #2dd4bf 0%, #0d9488 100%); }
+        .level-chip.chip-l4 .l-val, .meta-levels-group .level-chip:nth-of-type(4) .l-val { color: #0f766e; }
+
+        /* Level 5: เขียวเข้มป่าไม้ยอดเยี่ยม Deep Forest Green ⭐ */
+        .level-chip.chip-l5, .meta-levels-group .level-chip:nth-of-type(5) { border-color: #047857; border-width: 2.5px; }
+        .level-chip.chip-l5 .l-head, .meta-levels-group .level-chip:nth-of-type(5) .l-head { 
+            background: linear-gradient(180deg, #10b981 0%, #047857 100%); 
+            font-weight: 800; 
+        }
+        .level-chip.chip-l5 .l-val, .meta-levels-group .level-chip:nth-of-type(5) .l-val { 
+            color: #064e3b; 
+            background: #ecfdf5; 
+        }
+
+        /* Slide Content Area */
+        .slide-content {
+            padding: 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        /* Grid Rows */
+        .grid-upper {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .grid-lower {
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        /* Generic Card Styling */
+        .report-card {
+            background: #f8fbfe;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 40, 80, 0.03);
+            position: relative;
+        }
+
+        .card-header-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid #d8e8f5;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .card-header-icon {
+            font-size: 18px;
+        }
+
+        /* UPPER LEFT CARD: TARGET / BASELINE AMOUNT */
+        .card-target-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(180deg, #f4f9fd 0%, #eaf3fa 100%);
+            border: 1.5px solid #b8d7ee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .target-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            line-height: 1.4;
+        }
+
+        .target-amount-box {
+            margin: 20px 0;
+            text-align: center;
+            background: #ffffff;
+            padding: 16px 12px;
+            border-radius: 12px;
+            border: 2px solid #005691;
+            box-shadow: 0 4px 14px rgba(0, 86, 145, 0.1);
+        }
+
+        .target-amount-val {
+            font-size: 30px;
+            font-weight: 800;
+            color: #003366;
+            letter-spacing: -0.5px;
+            display: block;
+        }
+
+        .target-amount-unit {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .target-subtext {
+            font-size: 11.5px;
+            color: #50718e;
+            line-height: 1.4;
+        }
+
+        .target-watermark {
+            font-size: 56px;
+            opacity: 0.10;
+            position: absolute;
+            right: 14px;
+            bottom: 10px;
+            pointer-events: none;
+        }
+
+        /* UPPER RIGHT CARD: QUARTERLY PERFORMANCE TABLE */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .kpi-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .kpi-table th {
+            background: #005691;
+            color: #ffffff;
+            padding: 9px 10px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 13px;
+            border: 1px solid #004575;
+        }
+
+        .kpi-table td {
+            border: 1px solid #dce8f2;
+            padding: 7px 10px;
+            text-align: right;
+            color: #1a334d;
+        }
+
+        .kpi-table td:first-child {
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+            background: #f7fafc;
+        }
+
+        .kpi-table tr.total-row {
+            background: #e6f2fa;
+            font-weight: 700;
+        }
+
+        .kpi-table tr.total-row td {
+            border-top: 2px solid #8abde2;
+            color: #003666;
+        }
+
+        /* LOWER LEFT CARD: EVALUATION SUMMARY (4 FLOW BOXES ONLY) */
+        .eval-card-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            gap: 16px;
+        }
+
+        .eval-steps-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: #ffffff;
+            border: 1.5px solid #bed6ea;
+            border-radius: 12px;
+            padding: 18px 14px;
+            box-shadow: 0 4px 12px rgba(0, 60, 120, 0.05);
+            flex: 1;
+        }
+
+        .eval-step-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 6px;
+        }
+
+        .step-num-val {
+            font-size: 18px;
+            font-weight: 800;
+            color: #003865;
+            line-height: 1.25;
+            text-align: center;
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .step-arrow {
+            color: #0077b6;
+            font-size: 18px;
+            font-weight: 700;
+            flex-shrink: 0;
+            padding: 0 2px;
+        }
+
+        .step-highlight-blue {
+            background: #00529b;
+            color: #ffffff !important;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 20px !important;
+            display: inline-block;
+            box-shadow: 0 3px 8px rgba(0, 82, 155, 0.25);
+        }
+
+        .step-highlight-gold {
+            background: var(--accent-gold-gradient);
+            color: #ffffff !important;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 20px !important;
+            display: inline-block;
+            font-weight: 800;
+            box-shadow: 0 3px 8px rgba(230, 145, 56, 0.3);
+        }
+
+        /* LOWER RIGHT CARD: LONG 4-QUARTER 12-MONTH LINE GRAPH */
+        .graph-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #ffffff;
+            border: 1.5px solid #bad2e6;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 3px 10px rgba(0, 45, 90, 0.05);
+            position: relative;
+        }
+
+        .graph-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .graph-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #003e6b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .graph-canvas-container {
+            width: 100%;
+            height: 165px;
+            position: relative;
+        }
+
+        /* Monthly Data & Label Input Strip (Directly editable on screen) */
+        .month-input-strip {
+            background: #f4f8fc;
+            border: 1px solid #d0e2f2;
+            border-radius: 8px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .strip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #005691;
+        }
+
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 4px;
+        }
+
+        .month-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #c9deef;
+            border-radius: 5px;
+            padding: 3px 2px;
+            transition: all 0.2s;
+        }
+
+        .month-cell.inactive {
+            opacity: 0.35;
+            background: #e9ecef;
+            pointer-events: none;
+        }
+
+        /* Editable Month/Year Label Input */
+        .m-lbl-input {
+            width: 100%;
+            font-size: 10px;
+            font-weight: 700;
+            color: #005691;
+            text-align: center;
+            border: none;
+            outline: none;
+            background: #f0f7fd;
+            border-radius: 3px;
+            padding: 1px 0;
+            font-family: 'Prompt', sans-serif;
+            margin-bottom: 2px;
+        }
+        .m-lbl-input:focus {
+            background: #ffffff;
+            box-shadow: 0 0 0 1px #0077b6;
+        }
+
+        /* Editable Monthly Percentage Input */
+        .m-input {
+            width: 100%;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #002b49;
+            text-align: center;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: 'Prompt', sans-serif;
+            padding: 1px 0;
+        }
+
+        .m-input:focus {
+            background: #eef6fc;
+            color: #005691;
+        }
+
+        /* Footer Bar */
+        .footer-bar {
+            padding: 8px 28px;
+            background: #f2f7fb;
+            border-top: 1px solid #dce8f2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11.5px;
+            color: #55728d;
+        }
+
+        .footer-left {
+            font-weight: 500;
+        }
+
+        .footer-right {
+            font-style: italic;
+            color: #3b5a75;
+        }
+
+        /* Toast Notification */
+        #toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #003666;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            pointer-events: none;
+        }
+
+        #toast-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Print Media Style (Clean Presentation A4 Landscape / 16:9) */
+        @media print {
+            body {
+                background: #ffffff !important;
+                padding: 0 !important;
+            }
+            .toolbar-container, .month-input-strip, #toast-notification {
+                display: none !important;
+            }
+            .page-wrapper { min-width: 100% !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; }
+            #report-canvas {
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 100% !important;
+                border-radius: 0 !important;
+            }
+            [contenteditable="true"]:hover {
+                box-shadow: none !important;
+                background: transparent !important;
+            }
+            .level-chip:hover { transform: none !important; }
+        }
+    
+
+
+        /* -------------------------------------------------------------
+           STANDARDIZED DUAL-MODE & MODERN RIBBON TOOLBAR
+        ------------------------------------------------------------- */
+        .toolbar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Main Action Ribbon */
+        .toolbar-ribbon {
+            background: #ffffff;
+            border: 1px solid rgba(188, 219, 242, 0.85);
+            border-radius: 12px;
+            padding: 8px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 40, 80, 0.04);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ribbon-left, .ribbon-center, .ribbon-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* DUAL MODE SEGMENTED TOGGLE SWITCH */
+        .mode-segmented-control {
+            display: flex;
+            background: #e2edf6;
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid #bcdbf2;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #486581;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn:hover {
+            color: #003666;
+        }
+
+        .mode-btn.active {
+            background: #ffffff;
+            color: #004b87;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.15);
+        }
+
+        .mode-btn.active.edit-active {
+            color: #b45309;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #002b49;
+        }
+
+        .select-input {
+            appearance: none;
+            background: #f8fbfe url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004b87' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 10px center;
+            background-size: 12px;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 8px;
+            padding: 4px 26px 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .select-input:focus, .select-input:hover {
+            border-color: #0077b6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.12);
+        }
+
+        .quarter-active-badge {
+            background: #eef6fc;
+            border: 1px solid #bce0f8;
+            color: #005691;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5.5px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            border: 1.2px solid #bcdbf2;
+            color: #004b87;
+        }
+
+        .btn-outline:hover {
+            background: #f0f7fd;
+            border-color: #0077b6;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #005691 0%, #003d6b 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.18);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0066aa 0%, #004b87 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(4, 120, 87, 0.18);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #b45309, #92400e);
+            transform: translateY(-1px);
+        }
+
+        /* -------------------------------------------------------------
+           FULL EDITING TOOLBAR (VISIBLE IN EDIT MODE ONLY)
+        ------------------------------------------------------------- */
+        .format-bar {
+            background: #ffffff;
+            border: 1.5px solid #fed7aa; /* amber tint for edit mode */
+            border-radius: 10px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 3px 12px rgba(217, 119, 6, 0.08);
+            font-size: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .format-bar.mode-hidden {
+            display: none !important;
+        }
+
+        .format-title {
+            font-weight: 700;
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-tool {
+            background: #f8fbfe;
+            border: 1px solid #bcdbf2;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-tool:hover {
+            background: #e6f2fc;
+            border-color: #0077b6;
+        }
+
+        .font-size-badge {
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #003865;
+            background: #eef6fc;
+            border: 1px solid #b5d3ed;
+            border-radius: 5px;
+            padding: 3px 5px;
+        }
+
+        .format-sep {
+            width: 1px;
+            height: 20px;
+            background: #d4e4f2;
+            margin: 0 2px;
+        }
+
+        .popup-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: #ffffff;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 8px 24px rgba(0, 40, 80, 0.16);
+            z-index: 1000;
+        }
+
+        .popup-menu.show { display: block; }
+
+        .color-palette-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .color-chip {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .color-chip:hover { transform: scale(1.15); }
+
+        .btn-clear-hl {
+            font-size: 10.5px;
+            padding: 3px 6px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .popup-menu-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #004b87;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #e1edf7;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 3px;
+        }
+
+        .sym-tile {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            border: 1px solid #d4e4f2;
+            background: #f7fbfe;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .sym-tile:hover {
+            background: #e1eef8;
+            border-color: #005691;
+            transform: scale(1.12);
+        }
+
+        .active-target-pill {
+            font-size: 11px;
+            color: #b45309;
+            font-weight: 600;
+            background: #fffbeb;
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px dashed #fcd34d;
+        }
+
+        .menu-action-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 7px 12px;
+            font-size: 11.5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #003666;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .menu-action-item:hover {
+            background: #f0f7fd;
+        }
+
+        /* -------------------------------------------------------------
+           EDIT MODE VISUAL INDICATORS
+        ------------------------------------------------------------- */
+        body.app-mode-edit [contenteditable="true"] {
+            box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.35);
+        }
+
+        body.app-mode-edit [contenteditable="true"]:hover {
+            box-shadow: 0 0 0 1.5px #f59e0b !important;
+        }
+
+        body.app-mode-preview [contenteditable="true"]:hover {
+            background: rgba(0, 119, 182, 0.05);
+            box-shadow: 0 0 0 1px rgba(0, 119, 182, 0.25);
+        }
+
+        [contenteditable="true"]:focus {
+            background: #ffffff !important;
+            box-shadow: 0 0 0 2px #0077b6 !important;
+            color: #002b49 !important;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #002244;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Print Media Styles */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            html, body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                overflow: hidden !important;
+            }
+            .toolbar-container, #toast-notification, .filter-tabs-bar {
+                display: none !important;
+            }
+            .page-wrapper {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #report-canvas {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                width: 1400px !important;
+                max-width: 1400px !important;
+                zoom: 74% !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="app-mode-preview">
+
+    <!-- RESPONSIVE 16:9 SLIDE PAGE WRAPPER (PREVENTS OVERFLOW & CLIPPING) -->
+    <div class="page-wrapper">
+
+            <!-- TOP CONTROL TOOLBARS (WITH DUAL MODE SWITCHER) -->
+        <div class="toolbar-container">
+            <!-- 1. Primary Action Ribbon -->
+            <div class="toolbar-ribbon">
+                <div class="ribbon-left">
+                    <!-- KPI Quick Switcher -->
+                    <div class="control-item">
+                        <span>📑 ตัวชี้วัด:</span>
+                        <select id="select-kpi-page" class="select-input" onchange="navigateToKPI(this.value)" style="font-weight: 600; color: #0a4480; background: #eff6ff;">
+                <option value="1.1" selected>1.1 ร้อยละการรับชำระหนี้ (ปัจจุบัน)</option>
+                <option value="1.2.1">1.2.1 หนี้ไม่เกิน 1 ปี</option>
+                <option value="1.2.2">1.2.2 หนี้เกิน 1 ปี</option>
+                <option value="2.1">2.1 ร้อยละความพึงพอใจฯ</option>
+                <option value="2.2">2.2 ความสำเร็จโครงการเสริมสร้างวินัยฯ</option>
+                <option value="3.1">3.1 ร้อยละเงินอนุมัติให้กู้ยืม</option>
+                <option value="3.2">3.2 ความสำเร็จการแก้ไขปัญหาหนี้สินฯ</option>
+                <option value="3.3">3.3 การจัดเก็บข้อมูลประเมินผลลัพธ์ปี 2570</option>
+                <option value="4.1">4.1 การบริหารความเสี่ยงฯ</option>
+                <option value="4.2">4.2 การตรวจสอบภายใน</option>
+                <option value="4.3">4.3 การบริหารจัดการสารสนเทศและดิจิทัล</option>
+                <option value="5.1">5.1 บทบาทคณะกรรมการบริหารทุนหมุนเวียน</option>
+                <option value="5.2">5.2 การบริหารทรัพยากรบุคคล</option>
+                <option value="6.1">6.1 การเบิกจ่ายเงินตามแผนฯ</option>
+            </select>
+                    </div>
+
+                    <!-- Quarter Selector -->
+                    <div class="control-item">
+                        <span>📊 รายงานถึง:</span>
+                        <select id="quarter-focus" class="select-input" onchange="switchQuarter(this.value)">
+                <option value="1">ไตรมาส 1 (ต.ค. - ธ.ค.)</option>
+                <option value="2">ไตรมาส 2 (ต.ค. - มี.ค.)</option>
+                <option value="3">ไตรมาส 3 (ต.ค. - มิ.ย.)</option>
+                <option value="4" selected>ไตรมาส 4 (ครบปี ต.ค. - ก.ย.)</option>
+            </select>
+                    </div>
+
+                    <span id="quarter-badge" class="quarter-active-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        ไตรมาส 4
+                    </span>
+
+                    <!-- Fiscal Year Selector -->
+                    <div class="control-item" style="margin-left: 4px;">
+                        <span>📅 ปี:</span>
+                        <select id="select-year" class="select-input" onchange="changeFiscalYear(this.value)">
+                            <option value="2568">ปี 2568</option>
+                            <option value="2569" selected>ปี 2569</option>
+                            <option value="2570">ปี 2570</option>
+                        </select>
+                    </div>
+                    <!-- Toggle Monthly Chart -->
+                    <button class="btn btn-outline" id="btn-toggle-chart" onclick="toggleMonthlyChart()" title="ซ่อนหรือแสดงส่วนกราฟแนวโน้มรายเดือน">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <span id="txt-toggle-chart">ซ่อนกราฟ</span>
+                    </button>
+                </div>
+
+                <!-- 2. Dual Mode Segmented Switcher (Center of Ribbon) -->
+                <div class="ribbon-center">
+                    <div class="mode-segmented-control">
+                        <button class="mode-btn active" id="btn-mode-preview" onclick="setAppMode('preview')" title="โหมดนำเสนอ สะอาดตา ไร้เครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            โหมดนำเสนอ (Preview)
+                        </button>
+                        <button class="mode-btn" id="btn-mode-edit" onclick="setAppMode('edit')" title="โหมดแก้ไขข้อความ เปิดแถบเครื่องมือจัดฟอร์มแบบจัดเต็ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            โหมดแก้ไขข้อความ (Edit)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ribbon-right">
+                    <!-- Save Current Quarter -->
+                    <button class="btn btn-outline" onclick="saveCurrentQuarter(true)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        บันทึก
+                    </button>
+
+                    <!-- Copy Image to Clipboard -->
+                    <button class="btn btn-outline" onclick="copyImageToClipboard()" title="คัดลอกรูปภาพลงคลิปบอร์ดทันที (นำไปกด Ctrl+V วางใน PowerPoint หรือ LINE ได้เลย)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        คัดลอกภาพ
+                    </button>
+
+                    <!-- Export PNG -->
+                    <button class="btn btn-primary" onclick="exportToImage()" title="ส่งออกเป็นรูปภาพ PNG คุณภาพสูง">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        ส่งออกภาพ (PNG)
+                    </button>
+
+                    <!-- Export Direct PDF (Full Bleed) -->
+                    <button class="btn btn-warning" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; font-weight: 600;" onclick="exportToPDF()" title="ดาวน์โหลดไฟล์ PDF คุณภาพสูง สัดส่วนเต็มแผ่นเหมือนรูปภาพ 100% ไร้ขอบขาว">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        ส่งออก PDF (เต็มแผ่น)
+                    </button>
+
+                    <!-- Print Browser Dialog -->
+                    <button class="btn btn-success" onclick="window.print()" title="เปิดหน้าต่างสั่งพิมพ์ของเบราว์เซอร์ (ปรับพอดีหน้า A4 แนวนอนอัตโนมัติ ไม่ตกขอบ)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        พิมพ์ (Print)
+                    </button>
+
+                    <!-- Fullscreen Presentation Toggle -->
+                    <button class="btn btn-outline" id="btn-fullscreen" onclick="toggleFullscreen()" title="โหมดนำเสนอเต็มหน้าจอ (สำหรับจอโปรเจกเตอร์/ทีวี)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        เต็มจอ
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Full Formatting Bar (Controlled by Mode Switcher: visible in Edit Mode, hidden in Preview Mode) -->
+            <div class="format-bar mode-hidden" id="full-format-bar">
+                <div class="format-title">
+                    <span>✏️ แถบเครื่องมือจัดข้อความ (Edit Toolbar):</span>
+                </div>
+
+                <!-- History: Undo / Redo -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('undo')" title="ย้อนกลับการแก้ไข (Undo)">↶ ย้อนกลับ</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('redo')" title="ทำซ้ำ (Redo)">↷ ทำซ้ำ</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Font Size with Live Indicator -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(-1)" title="ลดขนาดตัวอักษร (-1px)">🅰️- ย่อ</button>
+                    <span id="font-size-val" class="font-size-badge" title="ขนาดฟอนต์ปัจจุบัน">14px</span>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(1)" title="เพิ่มขนาดตัวอักษร (+1px)">🅰️+ ขยาย</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Alignment -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('left')" title="จัดชิดซ้าย">⫷ ชิดซ้าย</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('center')" title="จัดกึ่งกลาง">≡ กึ่งกลาง</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('right')" title="จัดชิดขวา">⫸ ชิดขวา</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Bold & Color -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBold()" title="ตัวหนา"><strong>𝐁 หนา</strong></button>
+                    <label for="text-color-picker" style="font-size: 11.5px; margin-left: 2px;">🎨 สี:</label>
+                    <input type="color" id="text-color-picker" value="#002b49" style="width: 24px; height: 22px; border: none; cursor: pointer; border-radius: 4px;" onchange="setTextColor(this.value)">
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Text Highlight Palette Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleHighlightMenu()" title="ไฮไลท์ข้อความ">
+                        <span>🖍️ ไฮไลท์</span> ▾
+                    </button>
+                    <div id="highlight-palette-menu" class="popup-menu">
+                        <div class="color-palette-row">
+                            <div class="color-chip" style="background: #fef08a;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fef08a')" title="สีเหลืองพาสเทล"></div>
+                            <div class="color-chip" style="background: #bbf7d0;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bbf7d0')" title="สีเขียวมินต์พาสเทล"></div>
+                            <div class="color-chip" style="background: #bae6fd;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bae6fd')" title="สีฟ้าอ่อนพาสเทล"></div>
+                            <div class="color-chip" style="background: #fed7aa;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fed7aa')" title="สีส้มพาสเทล"></div>
+                            <div class="color-chip" style="background: #fbcfe8;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fbcfe8')" title="สีชมพูพาสเทล"></div>
+                            <button class="btn-clear-hl" onmousedown="event.preventDefault()" onclick="applyHighlight('transparent')">ลบไฮไลท์</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insert Symbol Popup Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleSymbolMenu()" title="แทรกสัญลักษณ์/ไอคอน">
+                        <span>🎯 สัญลักษณ์</span> ▾
+                    </button>
+                    <div id="symbol-palette-menu" class="popup-menu" style="min-width: 240px;">
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">📋 เอกสาร & เป้าหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📋')">📋</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📊')">📊</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📈')">📈</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🎯')">🎯</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⚖️')">⚖️</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📏')">📏</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🏆')">🏆</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🥇')">🥇</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⭐')">⭐</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🌟')">🌟</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('💡')">💡</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📌')">📌</button>
+                            </div>
+                        </div>
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">➔ ลูกศร & เครื่องหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➔')">➔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➜')">➜</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('•')">•</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('✔')">✔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🔴')">🔴</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🟢')">🟢</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Clear Format & Insert Date -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('removeFormat')" title="ล้างการจัดรูปแบบกลับเป็นมาตรฐาน">🧹 ล้างฟอร์แมต</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="insertDateStamp()" title="แทรกวันที่ปัจจุบัน ณ ตำแหน่งเคอร์เซอร์">📅 ลงวันที่</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Reset & Backup Data Utilities -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" style="color: #b91c1c; border-color: #fca5a5;" onmousedown="event.preventDefault()" onclick="resetQuarterDefaults()" title="คืนค่าตัวเลขเริ่มต้นของไตรมาสนี้">🔄 คืนค่าเริ่มต้น</button>
+                    
+                    <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                        <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBackupMenu()" title="สำรองหรือกู้คืนข้อมูล JSON">
+                            <span>📦 สำรอง/กู้คืน</span> ▾
+                        </button>
+                        <div id="backup-menu" class="popup-menu" style="min-width: 190px;">
+                            <button class="menu-action-item" onclick="exportDataBackup()">📤 ดาวน์โหลดไฟล์สำรอง (.json)</button>
+                            <button class="menu-action-item" onclick="document.getElementById('backup-file-input').click()">📥 นำเข้าไฟล์สำรอง (.json)</button>
+                            <input type="file" id="backup-file-input" style="display:none;" accept=".json" onchange="importDataBackup(event)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Target Indicator -->
+                <div class="ribbon-left">
+                    <span style="color: #92400e; font-size: 11px;">กำลังเลือก:</span>
+                    <span id="active-target-name" class="active-target-pill">คลิกข้อความใดก็ได้เพื่อปรับแต่ง</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="report-canvas">
+
+        <!-- HEADER BANNER -->
+        <div class="header-banner">
+            <div class="header-left">
+                <div class="header-icon-box">📊</div>
+                <div class="header-titles">
+                    <div contenteditable="true" id="hdr-main-title" class="main-heading">ด้านที่ 1 การเงิน | ตัวชี้วัดที่ 1.1 ร้อยละของการรับชำระหนี้ต่อยอดหนี้ที่ครบกำหนดชำระ</div>
+                    <div contenteditable="true" id="hdr-sub-title" class="sub-heading">พิจารณาจากร้อยละของจำนวนหนี้ที่เงินทุนได้รับชำระคืนเทียบกับจำนวนหนี้ที่ครบกำหนดชำระทั้งหมด</div>
+                </div>
+            </div>
+            <div contenteditable="true" id="hdr-slogan" class="header-slogan">
+                บริหารการเงิน<br>เพื่อความยั่งยืน
+            </div>
+        </div>
+
+        <!-- KPI METADATA STRIP (ALL LABELS & VALUES EDITABLE & FONT-SCALABLE) -->
+        <div class="meta-strip">
+            <div class="meta-pills-left">
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-code" class="pill-lbl">📋 ตัวชี้วัดที่:</span>
+                    <span contenteditable="true" id="meta-code" class="pill-val">1.1</span>
+                </div>
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-unit" class="pill-lbl">🎯 หน่วยวัด:</span>
+                    <span contenteditable="true" id="meta-unit" class="pill-val">ร้อยละ</span>
+                </div>
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-weight" class="pill-lbl">⚖️ ค่าน้ำหนัก:</span>
+                    <span contenteditable="true" id="meta-weight" class="pill-val">10</span>
+                </div>
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-criteria" class="pill-lbl">📏 ค่าเกณฑ์วัด:</span>
+                    <span contenteditable="true" id="meta-criteria" class="pill-val">(-/+ 2.5)</span>
+                </div>
+            </div>
+
+            <!-- Rubric Levels: Right beside Criteria without gap -->
+            <div class="meta-levels-group">
+                <span contenteditable="true" id="lbl-meta-rubric" class="rubric-lbl">เกณฑ์:</span>
+                <div class="level-chip chip-l1">
+                    <div contenteditable="true" id="lhead-1" class="l-head">ระดับ 1</div>
+                    <div contenteditable="true" id="lvl-1" class="l-val">99.20</div>
+                </div>
+                <div class="level-chip chip-l2">
+                    <div contenteditable="true" id="lhead-2" class="l-head">ระดับ 2</div>
+                    <div contenteditable="true" id="lvl-2" class="l-val">99.40</div>
+                </div>
+                <div class="level-chip chip-l3">
+                    <div contenteditable="true" id="lhead-3" class="l-head">ระดับ 3</div>
+                    <div contenteditable="true" id="lvl-3" class="l-val">99.60</div>
+                </div>
+                <div class="level-chip chip-l4">
+                    <div contenteditable="true" id="lhead-4" class="l-head">ระดับ 4</div>
+                    <div contenteditable="true" id="lvl-4" class="l-val">99.80</div>
+                </div>
+                <div class="level-chip chip-l5">
+                    <div contenteditable="true" id="lhead-5" class="l-head">ระดับ 5</div>
+                    <div contenteditable="true" id="lvl-5" class="l-val">100</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE CONTENT -->
+        <div class="slide-content">
+
+            <!-- UPPER ROW: 2 CARDS -->
+            <div class="grid-upper">
+
+                <!-- CARD 1: BASELINE & TARGET AMOUNT -->
+                <div class="report-card card-target-box">
+                    <div contenteditable="true" id="target-card-title" class="target-title" style="text-align: center;">
+                        จำนวนหนี้ที่ครบกำหนดชำระ<br>ภายในปีบัญชี 2569
+                    </div>
+
+                    <div class="target-amount-box">
+                        <span contenteditable="true" id="target-main-amount" class="target-amount-val">144,727,337.44</span>
+                        <div contenteditable="true" id="target-main-unit" class="target-amount-unit">บาท</div>
+                    </div>
+
+                    <div contenteditable="true" id="target-card-subtext" class="target-subtext">
+                        * ข้อมูลลูกหนี้ปกติครบกำหนดชำระในรอบปี 2569
+                    </div>
+
+                    <div class="target-watermark">💰</div>
+                </div>
+
+                <!-- CARD 2: QUARTERLY PERFORMANCE TABLE -->
+                <div class="report-card">
+                    <div class="card-header-line">
+                        <span class="card-header-icon">📋</span>
+                        <span contenteditable="true" id="tbl-card-title">ผลการดำเนินงานรายไตรมาส</span>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="kpi-table">
+                            <thead>
+                                <tr>
+                                    <th contenteditable="true" id="th-col-1" style="width: 60px;">ไตรมาสที่</th>
+                                    <th contenteditable="true" id="th-col-2">หนี้ที่ครบกำหนด (บาท)</th>
+                                    <th contenteditable="true" id="th-col-3">หนี้ที่ได้รับชำระคืนสะสม (บาท)</th>
+                                    <th contenteditable="true" id="th-col-4" style="width: 100px;">ร้อยละรายไตรมาส</th>
+                                    <th contenteditable="true" id="th-col-5" style="width: 110px;">ร้อยละ/ระดับ (คะแนน)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="trow-1">
+                                    <td contenteditable="true" id="td-q-1">1</td>
+                                    <td contenteditable="true" id="td-target-1" style="text-align: center;">36,610,086.44</td>
+                                    <td contenteditable="true" id="td-actual-1" style="text-align: center;">36,093,264.56</td>
+                                    <td contenteditable="true" id="td-pct-1" style="font-weight: 700; color: #005691; text-align: center;">98.59</td>
+                                    <td contenteditable="true" id="td-score-1" style="text-align: center;">24.94/NA</td>
+                                </tr>
+                                <tr id="trow-2">
+                                    <td contenteditable="true" id="td-q-2">2</td>
+                                    <td contenteditable="true" id="td-target-2" style="text-align: center;">36,313,635.03</td>
+                                    <td contenteditable="true" id="td-actual-2" style="text-align: center;">72,594,910.18</td>
+                                    <td contenteditable="true" id="td-pct-2" style="font-weight: 700; color: #005691; text-align: center;">99.55</td>
+                                    <td contenteditable="true" id="td-score-2" style="text-align: center;">25.43/NA</td>
+                                </tr>
+                                <tr id="trow-3">
+                                    <td contenteditable="true" id="td-q-3">3</td>
+                                    <td contenteditable="true" id="td-target-3" style="text-align: center;">36,089,751.36</td>
+                                    <td contenteditable="true" id="td-actual-3" style="text-align: center;">108,497,272.92</td>
+                                    <td contenteditable="true" id="td-pct-3" style="font-weight: 700; color: #005691; text-align: center;">99.53</td>
+                                    <td contenteditable="true" id="td-score-3" style="text-align: center;">25.17/NA</td>
+                                </tr>
+                                <tr id="trow-4">
+                                    <td contenteditable="true" id="td-q-4">4</td>
+                                    <td contenteditable="true" id="td-target-4" style="text-align: center;">35,713,864.61</td>
+                                    <td contenteditable="true" id="td-actual-4" style="text-align: center;">144,540,373.33</td>
+                                    <td contenteditable="true" id="td-pct-4" style="font-weight: 700; color: #005691; text-align: center;">99.87</td>
+                                    <td contenteditable="true" id="td-score-4" style="text-align: center;">ระดับ 4.3500</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td contenteditable="true" id="td-q-total">รวม</td>
+                                    <td contenteditable="true" id="td-target-total" style="text-align: center;">144,727,337.44</td>
+                                    <td contenteditable="true" id="td-actual-total" style="text-align: center;">144,540,373.33</td>
+                                    <td contenteditable="true" id="td-pct-total" style="color: #003666; text-align: center;">99.87</td>
+                                    <td contenteditable="true" id="td-score-total" style="text-align: center;">ระดับ 4.3500</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- LOWER ROW: EVALUATION SUMMARY (4 FLOW BOXES) + LONG 4-QUARTER 12-MONTH GRAPH -->
+            <div class="grid-lower">
+
+                <!-- CARD 3: EVALUATION SUMMARY (4 FLOW BOXES ONLY) -->
+                <div class="report-card">
+                    <div class="card-header-line">
+                        <span class="card-header-icon">🏆</span>
+                        <span contenteditable="true" id="eval-card-title">สรุปผลการประเมิน</span>
+                    </div>
+
+                    <div class="eval-card-container">
+                        <div class="eval-steps-row">
+                            <!-- Step 1 -->
+                            <div class="eval-step-box">
+                                <span contenteditable="true" id="step-1-val" class="step-num-val">144,727,337.44<br>บาท</span>
+                                <span contenteditable="true" id="step-1-lbl" class="step-label">หนี้ที่ครบกำหนดชำระ</span>
+                            </div>
+
+                            <div class="step-arrow">➔</div>
+
+                            <!-- Step 2 -->
+                            <div class="eval-step-box">
+                                <span contenteditable="true" id="step-2-val" class="step-num-val">36,093,264.56<br>บาท</span>
+                                <span contenteditable="true" id="step-2-lbl" class="step-label">ได้รับชำระหนี้คืน</span>
+                            </div>
+
+                            <div class="step-arrow">➔</div>
+
+                            <!-- Step 3 -->
+                            <div class="eval-step-box">
+                                <span contenteditable="true" id="step-3-val" class="step-num-val step-highlight-blue">98.59%</span>
+                                <span contenteditable="true" id="step-3-lbl" class="step-label">ร้อยละสะสม</span>
+                            </div>
+
+                            <div class="step-arrow">➔</div>
+
+                            <!-- Step 4 -->
+                            <div class="eval-step-box">
+                                <div contenteditable="true" id="step-4-val" class="step-num-val step-highlight-gold">ระดับ<br>3.6500</div>
+                                <span contenteditable="true" id="step-4-lbl" class="step-label">คะแนนที่ได้</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 4: LONG 4-QUARTER 12-MONTH LINE GRAPH -->
+                <div class="report-card graph-card">
+                    <div class="graph-header-row">
+                        <div contenteditable="true" id="graph-title-text" class="graph-title">
+                            📈 ร้อยละของการรับชำระหนี้รายเดือน
+                        </div>
+                        <span style="font-size: 11px; font-weight: 600; color: #005691; background: #eaf3fb; padding: 2px 8px; border-radius: 4px;">
+                            หน่วย: ร้อยละ
+                        </span>
+                    </div>
+
+                    <!-- Chart Container -->
+                    <div class="graph-canvas-container">
+                        <canvas id="monthlyLineChart"></canvas>
+                    </div>
+
+                    <!-- Monthly Data Input Strip (With EDITABLE Month/Year labels and values) -->
+                    <div id="month-strip" class="month-input-strip">
+                        <div class="strip-header">
+                            <span>✏️ กรอก/แก้ไข ชื่อเดือน ปี และตัวเลขผลงานรายเดือน (คำนวณลงกราฟทันที):</span>
+                            <span style="font-size: 10px; color: #7f9bb3;">* เปลี่ยนชื่อเดือน/ปี หรือตัวเลขได้โดยตรง</span>
+                        </div>
+                        <div class="months-grid">
+                            <!-- Q1 -->
+                            <div class="month-cell" id="mcell-0" title="ไตรมาส 1">
+                                <input type="text" class="m-lbl-input" id="mlbl-0" value="ต.ค.-68" oninput="onMonthLabelChanged(0, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-0" value="98.42" oninput="onMonthDataChanged(0, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-1" title="ไตรมาส 1">
+                                <input type="text" class="m-lbl-input" id="mlbl-1" value="พ.ย.-68" oninput="onMonthLabelChanged(1, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-1" value="97.88" oninput="onMonthDataChanged(1, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-2" title="ไตรมาส 1">
+                                <input type="text" class="m-lbl-input" id="mlbl-2" value="ธ.ค.-68" oninput="onMonthLabelChanged(2, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-2" value="99.46" oninput="onMonthDataChanged(2, this.value)">
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="month-cell" id="mcell-3" title="ไตรมาส 2">
+                                <input type="text" class="m-lbl-input" id="mlbl-3" value="ม.ค.-69" oninput="onMonthLabelChanged(3, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-3" value="100.87" oninput="onMonthDataChanged(3, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-4" title="ไตรมาส 2">
+                                <input type="text" class="m-lbl-input" id="mlbl-4" value="ก.พ.-69" oninput="onMonthLabelChanged(4, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-4" value="96.93" oninput="onMonthDataChanged(4, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-5" title="ไตรมาส 2">
+                                <input type="text" class="m-lbl-input" id="mlbl-5" value="มี.ค.-69" oninput="onMonthLabelChanged(5, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-5" value="103.76" oninput="onMonthDataChanged(5, this.value)">
+                            </div>
+
+                            <!-- Q3 -->
+                            <div class="month-cell" id="mcell-6" title="ไตรมาส 3">
+                                <input type="text" class="m-lbl-input" id="mlbl-6" value="เม.ย.-69" oninput="onMonthLabelChanged(6, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-6" value="99.02" oninput="onMonthDataChanged(6, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-7" title="ไตรมาส 3">
+                                <input type="text" class="m-lbl-input" id="mlbl-7" value="พ.ค.-69" oninput="onMonthLabelChanged(7, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-7" value="99.85" oninput="onMonthDataChanged(7, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-8" title="ไตรมาส 3">
+                                <input type="text" class="m-lbl-input" id="mlbl-8" value="มิ.ย.-69" oninput="onMonthLabelChanged(8, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-8" value="99.57" oninput="onMonthDataChanged(8, this.value)">
+                            </div>
+
+                            <!-- Q4 -->
+                            <div class="month-cell" id="mcell-9" title="ไตรมาส 4">
+                                <input type="text" class="m-lbl-input" id="mlbl-9" value="ก.ค.-69" oninput="onMonthLabelChanged(9, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-9" value="101.45" oninput="onMonthDataChanged(9, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-10" title="ไตรมาส 4">
+                                <input type="text" class="m-lbl-input" id="mlbl-10" value="ส.ค.-69" oninput="onMonthLabelChanged(10, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-10" value="96.62" oninput="onMonthDataChanged(10, this.value)">
+                            </div>
+                            <div class="month-cell" id="mcell-11" title="ไตรมาส 4">
+                                <input type="text" class="m-lbl-input" id="mlbl-11" value="ก.ย.-69" oninput="onMonthLabelChanged(11, this.value)">
+                                <input type="number" step="0.01" class="m-input" id="minput-11" value="104.71" oninput="onMonthDataChanged(11, this.value)">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER BAR -->
+        <div class="footer-bar">
+            <div contenteditable="true" id="ftr-left" class="footer-left">
+                สำนักงานคณะกรรมการข้าราชการครูและบุคลากรทางการศึกษา (ก.ค.ศ.)
+            </div>
+            <div contenteditable="true" id="ftr-right" class="footer-right">
+                ข้อมูลโปร่งใส พัฒนาต่อเนื่อง เพื่ออนาคตที่มั่นคง
+            </div>
+        </div>
+
+    </div>
+
+    </div> <!-- End .page-wrapper -->
+    <div id="toast-notification">ข้อความแจ้งเตือน</div>
+
+    <script>
+        let monthlyChartInstance = null;
+        let lastFocusedElement = null;
+        let activeQuarter = 4;
+
+        // Quarter Defaults for 1.1 based on official data
+        const quarterDefaults11 = {
+            1: {
+                step2Val: "36,093,264.56<br>บาท",
+                step3Val: "98.59%",
+                step4Val: "ระดับ<br>3.6500",
+                tableRows: [
+                    ["1", "36,610,086.44", "36,093,264.56", "98.59", "24.94/NA"],
+                    ["2", "36,313,635.03", "-", "-", "-"],
+                    ["3", "36,089,751.36", "-", "-", "-"],
+                    ["4", "35,713,864.61", "-", "-", "-"]
+                ],
+                totalRow: ["144,727,337.44", "36,093,264.56", "98.59", "24.94/NA"]
+            },
+            2: {
+                step2Val: "72,594,910.18<br>บาท",
+                step3Val: "99.55%",
+                step4Val: "ระดับ<br>4.1500",
+                tableRows: [
+                    ["1", "36,610,086.44", "36,093,264.56", "98.59", "24.94/NA"],
+                    ["2", "36,313,635.03", "72,594,910.18", "99.55", "25.43/NA"],
+                    ["3", "36,089,751.36", "-", "-", "-"],
+                    ["4", "35,713,864.61", "-", "-", "-"]
+                ],
+                totalRow: ["144,727,337.44", "72,594,910.18", "99.55", "4.1500"]
+            },
+            3: {
+                step2Val: "108,497,272.92<br>บาท",
+                step3Val: "99.53%",
+                step4Val: "ระดับ<br>4.1300",
+                tableRows: [
+                    ["1", "36,610,086.44", "36,093,264.56", "98.59", "24.94/NA"],
+                    ["2", "36,313,635.03", "72,594,910.18", "99.55", "25.43/NA"],
+                    ["3", "36,089,751.36", "108,497,272.92", "99.53", "25.17/NA"],
+                    ["4", "35,713,864.61", "-", "-", "-"]
+                ],
+                totalRow: ["144,727,337.44", "108,497,272.92", "99.53", "4.1300"]
+            },
+            4: {
+                step2Val: "144,540,373.33<br>บาท",
+                step3Val: "99.87%",
+                step4Val: "ระดับ<br>4.3500",
+                tableRows: [
+                    ["1", "36,610,086.44", "36,093,264.56", "98.59", "24.94/NA"],
+                    ["2", "36,313,635.03", "72,594,910.18", "99.55", "25.43/NA"],
+                    ["3", "36,089,751.36", "108,497,272.92", "99.53", "25.17/NA"],
+                    ["4", "35,713,864.61", "144,540,373.33", "99.87", "ระดับ 4.3500"]
+                ],
+                totalRow: ["144,727,337.44", "144,540,373.33", "99.87", "ระดับ 4.3500"]
+            }
+        };
+
+        function applyQuarterDefault11(q) {
+            const def = quarterDefaults11[q] || quarterDefaults11[4];
+            const s2 = document.getElementById('step-2-val');
+            if (s2) s2.innerHTML = def.step2Val;
+            const s3 = document.getElementById('step-3-val');
+            if (s3) s3.innerText = def.step3Val;
+            const s4 = document.getElementById('step-4-val');
+            if (s4) s4.innerHTML = def.step4Val;
+
+            for (let r = 1; r <= 4; r++) {
+                const row = def.tableRows[r - 1];
+                const tdTarget = document.getElementById(`td-target-${r}`);
+                if (tdTarget) tdTarget.innerText = row[1];
+                const tdActual = document.getElementById(`td-actual-${r}`);
+                if (tdActual) tdActual.innerText = row[2];
+                const tdPct = document.getElementById(`td-pct-${r}`);
+                if (tdPct) tdPct.innerText = row[3];
+                const tdScore = document.getElementById(`td-score-${r}`);
+                if (tdScore) tdScore.innerText = row[4];
+            }
+
+            if (def.totalRow) {
+                const totTarget = document.getElementById('td-target-total');
+                if (totTarget) totTarget.innerText = def.totalRow[0];
+                const totActual = document.getElementById('td-actual-total');
+                if (totActual) totActual.innerText = def.totalRow[1];
+                const totPct = document.getElementById('td-pct-total');
+                if (totPct) totPct.innerText = def.totalRow[2];
+                const totScore = document.getElementById('td-score-total');
+                if (totScore) totScore.innerText = def.totalRow[3];
+            }
+            refreshQuarterView();
+        }
+
+        let defaultSnapshot = null;
+
+        // Base 12 Month Names
+        const monthBaseNames = [
+            'ต.ค.', 'พ.ย.', 'ธ.ค.',
+            'ม.ค.', 'ก.พ.', 'มี.ค.',
+            'เม.ย.', 'พ.ค.', 'มิ.ย.',
+            'ก.ค.', 'ส.ค.', 'ก.ย.'
+        ];
+
+        // Editable 12 Month Labels for X-Axis
+        let monthLabels = [
+            'ต.ค.-68', 'พ.ย.-68', 'ธ.ค.-68',
+            'ม.ค.-69', 'ก.พ.-69', 'มี.ค.-69',
+            'เม.ย.-69', 'พ.ค.-69', 'มิ.ย.-69',
+            'ก.ค.-69', 'ส.ค.-69', 'ก.ย.-69'
+        ];
+
+        // Default Monthly Raw Data
+        let monthRawValues = [
+            98.42, 97.88, 99.46,
+            100.87, 96.93, 103.76,
+            99.02, 99.85, 99.57,
+            101.45, 96.62, 104.71
+        ];
+
+        // Custom Inline Plugin to Draw Exact Numbers Above Each Point
+        const customPointLabelsPlugin = {
+            id: 'customPointLabelsPlugin',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    if (meta.hidden) return;
+
+                    meta.data.forEach((element, index) => {
+                        const val = dataset.data[index];
+                        if (val !== null && val !== undefined && !isNaN(val) && val !== '') {
+                            ctx.save();
+                            ctx.font = 'bold 11px Prompt, Sarabun, sans-serif';
+                            ctx.fillStyle = '#00264d';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            const textVal = Number(val).toFixed(2);
+                            ctx.fillText(textVal, element.x, element.y - 7);
+                            ctx.restore();
+                        }
+                    });
+                });
+            }
+        };
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        // Initialize Chart (Canvas stays permanently intact in DOM)
+        function initMonthlyChart() {
+            const ctx = document.getElementById('monthlyLineChart').getContext('2d');
+            const filteredData = getFilteredQuarterData();
+
+            monthlyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...monthLabels],
+                    datasets: [{
+                        label: 'ร้อยละการรับชำระหนี้รายเดือน',
+                        data: filteredData,
+                        borderColor: '#005fa3',
+                        backgroundColor: 'rgba(0, 95, 163, 0.08)',
+                        borderWidth: 2.6,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#004b87',
+                        pointBorderWidth: 2.2,
+                        pointRadius: 5.5,
+                        pointHoverRadius: 7.5,
+                        pointHoverBackgroundColor: '#ffcc00',
+                        pointHoverBorderColor: '#003366',
+                        fill: false,
+                        tension: 0.2,
+                        spanGaps: false
+                    }]
+                },
+                plugins: [customPointLabelsPlugin],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 22,
+                            bottom: 5,
+                            left: 24,
+                            right: 18
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: ctx => ` ผลงาน: ${Number(ctx.raw).toFixed(2)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 80,
+                            max: 115,
+                            ticks: {
+                                stepSize: 5,
+                                font: { family: 'Prompt', size: 10, weight: '500' },
+                                color: '#4a6782',
+                                callback: val => val
+                            },
+                            grid: {
+                                color: '#e8f0f8',
+                                drawBorder: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'ร้อยละ',
+                                align: 'end',
+                                font: { family: 'Prompt', size: 11, weight: '600' },
+                                color: '#003e6b',
+                                padding: { bottom: 0 }
+                            }
+                        },
+                        x: {
+                            offset: true,
+                            ticks: {
+                                font: { family: 'Prompt', size: 10.5, weight: '600' },
+                                color: '#002b49'
+                            },
+                            grid: {
+                                color: '#f0f5fa'
+                            },
+                            title: {
+                                display: true,
+                                text: 'เดือน',
+                                font: { family: 'Prompt', size: 11, weight: '600' },
+                                color: '#003e6b',
+                                padding: { top: 2 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Return 12-length array with nulls for months beyond activeQuarter
+        function getFilteredQuarterData() {
+            const maxMonthIdx = activeQuarter * 3; // Q1=3, Q2=6, Q3=9, Q4=12
+            let res = [];
+            for (let i = 0; i < 12; i++) {
+                if (i < maxMonthIdx) {
+                    res.push(monthRawValues[i]);
+                } else {
+                    res.push(null);
+                }
+            }
+            return res;
+        }
+
+        // Update month strip dimming & chart lines for current quarter
+        function refreshQuarterView() {
+            const maxMonthIdx = activeQuarter * 3;
+
+            for (let i = 0; i < 12; i++) {
+                const cell = document.getElementById(`mcell-${i}`);
+                if (i < maxMonthIdx) {
+                    cell.classList.remove('inactive');
+                } else {
+                    cell.classList.add('inactive');
+                }
+            }
+
+            if (monthlyChartInstance) {
+                monthlyChartInstance.data.labels = [...monthLabels];
+                monthlyChartInstance.data.datasets[0].data = getFilteredQuarterData();
+                monthlyChartInstance.update();
+            }
+
+            document.getElementById('quarter-badge').innerText = `📂 ข้อมูลแยกเฉพาะ: ไตรมาส ${activeQuarter}`;
+        }
+
+        // When user edits Month/Year Label
+        function onMonthLabelChanged(idx, val) {
+            monthLabels[idx] = val;
+            if (monthlyChartInstance) {
+                monthlyChartInstance.data.labels = [...monthLabels];
+                monthlyChartInstance.update();
+            }
+            saveCurrentQuarter(false);
+        }
+
+        // When user edits monthly percentage value
+        function onMonthDataChanged(idx, val) {
+            const num = parseFloat(val);
+            monthRawValues[idx] = !isNaN(num) ? num : null;
+
+            if (monthlyChartInstance) {
+                monthlyChartInstance.data.datasets[0].data = getFilteredQuarterData();
+                monthlyChartInstance.update();
+            }
+            saveCurrentQuarter(false);
+        }
+
+        // Quick Fiscal Year Updater
+        function quickUpdateFiscalYear(yearVal) {
+            const yNum = parseInt(yearVal) || 2569;
+            const y1 = String(yNum - 1).slice(-2);
+            const y2 = String(yNum).slice(-2);
+
+            for (let i = 0; i < 3; i++) {
+                monthLabels[i] = `${monthBaseNames[i]}-${y1}`;
+                document.getElementById(`mlbl-${i}`).value = monthLabels[i];
+            }
+            for (let i = 3; i < 12; i++) {
+                monthLabels[i] = `${monthBaseNames[i]}-${y2}`;
+                document.getElementById(`mlbl-${i}`).value = monthLabels[i];
+            }
+
+            if (monthlyChartInstance) {
+                monthlyChartInstance.data.labels = [...monthLabels];
+                monthlyChartInstance.update();
+            }
+
+            const targetTitle = document.getElementById('target-card-title');
+            if (targetTitle) {
+                targetTitle.innerHTML = `จำนวนหนี้ที่ครบกำหนดชำระ<br>ภายในปีบัญชี ${yearVal}`;
+            }
+
+            saveCurrentQuarter(false);
+            showToast(`📅 ปรับปีเป็น ${yearVal} เรียบร้อยแล้ว`);
+        }
+
+        // Toggle Month Input Strip display
+        function toggleMonthInputStrip() {
+            const strip = document.getElementById('month-strip');
+            if (strip.style.display === 'none') {
+                strip.style.display = 'flex';
+            } else {
+                strip.style.display = 'none';
+            }
+        }
+
+        /* -------------------------------------------------------------------------
+           SAFE PER-QUARTER STATE CAPTURE & RESTORE (DOES NOT TOUCH CANVAS DOM)
+        -------------------------------------------------------------------------- */
+        function getStorageKey(q) {
+            return `kpi_official_11_Q${q}`;
+        }
+
+        function captureCurrentState() {
+            const editables = {};
+            document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                const key = el.id || ('ed_' + idx);
+                editables[key] = {
+                    html: el.innerHTML,
+                    style: el.getAttribute('style') || ''
+                };
+            });
+
+            return {
+                fiscalYear: (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value,
+                monthLabels: [...monthLabels],
+                monthRawValues: [...monthRawValues],
+                editables: editables
+            };
+        }
+
+        function applyCapturedState(state) {
+            if (!state) return;
+
+            if (state.editables) {
+                document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                    const key = el.id || ('ed_' + idx);
+                    if (state.editables[key]) {
+                        el.innerHTML = state.editables[key].html;
+                        el.setAttribute('style', state.editables[key].style);
+                    }
+                });
+            }
+
+            if (state.monthLabels) monthLabels = [...state.monthLabels];
+            if (state.monthRawValues) monthRawValues = [...state.monthRawValues];
+            if (state.fiscalYear) (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value = state.fiscalYear;
+
+            // Sync input boxes
+            for (let i = 0; i < 12; i++) {
+                const lblInput = document.getElementById(`mlbl-${i}`);
+                if (lblInput) lblInput.value = monthLabels[i];
+
+                const valInput = document.getElementById(`minput-${i}`);
+                if (valInput) valInput.value = monthRawValues[i] !== null ? monthRawValues[i] : '';
+            }
+        }
+
+        function saveCurrentQuarter(showMsg = true) {
+            const state = captureCurrentState();
+            localStorage.setItem(getStorageKey(activeQuarter), JSON.stringify(state));
+            if (showMsg) {
+                showToast(`💾 บันทึกข้อมูล "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+            }
+        }
+
+        function switchQuarter(newQ) {
+            newQ = parseInt(newQ);
+            if (newQ === activeQuarter) return;
+
+            // 1. Auto-save current quarter before leaving
+            saveCurrentQuarter(false);
+
+            // 2. Update activeQuarter
+            activeQuarter = newQ;
+
+            // 3. Load saved data for newQ (or default snapshot if never saved)
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved) {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                }
+            } else if (typeof applyQuarterDefault11 === 'function') {
+                applyQuarterDefault11(activeQuarter);
+            } else if (defaultSnapshot) {
+                applyCapturedState(JSON.parse(JSON.stringify(defaultSnapshot)));
+            }
+
+            // 4. Refresh chart and active month cells
+            refreshQuarterView();
+            showToast(`📂 สลับมาที่ "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+        }
+
+        function resetQuarterDefaults() {
+            if (confirm(`ต้องการคืนค่าเริ่มต้นเฉพาะ "ไตรมาส ${activeQuarter}" ใช่หรือไม่?`)) {
+                localStorage.removeItem(getStorageKey(activeQuarter));
+                if (defaultSnapshot) {
+                    applyCapturedState(JSON.parse(JSON.stringify(defaultSnapshot)));
+                }
+                refreshQuarterView();
+                showToast(`🔄 คืนค่าเริ่มต้น "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+            }
+        }
+
+        // Auto-save whenever user edits any text inside #report-canvas
+        document.getElementById('report-canvas').addEventListener('input', function() {
+            saveCurrentQuarter(false);
+        });
+
+        /* -------------------------------------------------------------------------
+           TEXT FORMATTING CONTROLS (Font Size, Text Alignment, Bold, Color)
+        -------------------------------------------------------------------------- */
+        function updateActiveTarget(el) {
+            if (!el) return;
+            const editable = el.closest('[contenteditable="true"]') || (el.tagName === 'INPUT' && el.type === 'text' ? el : null);
+            if (editable) {
+                lastFocusedElement = editable;
+                const name = editable.id || editable.className || editable.tagName;
+                const previewText = editable.innerText || editable.value || '';
+                const shortPreview = previewText.length > 22 ? previewText.substring(0, 22) + '...' : previewText;
+                const targetNameEl = document.getElementById('active-target-name');
+                if (targetNameEl) {
+                    targetNameEl.innerText = shortPreview ? `"${shortPreview.trim()}"` : `[${name}]`;
+                    targetNameEl.style.color = '#005691';
+                    targetNameEl.style.fontWeight = '700';
+                }
+
+                // Update live font size badge
+                const currentSize = Math.round(parseFloat(window.getComputedStyle(editable).fontSize)) || 14;
+                const fsBadge = document.getElementById('font-size-val');
+                if (fsBadge) fsBadge.innerText = currentSize + 'px';
+            }
+        }
+
+        document.addEventListener('focusin', e => updateActiveTarget(e.target));
+        document.addEventListener('click', e => updateActiveTarget(e.target));
+        document.addEventListener('keyup', e => updateActiveTarget(e.target));
+
+        // Adjust Font Size (+ / -)
+        function adjustFontSize(delta) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการปรับขนาดก่อนครับ');
+                return;
+            }
+            const currentSize = parseFloat(window.getComputedStyle(lastFocusedElement).fontSize) || 14;
+            const newSize = Math.max(8, Math.min(68, Math.round(currentSize + delta)));
+            lastFocusedElement.style.fontSize = newSize + 'px';
+            
+            // Update live font size badge
+            const fsBadge = document.getElementById('font-size-val');
+            if (fsBadge) fsBadge.innerText = newSize + 'px';
+            
+            saveCurrentQuarter(false);
+        }
+
+        // Set Text Alignment (Left, Center, Right)
+        function setTextAlign(align) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการจัดตำแหน่งก่อนครับ');
+                return;
+            }
+            lastFocusedElement.style.textAlign = align;
+            saveCurrentQuarter(false);
+        }
+
+        // Toggle Bold
+        function toggleBold() {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการปรับตัวหนาก่อนครับ');
+                return;
+            }
+            const currentWeight = window.getComputedStyle(lastFocusedElement).fontWeight;
+            if (currentWeight === 'bold' || parseInt(currentWeight) >= 700) {
+                lastFocusedElement.style.fontWeight = 'normal';
+            } else {
+                lastFocusedElement.style.fontWeight = 'bold';
+            }
+            saveCurrentQuarter(false);
+        }
+
+        // Set Text Color
+        function setTextColor(color) {
+            if (!lastFocusedElement) return;
+            lastFocusedElement.style.color = color;
+            saveCurrentQuarter(false);
+        }
+
+        /* Text Highlight (🖍️) */
+        function toggleHighlightMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const menu = document.getElementById('highlight-palette');
+            const isShown = menu.style.display === 'block';
+            closeAllToolPopups();
+            if (!isShown) menu.style.display = 'block';
+        }
+
+        function applyHighlight(color) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการไฮไลท์ก่อนครับ');
+                return;
+            }
+            const selection = window.getSelection();
+            if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
+                if (color === 'transparent') {
+                    document.execCommand('removeFormat', false, null);
+                } else {
+                    document.execCommand('hiliteColor', false, color);
+                    document.execCommand('backColor', false, color);
+                }
+            } else {
+                if (color === 'transparent') {
+                    lastFocusedElement.style.backgroundColor = '';
+                } else {
+                    lastFocusedElement.style.backgroundColor = color;
+                }
+            }
+            closeAllToolPopups();
+            saveCurrentQuarter(false);
+            showToast(color === 'transparent' ? 'ล้างสีไฮไลท์แล้ว' : 'ใส่สีไฮไลท์เรียบร้อยแล้ว');
+        }
+
+        /* Symbol / Emoji Insertion (🎯) */
+        function toggleSymbolMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const menu = document.getElementById('symbol-palette');
+            const isShown = menu.style.display === 'block';
+            closeAllToolPopups();
+            if (!isShown) menu.style.display = 'block';
+        }
+
+        function insertSymbol(sym) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการแทรกสัญลักษณ์ก่อนครับ');
+                return;
+            }
+            lastFocusedElement.focus();
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0) {
+                const range = sel.getRangeAt(0);
+                range.deleteContents();
+                const node = document.createTextNode(sym + ' ');
+                range.insertNode(node);
+                range.setStartAfter(node);
+                range.setEndAfter(node);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } else {
+                lastFocusedElement.innerText += ' ' + sym;
+            }
+            closeAllToolPopups();
+            saveCurrentQuarter(false);
+            showToast(`แทรกสัญลักษณ์ "${sym}" เรียบร้อยแล้ว`);
+        }
+
+        function closeAllToolPopups() {
+            const hl = document.getElementById('highlight-palette');
+            if (hl) hl.style.display = 'none';
+            const sym = document.getElementById('symbol-palette');
+            if (sym) sym.style.display = 'none';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-wrapper')) {
+                closeAllToolPopups();
+            }
+        });
+
+        /* -------------------------------------------------------------------------
+           EXPORT AS IMAGE (PNG)
+        -------------------------------------------------------------------------- */
+        function exportPNG() {
+            const canvasEl = document.getElementById('report-canvas');
+            const originalShadow = canvasEl.style.boxShadow;
+            canvasEl.style.boxShadow = 'none';
+
+            const strip = document.getElementById('month-strip');
+            const stripWasVisible = strip.style.display !== 'none';
+            strip.style.display = 'none';
+
+            html2canvas(canvasEl, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                canvasEl.style.boxShadow = originalShadow;
+                if (stripWasVisible) strip.style.display = 'flex';
+
+                const link = document.createElement('a');
+                const year = (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value;
+                link.download = `รายงานตัวชี้วัด_1.1_ปี_${year}_ไตรมาส_${activeQuarter}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Window Onload
+        window.onload = function() {
+            // Clear old buggy storage keys if present
+            ['1', '2', '3', '4'].forEach(q => localStorage.removeItem(`kpi_save_1_1_Q${q}`));
+            localStorage.removeItem('kpi_dashboard_save_1_1');
+
+            // 1. Capture clean initial HTML state as defaultSnapshot
+            defaultSnapshot = captureCurrentState();
+
+            // 2. Initialize Chart first so canvas is bound cleanly
+            activeQuarter = parseInt(document.getElementById('quarter-focus').value) || 1;
+            initMonthlyChart();
+
+            // 3. Load saved state for activeQuarter if any, or default preset
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved) {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                }
+            } else if (typeof applyQuarterDefault11 === 'function') {
+                applyQuarterDefault11(activeQuarter);
+            }
+
+            // 4. Refresh chart & active month inputs
+            refreshQuarterView();
+        };
+    
+        // ============================================================
+        // MODERN TOOLBAR, DUAL-MODE, EXPORT & DATA PERSISTENCE SUITE
+        // ============================================================
+        let currentAppMode = 'preview'; // 'preview' or 'edit'
+        const KPI_KEY = '1.1';
+        const STORAGE_KEY_PREFIX = 'kpi_official_11_Q';
+
+
+        function navigateToKPI(targetKey) {
+                                                            const routes = {
+                '1.1': 'ตัวชี้วัดที่ 1.1.html',
+                '1.2.1': 'ตัวชี้วัดที่ 1.2.1.html',
+                '1.2.2': 'ตัวชี้วัดที่ 1.2.2.html',
+                '2.1': 'ตัวชี้วัดที่ 2.1.html',
+                '2.2': 'ตัวชี้วัดที่ 2.2.html',
+                '3.1': 'ตัวชี้วัดที่ 3.1.html',
+                '3.2': 'ตัวชี้วัดที่ 3.2.html',
+                '3.3': 'ตัวชี้วัดที่ 3.3.html',
+                '4.1': 'ตัวชี้วัดที่ 4.1.html',
+                '4.2': 'ตัวชี้วัดที่ 4.2.html',
+                '4.3': 'ตัวชี้วัดที่ 4.3.html',
+                '5.1': 'ตัวชี้วัดที่ 5.1.html',
+                '5.2': 'ตัวชี้วัดที่ 5.2.html',
+                '6.1': 'ตัวชี้วัดที่ 6.1.html'
+            };
+            if (routes[targetKey] && !window.location.pathname.endsWith(encodeURI(routes[targetKey])) && !window.location.pathname.endsWith(routes[targetKey])) {
+                showToast(`⏳ กำลังเปิด ${routes[targetKey]}...`);
+                setTimeout(() => {
+                    window.location.href = routes[targetKey];
+                }, 300);
+            }
+        }
+
+        function setAppMode(mode) {
+            currentAppMode = mode;
+            const btnPreview = document.getElementById('btn-mode-preview');
+            const btnEdit = document.getElementById('btn-mode-edit');
+            const formatBar = document.getElementById('full-format-bar');
+
+            if (mode === 'preview') {
+                document.body.classList.remove('app-mode-edit');
+                document.body.classList.add('app-mode-preview');
+                if (btnPreview) btnPreview.classList.add('active');
+                if (btnEdit) btnEdit.classList.remove('active', 'edit-active');
+                if (formatBar) formatBar.classList.add('mode-hidden');
+                showToast('👁️ สลับสู่โหมดนำเสนอ (Preview) - แสดงภาพสไลด์ Infographic สะอาดตา');
+            } else {
+                document.body.classList.remove('app-mode-preview');
+                document.body.classList.add('app-mode-edit');
+                if (btnPreview) btnPreview.classList.remove('active');
+                if (btnEdit) btnEdit.classList.add('active', 'edit-active');
+                if (formatBar) formatBar.classList.remove('mode-hidden');
+                showToast('✏️ สลับสู่โหมดแก้ไข (Edit) - เปิดแถบเครื่องมือปรับแต่งข้อความและเกณฑ์');
+            }
+        }
+
+        function copyImageToClipboard() {
+            showToast('⏳ กำลังเรนเดอร์และคัดลอกภาพลงคลิปบอร์ด...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    canvas.toBlob(blob => {
+                        if (!navigator.clipboard || !navigator.clipboard.write) {
+                            showToast('⚠️ เบราว์เซอร์ไม่รองรับ Direct Clipboard (ใช้ปุ่มส่งออกภาพ PNG แทนได้ครับ)');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                            return;
+                        }
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        navigator.clipboard.write([item]).then(() => {
+                            showToast('📋 คัดลอกภาพสไลด์แล้ว! สามารถกด Ctrl+V วางใน PowerPoint หรือ LINE ได้ทันที');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        }).catch(err => {
+                            console.error(err);
+                            showToast('⚠️ ไม่สามารถเขียนลงคลิปบอร์ดได้ กรุณาใช้ปุ่มส่งออกภาพ PNG');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        });
+                    }, 'image/png');
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้างภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToImage() {
+            showToast('⏳ กำลังเรนเดอร์ภาพความละเอียดสูง (โหมดสไลด์นำเสนอ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvas = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvas, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(renderedCanvas => {
+                    const link = document.createElement('a');
+                    link.download = `รายงานตัวชี้วัด_1.1_ไตรมาส${activeQuarter}_Infographic.png`;
+                    link.href = renderedCanvas.toDataURL('image/png');
+                    link.click();
+                    showToast('✅ ส่งออกภาพสำเร็จแล้ว!');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการบันทึกภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToPDF() {
+            showToast('⏳ กำลังสร้างไฟล์ PDF เต็มแผ่น (คมชัดระดับเดียวกับรูปภาพ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    const { jsPDF } = window.jspdf;
+                    const imgWidthPt = (canvas.width / 2) * 0.75;
+                    const imgHeightPt = (canvas.height / 2) * 0.75;
+                    const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+
+                    const pdf = new jsPDF({
+                        orientation: orientation,
+                        unit: 'pt',
+                        format: [imgWidthPt, imgHeightPt]
+                    });
+
+                    const imgData = canvas.toDataURL('image/png');
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidthPt, imgHeightPt, undefined, 'FAST');
+                    pdf.save(`รายงานตัวชี้วัด_1.1_ไตรมาส${activeQuarter}_Infographic.pdf`);
+                    showToast('✅ ส่งออกไฟล์ PDF สำเร็จ (เต็มแผ่นไร้ขอบขาว เหมือนรูปภาพ 100%)!');
+
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้าง PDF');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    showToast('⛶ เข้าสู่โหมดเต็มหน้าจอแล้ว (กด Esc เพื่อออกจากเต็มจอ)');
+                }).catch(err => {
+                    console.error(err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    showToast('ออกจากโหมดเต็มหน้าจอแล้ว');
+                }
+            }
+        }
+
+        function insertDateStamp() {
+            const today = new Date();
+            const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const dateStr = `ข้อมูล ณ วันที่ ${today.getDate()} ${thaiMonths[today.getMonth()]} ${today.getFullYear() + 543}`;
+            document.execCommand('insertText', false, dateStr);
+            showToast(`📅 แทรกวันที่: "${dateStr}" สำเร็จ`);
+        }
+
+        function toggleBackupMenu() {
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.toggle('show');
+        }
+
+        function exportDataBackup() {
+            const backupData = {
+                app: 'KPI_Report_System',
+                kpi: '1.1',
+                fiscalYear: typeof currentFiscalYear !== 'undefined' ? currentFiscalYear : '2569',
+                exportedAt: new Date().toISOString(),
+                storage: {}
+            };
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k.startsWith('kpi_official_11_Q')) {
+                    backupData.storage[k] = localStorage.getItem(k);
+                }
+            }
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `backup_kpi_1.1_${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            showToast('📤 ส่งออกไฟล์สำรองข้อมูลสำเร็จ!');
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function importDataBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data && data.storage) {
+                        for (let k in data.storage) {
+                            localStorage.setItem(k, data.storage[k]);
+                        }
+                        showToast('📥 กู้คืนข้อมูลสำเร็จ! กำลังรีโหลดหน้าจอ...');
+                        setTimeout(() => location.reload(), 600);
+                    } else {
+                        showToast('❌ รูปแบบไฟล์สำรองไม่ถูกต้อง');
+                    }
+                } catch(err) {
+                    showToast('❌ เกิดข้อผิดพลาดในการอ่านไฟล์สำรอง');
+                }
+            };
+            reader.readAsText(file);
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function adjustFontSize(delta) {
+            if (!lastFocusedElement) return;
+            const curSize = parseInt(window.getComputedStyle(lastFocusedElement).fontSize) || 14;
+            const newSize = Math.max(9, Math.min(36, curSize + delta));
+            lastFocusedElement.style.fontSize = newSize + 'px';
+            const badge = document.getElementById('font-size-val');
+            if (badge) badge.innerText = newSize + 'px';
+        }
+
+        function setTextAlign(align) {
+            if (!lastFocusedElement) return;
+            lastFocusedElement.style.textAlign = align;
+        }
+
+        function toggleBold() {
+            document.execCommand('bold', false, null);
+        }
+
+        function setTextColor(color) {
+            document.execCommand('foreColor', false, color);
+        }
+
+        function toggleHighlightMenu() {
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function applyHighlight(color) {
+            document.execCommand('hiliteColor', false, color);
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        function toggleSymbolMenu() {
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function insertSymbol(sym) {
+            document.execCommand('insertText', false, sym);
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        /* duplicate showToast */
+
+        function bindEditableEvents() {
+            const editables = document.querySelectorAll('[contenteditable="true"]');
+            editables.forEach(el => {
+                el.addEventListener('focus', () => {
+                    lastFocusedElement = el;
+                    const pill = document.getElementById('active-target-name');
+                    if (pill) {
+                        const text = (el.innerText || el.textContent || '').trim();
+                        pill.innerText = text.length > 25 ? text.slice(0, 22) + '...' : text || el.id || 'กำลังเลือก';
+                    }
+                    const sz = parseInt(window.getComputedStyle(el).fontSize) || 14;
+                    const badge = document.getElementById('font-size-val');
+                    if (badge) badge.innerText = sz + 'px';
+                });
+            });
+        }
+    
+    </script>
+</body>
+</html>

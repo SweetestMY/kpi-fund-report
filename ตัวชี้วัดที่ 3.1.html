@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มรายงานผลตัวชี้วัดที่ 3.1 ร้อยละเงินอนุมัติให้กู้ยืม (KPI Presentation Dashboard)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #005691;
+            --primary-dark: #003865;
+            --primary-light: #e6f0fa;
+            --accent-blue: #0088cc;
+            --navy-dark: #002244;
+            --gold: #d4af37;
+            --gold-light: #fff9e6;
+            --gold-dark: #b38f2a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+            --radius-md: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+        }
+
+        body {
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            padding: 16px;
+            font-size: 14px;
+        }
+
+        .page-wrapper {
+            max-width: 1560px;
+            min-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* -------------------------------------------------------------
+           TOOLBAR 1: NAVIGATION & ACTIONS
+        ------------------------------------------------------------- */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e2e8f0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .select-input {
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            font-size: 13.5px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1.5px solid #cbd5e1;
+            background: #ffffff;
+            color: #1e293b;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .select-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .quarter-active-badge {
+            background: #005691;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 4px rgba(0,86,145,0.25);
+        }
+
+        .btn {
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-outline {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            color: #334155;
+        }
+        .btn-outline:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-primary {
+            background: #005691;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background: #004370;
+        }
+
+        .btn-success {
+            background: #107569;
+            color: #ffffff;
+        }
+        .btn-success:hover {
+            background: #0b534a;
+        }
+
+        /* -------------------------------------------------------------
+           TOOLBAR 2: TEXT FORMATTING TOOLBAR
+        ------------------------------------------------------------- */
+        .format-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .format-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-right: 4px;
+        }
+
+        .btn-tool {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #1e293b;
+            font-weight: 600;
+            transition: all 0.15s;
+        }
+        .btn-tool:hover {
+            background: #e2e8f0;
+        }
+
+        .font-size-badge {
+            background: #003865;
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            min-width: 48px;
+            text-align: center;
+        }
+
+        .format-sep {
+            width: 1px;
+            height: 22px;
+            background: #cbd5e1;
+            margin: 0 4px;
+        }
+
+        .dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .palette-popup {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+            z-index: 100;
+            display: none;
+        }
+
+        .highlight-colors-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .color-dot-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .color-dot-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            width: 220px;
+        }
+
+        .symbol-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .symbol-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .active-target-pill {
+            margin-left: auto;
+            font-size: 12px;
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* -------------------------------------------------------------
+           REPORT CANVAS & HEADER BANNER
+        ------------------------------------------------------------- */
+        #report-canvas {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, #002244 0%, #004080 50%, #005691 100%);
+            color: #ffffff;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #ffcc00;
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon-box {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .header-main-title {
+            font-family: 'Prompt', sans-serif;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .header-sub-title {
+            font-size: 13.5px;
+            color: #e2e8f0;
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        .header-quote {
+            text-align: right;
+            font-size: 12.5px;
+            color: #cbd5e1;
+            font-style: italic;
+            border-left: 2px solid rgba(255, 255, 255, 0.25);
+            padding-left: 14px;
+        }
+
+        /* -------------------------------------------------------------
+           META SUB-BANNER (Pills & Rubric)
+        ------------------------------------------------------------- */
+        .meta-bar {
+            background: #f8fafc;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pills-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pill {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .meta-levels-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rubric-lbl {
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            margin-right: 2px;
+        }
+
+        .level-chip {
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            width: 58px;
+            text-align: center;
+            border: 1.5px solid;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .level-chip .l-head {
+            font-size: 11px;
+            font-weight: 700;
+            color: #ffffff;
+            padding: 3px 0;
+        }
+
+        .level-chip .l-val {
+            font-size: 14px;
+            font-weight: 800;
+            padding: 3px 0;
+        }
+
+        /* Executive Ocean & Emerald Theme */
+        .chip-l1 { border-color: #475569; }
+        .chip-l1 .l-head { background: #475569; }
+        .chip-l1 .l-val { color: #334155; }
+
+        .chip-l2 { border-color: #2563eb; }
+        .chip-l2 .l-head { background: #2563eb; }
+        .chip-l2 .l-val { color: #1d4ed8; }
+
+        .chip-l3 { border-color: #0284c7; }
+        .chip-l3 .l-head { background: #0284c7; }
+        .chip-l3 .l-val { color: #0369a1; }
+
+        .chip-l4 { border-color: #0d9488; }
+        .chip-l4 .l-head { background: #0d9488; }
+        .chip-l4 .l-val { color: #0f766e; }
+
+        .chip-l5 { border-color: #059669; border-width: 2px; box-shadow: 0 2px 8px rgba(5,150,105,0.25); }
+        .chip-l5 .l-head { background: #059669; }
+        .chip-l5 .l-val { color: #047857; font-weight: 900; }
+
+        /* -------------------------------------------------------------
+           SLIDE CONTENT: 3-COLUMN GRID
+        ------------------------------------------------------------- */
+        .slide-content {
+            padding: 20px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grid-3col {
+            display: grid;
+            grid-template-columns: 330px 1.45fr 350px;
+            gap: 20px;
+            align-items: stretch;
+            flex: 1;
+        }
+
+        /* Shared Card Frame Styles */
+        .card-col1, .report-card, .card-eval-vertical {
+            background: #ffffff;
+            border: 1.5px solid #dbeafe;
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .card-header-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Prompt', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 10px;
+        }
+
+        .card-header-icon {
+            font-size: 19px;
+        }
+
+        /* -------------------------------------------------------------
+           COLUMN 1 (LEFT): BUDGET & WCT STATS (Clean 2-Box Design)
+        ------------------------------------------------------------- */
+        .budget-plan-card {
+            background: #f0f7ff;
+            border: 1.5px solid #bae0fd;
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,86,145,0.04);
+        }
+
+        .budget-plan-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .budget-plan-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .budget-plan-val {
+            font-size: 28px;
+            font-weight: 800;
+            color: #004b87;
+            letter-spacing: -0.3px;
+        }
+
+        .budget-plan-unit {
+            font-size: 15px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .budget-plan-sub {
+            font-size: 12.5px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .wct-pipeline-box {
+            background: #ffffff;
+            border: 1.5px solid #cce3f7;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .wct-pipe-header {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .wct-step-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .wct-step-item {
+            border-radius: 9px;
+            padding: 9px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: transform 0.15s;
+        }
+
+        .wct-step-blue {
+            background: #f0f7ff;
+            border: 1.5px solid #bae0fd;
+        }
+
+        .wct-step-red {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+        }
+
+        .wct-step-green {
+            background: #ecfdf5;
+            border: 1.5px solid #a7f3d0;
+            box-shadow: 0 2px 6px rgba(16,185,129,0.08);
+        }
+
+        .wct-item-lbl {
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .wct-item-val {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .wct-item-amt {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        /* -------------------------------------------------------------
+           COLUMN 2 (CENTER): ENLARGED TABLE & KEY HIGHLIGHTS
+        ------------------------------------------------------------- */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .kpi-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1.5px solid #b5d3ed;
+            box-shadow: 0 2px 8px rgba(0, 40, 80, 0.04);
+        }
+
+        .kpi-table th {
+            background: linear-gradient(180deg, #005691 0%, #003865 100%);
+            color: #ffffff;
+            padding: 12px 8px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 13.5px;
+            border-right: 1px solid rgba(255, 255, 255, 0.18);
+            line-height: 1.35;
+        }
+
+        .kpi-table th:last-child {
+            border-right: none;
+        }
+
+        .kpi-table td {
+            border-top: 1px solid #dce8f2;
+            border-right: 1px solid #e3edf5;
+            padding: 13px 10px;
+            text-align: center;
+            color: #0f172a;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .kpi-table td:last-child {
+            border-right: none;
+        }
+
+        .kpi-table tbody tr:nth-child(even) {
+            background: #f8fbfe;
+        }
+
+        .kpi-table tbody tr:nth-child(odd) {
+            background: #ffffff;
+        }
+
+        .kpi-table tbody tr:hover {
+            background: #eef6fc;
+        }
+
+        .kpi-table tr.total-row {
+            background: #e6f2fb !important;
+            font-weight: 800;
+        }
+
+        .kpi-table tr.total-row td {
+            border-top: 2.5px solid #005691;
+            color: #003865;
+            font-size: 15px;
+            padding: 15px 10px;
+        }
+
+        /* High Impact Key Highlights Card (Replaces tiny messy boxes) */
+        .highlight-summary-box {
+            background: #f8fbfe;
+            border: 1.5px solid #c2def5;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hl-header {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hl-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .hl-card {
+            background: #ffffff;
+            border: 1px solid #cfe2f2;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .hl-card-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .hl-card-val {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .hl-card-sub {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.35;
+        }
+
+        /* -------------------------------------------------------------
+           COLUMN 3 (RIGHT): OFFICIAL EVALUATION FLOW & SCORECARD
+        ------------------------------------------------------------- */
+        .eval-v-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: stretch;
+            flex: 1;
+        }
+
+        .vstep-card {
+            background: #f8fbfe;
+            border: 1.5px solid #c8dced;
+            border-radius: 12px;
+            padding: 10px 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            box-shadow: 0 2px 6px rgba(0, 40, 80, 0.03);
+        }
+
+        .vstep-card .vstep-val {
+            font-size: 26px;
+            font-weight: 800;
+            color: #003865;
+            letter-spacing: -0.3px;
+        }
+
+        .vstep-card .vstep-lbl {
+            font-size: 13.5px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .vstep-arrow {
+            font-size: 12px;
+            font-weight: 700;
+            color: #005691;
+            text-align: center;
+            padding: 2px 0;
+        }
+
+        .vstep-blue-card {
+            background: linear-gradient(135deg, #004b87 0%, #0077b6 100%);
+            border-radius: 12px;
+            padding: 12px 14px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            box-shadow: 0 4px 14px rgba(0, 75, 135, 0.25);
+        }
+
+        .vstep-blue-card .vstep-val {
+            color: #ffffff;
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .vstep-blue-card .vstep-lbl {
+            color: #e0f2fe;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .vstep-blue-card .vstep-formula {
+            font-size: 13px;
+            color: #bae6fd;
+            font-family: monospace;
+            margin-top: 2px;
+        }
+
+        .vstep-gold-card {
+            background: linear-gradient(135deg, #002d54 0%, #00172e 100%);
+            border: 2.5px solid #ffcc00;
+            border-radius: 12px;
+            padding: 10px 14px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0, 35, 70, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .vstep-gold-card .vstep-val {
+            color: #ffcc00;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .vstep-gold-card .vstep-stars {
+            font-size: 18px;
+            color: #ffdd44;
+        }
+
+        .eval-summary-text-box {
+            background: #f0f7fd;
+            border: 1.5px solid #cfe2f2;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #0f2742;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* -------------------------------------------------------------
+           FOOTER BAR
+        ------------------------------------------------------------- */
+        .footer-bar {
+            background: #f8fafc;
+            border-top: 1.5px solid #e2e8f0;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .footer-left {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .footer-right {
+            font-style: italic;
+        }
+
+        /* -------------------------------------------------------------
+           TOAST NOTIFICATION
+        ------------------------------------------------------------- */
+        #toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #003865;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+            display: none;
+            z-index: 999;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        #toast-notification.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* -------------------------------------------------------------
+           PRINT & SCREENSHOT STYLES
+        ------------------------------------------------------------- */
+        @media print {
+            body {
+                padding: 0;
+                background: #ffffff;
+            }
+            .toolbar, .format-bar, #toast-notification {
+                display: none !important;
+            }
+            .page-wrapper {
+                max-width: 100% !important;
+                min-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #report-canvas {
+                border: none !important;
+                box-shadow: none !important;
+            }
+        }
+    
+
+
+        /* -------------------------------------------------------------
+           STANDARDIZED DUAL-MODE & MODERN RIBBON TOOLBAR
+        ------------------------------------------------------------- */
+        .toolbar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Main Action Ribbon */
+        .toolbar-ribbon {
+            background: #ffffff;
+            border: 1px solid rgba(188, 219, 242, 0.85);
+            border-radius: 12px;
+            padding: 8px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 40, 80, 0.04);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ribbon-left, .ribbon-center, .ribbon-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* DUAL MODE SEGMENTED TOGGLE SWITCH */
+        .mode-segmented-control {
+            display: flex;
+            background: #e2edf6;
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid #bcdbf2;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #486581;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn:hover {
+            color: #003666;
+        }
+
+        .mode-btn.active {
+            background: #ffffff;
+            color: #004b87;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.15);
+        }
+
+        .mode-btn.active.edit-active {
+            color: #b45309;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #002b49;
+        }
+
+        .select-input {
+            appearance: none;
+            background: #f8fbfe url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004b87' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 10px center;
+            background-size: 12px;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 8px;
+            padding: 4px 26px 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .select-input:focus, .select-input:hover {
+            border-color: #0077b6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.12);
+        }
+
+        .quarter-active-badge {
+            background: #eef6fc;
+            border: 1px solid #bce0f8;
+            color: #005691;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5.5px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            border: 1.2px solid #bcdbf2;
+            color: #004b87;
+        }
+
+        .btn-outline:hover {
+            background: #f0f7fd;
+            border-color: #0077b6;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #005691 0%, #003d6b 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.18);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0066aa 0%, #004b87 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(4, 120, 87, 0.18);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #b45309, #92400e);
+            transform: translateY(-1px);
+        }
+
+        /* -------------------------------------------------------------
+           FULL EDITING TOOLBAR (VISIBLE IN EDIT MODE ONLY)
+        ------------------------------------------------------------- */
+        .format-bar {
+            background: #ffffff;
+            border: 1.5px solid #fed7aa; /* amber tint for edit mode */
+            border-radius: 10px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 3px 12px rgba(217, 119, 6, 0.08);
+            font-size: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .format-bar.mode-hidden {
+            display: none !important;
+        }
+
+        .format-title {
+            font-weight: 700;
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-tool {
+            background: #f8fbfe;
+            border: 1px solid #bcdbf2;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-tool:hover {
+            background: #e6f2fc;
+            border-color: #0077b6;
+        }
+
+        .font-size-badge {
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #003865;
+            background: #eef6fc;
+            border: 1px solid #b5d3ed;
+            border-radius: 5px;
+            padding: 3px 5px;
+        }
+
+        .format-sep {
+            width: 1px;
+            height: 20px;
+            background: #d4e4f2;
+            margin: 0 2px;
+        }
+
+        .popup-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: #ffffff;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 8px 24px rgba(0, 40, 80, 0.16);
+            z-index: 1000;
+        }
+
+        .popup-menu.show { display: block; }
+
+        .color-palette-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .color-chip {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .color-chip:hover { transform: scale(1.15); }
+
+        .btn-clear-hl {
+            font-size: 10.5px;
+            padding: 3px 6px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .popup-menu-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #004b87;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #e1edf7;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 3px;
+        }
+
+        .sym-tile {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            border: 1px solid #d4e4f2;
+            background: #f7fbfe;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .sym-tile:hover {
+            background: #e1eef8;
+            border-color: #005691;
+            transform: scale(1.12);
+        }
+
+        .active-target-pill {
+            font-size: 11px;
+            color: #b45309;
+            font-weight: 600;
+            background: #fffbeb;
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px dashed #fcd34d;
+        }
+
+        .menu-action-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 7px 12px;
+            font-size: 11.5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #003666;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .menu-action-item:hover {
+            background: #f0f7fd;
+        }
+
+        /* -------------------------------------------------------------
+           EDIT MODE VISUAL INDICATORS
+        ------------------------------------------------------------- */
+        body.app-mode-edit [contenteditable="true"] {
+            box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.35);
+        }
+
+        body.app-mode-edit [contenteditable="true"]:hover {
+            box-shadow: 0 0 0 1.5px #f59e0b !important;
+        }
+
+        body.app-mode-preview [contenteditable="true"]:hover {
+            background: rgba(0, 119, 182, 0.05);
+            box-shadow: 0 0 0 1px rgba(0, 119, 182, 0.25);
+        }
+
+        [contenteditable="true"]:focus {
+            background: #ffffff !important;
+            box-shadow: 0 0 0 2px #0077b6 !important;
+            color: #002b49 !important;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #002244;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Print Media Styles */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            html, body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                overflow: hidden !important;
+            }
+            .toolbar-container, #toast-notification, .filter-tabs-bar {
+                display: none !important;
+            }
+            .page-wrapper {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #report-canvas {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                width: 1400px !important;
+                max-width: 1400px !important;
+                zoom: 74% !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+
+</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="app-mode-preview">
+
+    <div class="page-wrapper">
+
+        <!-- Toolbar 1: Core Navigation & Actions -->
+                <!-- TOP CONTROL TOOLBARS (WITH DUAL MODE SWITCHER) -->
+        <div class="toolbar-container">
+            <!-- 1. Primary Action Ribbon -->
+            <div class="toolbar-ribbon">
+                <div class="ribbon-left">
+                    <!-- KPI Quick Switcher -->
+                    <div class="control-item">
+                        <span>📑 ตัวชี้วัด:</span>
+                        <select id="select-kpi-page" class="select-input" onchange="navigateToKPI(this.value)" style="font-weight: 600; color: #0a4480; background: #eff6ff;">
+                <option value="1.1">1.1 ร้อยละการรับชำระหนี้</option>
+                <option value="1.2.1">1.2.1 หนี้ไม่เกิน 1 ปี</option>
+                <option value="1.2.2">1.2.2 หนี้เกิน 1 ปี</option>
+                <option value="2.1">2.1 ร้อยละความพึงพอใจฯ</option>
+                <option value="2.2">2.2 ความสำเร็จโครงการเสริมสร้างวินัยฯ</option>
+                <option value="3.1" selected>3.1 ร้อยละเงินอนุมัติให้กู้ยืม (ปัจจุบัน)</option>
+                <option value="3.2">3.2 ความสำเร็จการแก้ไขปัญหาหนี้สินฯ</option>
+                <option value="3.3">3.3 การจัดเก็บข้อมูลประเมินผลลัพธ์ปี 2570</option>
+                <option value="4.1">4.1 การบริหารความเสี่ยงฯ</option>
+                <option value="4.2">4.2 การตรวจสอบภายใน</option>
+                <option value="4.3">4.3 การบริหารจัดการสารสนเทศและดิจิทัล</option>
+                <option value="5.1">5.1 บทบาทคณะกรรมการบริหารทุนหมุนเวียน</option>
+                <option value="5.2">5.2 การบริหารทรัพยากรบุคคล</option>
+                <option value="6.1">6.1 การเบิกจ่ายเงินตามแผนฯ</option>
+            </select>
+                    </div>
+
+                    <!-- Quarter Selector -->
+                    <div class="control-item">
+                        <span>📊 รายงานถึง:</span>
+                        <select id="quarter-focus" class="select-input" onchange="switchQuarter(this.value)">
+                <option value="1">ไตรมาส 1 (ต.ค. - ธ.ค.)</option>
+                <option value="2">ไตรมาส 2 (ต.ค. - มี.ค.)</option>
+                <option value="3">ไตรมาส 3 (ต.ค. - มิ.ย.)</option>
+                <option value="4" selected>ไตรมาส 4 (ครบปี ต.ค. - ก.ย.)</option>
+            </select>
+                    </div>
+
+                    <span id="quarter-badge" class="quarter-active-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        ไตรมาส 4
+                    </span>
+
+                    <!-- Fiscal Year Selector -->
+                    <div class="control-item" style="margin-left: 4px;">
+                        <span>📅 ปี:</span>
+                        <select id="select-year" class="select-input" onchange="changeFiscalYear(this.value)">
+                            <option value="2568">ปี 2568</option>
+                            <option value="2569" selected>ปี 2569</option>
+                            <option value="2570">ปี 2570</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 2. Dual Mode Segmented Switcher (Center of Ribbon) -->
+                <div class="ribbon-center">
+                    <div class="mode-segmented-control">
+                        <button class="mode-btn active" id="btn-mode-preview" onclick="setAppMode('preview')" title="โหมดนำเสนอ สะอาดตา ไร้เครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            โหมดนำเสนอ (Preview)
+                        </button>
+                        <button class="mode-btn" id="btn-mode-edit" onclick="setAppMode('edit')" title="โหมดแก้ไขข้อความ เปิดแถบเครื่องมือจัดฟอร์มแบบจัดเต็ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            โหมดแก้ไขข้อความ (Edit)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ribbon-right">
+                    <!-- Save Current Quarter -->
+                    <button class="btn btn-outline" onclick="saveCurrentQuarter(true)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        บันทึก
+                    </button>
+
+                    <!-- Copy Image to Clipboard -->
+                    <button class="btn btn-outline" onclick="copyImageToClipboard()" title="คัดลอกรูปภาพลงคลิปบอร์ดทันที (นำไปกด Ctrl+V วางใน PowerPoint หรือ LINE ได้เลย)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        คัดลอกภาพ
+                    </button>
+
+                    <!-- Export PNG -->
+                    <button class="btn btn-primary" onclick="exportToImage()" title="ส่งออกเป็นรูปภาพ PNG คุณภาพสูง">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        ส่งออกภาพ (PNG)
+                    </button>
+
+                    <!-- Export Direct PDF (Full Bleed) -->
+                    <button class="btn btn-warning" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; font-weight: 600;" onclick="exportToPDF()" title="ดาวน์โหลดไฟล์ PDF คุณภาพสูง สัดส่วนเต็มแผ่นเหมือนรูปภาพ 100% ไร้ขอบขาว">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        ส่งออก PDF (เต็มแผ่น)
+                    </button>
+
+                    <!-- Print Browser Dialog -->
+                    <button class="btn btn-success" onclick="window.print()" title="เปิดหน้าต่างสั่งพิมพ์ของเบราว์เซอร์ (ปรับพอดีหน้า A4 แนวนอนอัตโนมัติ ไม่ตกขอบ)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        พิมพ์ (Print)
+                    </button>
+
+                    <!-- Fullscreen Presentation Toggle -->
+                    <button class="btn btn-outline" id="btn-fullscreen" onclick="toggleFullscreen()" title="โหมดนำเสนอเต็มหน้าจอ (สำหรับจอโปรเจกเตอร์/ทีวี)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        เต็มจอ
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Full Formatting Bar (Controlled by Mode Switcher: visible in Edit Mode, hidden in Preview Mode) -->
+            <div class="format-bar mode-hidden" id="full-format-bar">
+                <div class="format-title">
+                    <span>✏️ แถบเครื่องมือจัดข้อความ (Edit Toolbar):</span>
+                </div>
+
+                <!-- History: Undo / Redo -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('undo')" title="ย้อนกลับการแก้ไข (Undo)">↶ ย้อนกลับ</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('redo')" title="ทำซ้ำ (Redo)">↷ ทำซ้ำ</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Font Size with Live Indicator -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(-1)" title="ลดขนาดตัวอักษร (-1px)">🅰️- ย่อ</button>
+                    <span id="font-size-val" class="font-size-badge" title="ขนาดฟอนต์ปัจจุบัน">14px</span>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(1)" title="เพิ่มขนาดตัวอักษร (+1px)">🅰️+ ขยาย</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Alignment -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('left')" title="จัดชิดซ้าย">⫷ ชิดซ้าย</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('center')" title="จัดกึ่งกลาง">≡ กึ่งกลาง</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('right')" title="จัดชิดขวา">⫸ ชิดขวา</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Bold & Color -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBold()" title="ตัวหนา"><strong>𝐁 หนา</strong></button>
+                    <label for="text-color-picker" style="font-size: 11.5px; margin-left: 2px;">🎨 สี:</label>
+                    <input type="color" id="text-color-picker" value="#002b49" style="width: 24px; height: 22px; border: none; cursor: pointer; border-radius: 4px;" onchange="setTextColor(this.value)">
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Text Highlight Palette Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleHighlightMenu()" title="ไฮไลท์ข้อความ">
+                        <span>🖍️ ไฮไลท์</span> ▾
+                    </button>
+                    <div id="highlight-palette-menu" class="popup-menu">
+                        <div class="color-palette-row">
+                            <div class="color-chip" style="background: #fef08a;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fef08a')" title="สีเหลืองพาสเทล"></div>
+                            <div class="color-chip" style="background: #bbf7d0;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bbf7d0')" title="สีเขียวมินต์พาสเทล"></div>
+                            <div class="color-chip" style="background: #bae6fd;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bae6fd')" title="สีฟ้าอ่อนพาสเทล"></div>
+                            <div class="color-chip" style="background: #fed7aa;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fed7aa')" title="สีส้มพาสเทล"></div>
+                            <div class="color-chip" style="background: #fbcfe8;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fbcfe8')" title="สีชมพูพาสเทล"></div>
+                            <button class="btn-clear-hl" onmousedown="event.preventDefault()" onclick="applyHighlight('transparent')">ลบไฮไลท์</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insert Symbol Popup Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleSymbolMenu()" title="แทรกสัญลักษณ์/ไอคอน">
+                        <span>🎯 สัญลักษณ์</span> ▾
+                    </button>
+                    <div id="symbol-palette-menu" class="popup-menu" style="min-width: 240px;">
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">📋 เอกสาร & เป้าหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📋')">📋</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📊')">📊</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📈')">📈</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🎯')">🎯</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⚖️')">⚖️</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📏')">📏</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🏆')">🏆</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🥇')">🥇</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⭐')">⭐</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🌟')">🌟</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('💡')">💡</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📌')">📌</button>
+                            </div>
+                        </div>
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">➔ ลูกศร & เครื่องหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➔')">➔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➜')">➜</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('•')">•</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('✔')">✔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🔴')">🔴</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🟢')">🟢</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Clear Format & Insert Date -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('removeFormat')" title="ล้างการจัดรูปแบบกลับเป็นมาตรฐาน">🧹 ล้างฟอร์แมต</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="insertDateStamp()" title="แทรกวันที่ปัจจุบัน ณ ตำแหน่งเคอร์เซอร์">📅 ลงวันที่</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Reset & Backup Data Utilities -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" style="color: #b91c1c; border-color: #fca5a5;" onmousedown="event.preventDefault()" onclick="resetQuarterDefaults()" title="คืนค่าตัวเลขเริ่มต้นของไตรมาสนี้">🔄 คืนค่าเริ่มต้น</button>
+                    
+                    <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                        <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBackupMenu()" title="สำรองหรือกู้คืนข้อมูล JSON">
+                            <span>📦 สำรอง/กู้คืน</span> ▾
+                        </button>
+                        <div id="backup-menu" class="popup-menu" style="min-width: 190px;">
+                            <button class="menu-action-item" onclick="exportDataBackup()">📤 ดาวน์โหลดไฟล์สำรอง (.json)</button>
+                            <button class="menu-action-item" onclick="document.getElementById('backup-file-input').click()">📥 นำเข้าไฟล์สำรอง (.json)</button>
+                            <input type="file" id="backup-file-input" style="display:none;" accept=".json" onchange="importDataBackup(event)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Target Indicator -->
+                <div class="ribbon-left">
+                    <span style="color: #92400e; font-size: 11px;">กำลังเลือก:</span>
+                    <span id="active-target-name" class="active-target-pill">คลิกข้อความใดก็ได้เพื่อปรับแต่ง</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="report-canvas">
+
+            <!-- HEADER BANNER -->
+            <div class="header-banner">
+                <div class="header-title-box">
+                    <div class="header-icon-box">🏛️</div>
+                    <div>
+                        <div contenteditable="true" id="hdr-main-title" class="header-main-title">
+                            ด้านที่ 3 การปฏิบัติการ | ตัวชี้วัดที่ 3.1 ร้อยละของจำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืม
+                        </div>
+                        <div contenteditable="true" id="hdr-sub-title" class="header-sub-title">
+                            พิจารณาจากร้อยละของจำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืมภายในปีบัญชี เทียบกับวงเงินให้กู้ยืมตามแผนปฏิบัติการ (250,000,000.00 บาท)
+                        </div>
+                    </div>
+                </div>
+                <div contenteditable="true" id="hdr-quote" class="header-quote">
+                    คุณภาพการบริหาร เพื่อครู เพื่ออนาคตการศึกษาไทย
+                </div>
+            </div>
+
+            <!-- META SUB-BANNER -->
+            <div class="meta-bar">
+                <div class="meta-pills-group">
+                    <div class="meta-pill">
+                        <span>📋</span>
+                        <span>ตัวชี้วัด:</span>
+                        <strong contenteditable="true" id="meta-code">3.1 การอนุมัติเงินกู้ยืม</strong>
+                    </div>
+                    <div class="meta-pill">
+                        <span>🎯</span>
+                        <span>หน่วยวัด:</span>
+                        <strong contenteditable="true" id="meta-unit">ร้อยละ</strong>
+                    </div>
+                    <div class="meta-pill">
+                        <span>⚖️</span>
+                        <span>ค่าน้ำหนัก:</span>
+                        <strong contenteditable="true" id="meta-weight">10%</strong>
+                    </div>
+                    <div class="meta-pill">
+                        <span>📏</span>
+                        <span>ค่าเกณฑ์วัด:</span>
+                        <strong contenteditable="true" id="meta-scale">(-/+ 5)</strong>
+                    </div>
+                </div>
+
+                <!-- Rubric Levels: 80, 85, 90, 95, 100 -->
+                <div class="meta-levels-group">
+                    <span contenteditable="true" id="lbl-meta-rubric" class="rubric-lbl">เกณฑ์:</span>
+                    <div class="level-chip chip-l1">
+                        <div contenteditable="true" id="lhead-1" class="l-head">ระดับ 1</div>
+                        <div contenteditable="true" id="lvl-1" class="l-val">80</div>
+                    </div>
+                    <div class="level-chip chip-l2">
+                        <div contenteditable="true" id="lhead-2" class="l-head">ระดับ 2</div>
+                        <div contenteditable="true" id="lvl-2" class="l-val">85</div>
+                    </div>
+                    <div class="level-chip chip-l3">
+                        <div contenteditable="true" id="lhead-3" class="l-head">ระดับ 3</div>
+                        <div contenteditable="true" id="lvl-3" class="l-val">90</div>
+                    </div>
+                    <div class="level-chip chip-l4">
+                        <div contenteditable="true" id="lhead-4" class="l-head">ระดับ 4</div>
+                        <div contenteditable="true" id="lvl-4" class="l-val">95</div>
+                    </div>
+                    <div class="level-chip chip-l5">
+                        <div contenteditable="true" id="lhead-5" class="l-head">ระดับ 5</div>
+                        <div contenteditable="true" id="lvl-5" class="l-val">100</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE CONTENT -->
+            <div class="slide-content">
+
+                <!-- 3-COLUMN MAIN GRID -->
+                <div class="grid-3col">
+
+                    <!-- COLUMN 1: LEFT (KEY MILESTONES & WCT STATS - 1.2 REMOVED AS REQUESTED) -->
+                    <div class="card-col1">
+                        <div class="card-header-line">
+                            <span class="card-header-icon">📌</span>
+                            <span contenteditable="true" id="c1-title">1. แผนวงเงินและการยื่นคำขอกู้</span>
+                        </div>
+
+                        <!-- 1.1 วงเงินตามแผนจัดสรร -->
+                        <div class="budget-plan-card">
+                            <div contenteditable="true" id="c1-b1-title" class="budget-plan-title">
+                                🪙 1.1 วงเงินจัดสรรให้ข้าราชการครูกู้ยืมตามแผน
+                            </div>
+                            <div class="budget-plan-row">
+                                <span contenteditable="true" id="c1-b1-val" class="budget-plan-val">250,000,000.00</span>
+                                <span contenteditable="true" id="c1-b1-unit" class="budget-plan-unit">บาท</span>
+                            </div>
+                            <div contenteditable="true" id="c1-b1-sub" class="budget-plan-sub">
+                                กรอบแผนเงินทุนหมุนเวียนที่ได้รับอนุมัติจากกระทรวงการคลัง (279,196,000 บาท)
+                            </div>
+                        </div>
+
+                        <!-- 1.2 สถิติการยื่นคำขอกู้ผ่านระบบ WCT (เต็มความสูง สบายตา) -->
+                        <div class="wct-pipeline-box">
+                            <div contenteditable="true" id="c1-b3-title" class="wct-pipe-header">
+                                💻 1.2 ผลการยื่นคำขอกู้ผ่านระบบ WCT
+                            </div>
+                            <div class="wct-step-grid">
+                                <div class="wct-step-item wct-step-blue">
+                                    <span contenteditable="true" id="wct-s1-lbl" class="wct-item-lbl">📋 ผู้ยื่นคำขอกู้ยืมทั้งหมดในระบบ WCT</span>
+                                    <span contenteditable="true" id="wct-s1-val" class="wct-item-val">3,528 ราย</span>
+                                    <span contenteditable="true" id="wct-s1-amt" class="wct-item-amt">วงเงินยื่นกู้รวม 1,330,518,496.54 บาท</span>
+                                </div>
+                                <div class="wct-step-item wct-step-red">
+                                    <span contenteditable="true" id="wct-s2-lbl" class="wct-item-lbl">⚠️ เงินได้รายเดือนคงเหลือสุทธิ &lt; 30% (ยื่นไม่ได้)</span>
+                                    <span contenteditable="true" id="wct-s2-val" class="wct-item-val" style="color: #dc2626;">2,237 ราย</span>
+                                    <span contenteditable="true" id="wct-s2-amt" class="wct-item-amt" style="color: #991b1b;">วงเงิน 829,310,005.08 บาท</span>
+                                </div>
+                                <div class="wct-step-item wct-step-green">
+                                    <span contenteditable="true" id="wct-s3-lbl" class="wct-item-lbl" style="color: #065f46;">✅ ผู้ยื่นคำขอกู้ยืมผ่านระบบ WCT สำเร็จ</span>
+                                    <span contenteditable="true" id="wct-s3-val" class="wct-item-val" style="color: #047857;">1,291 ราย</span>
+                                    <span contenteditable="true" id="wct-s3-amt" class="wct-item-amt" style="font-size: 13.5px; font-weight: 700; color: #047857;">วงเงินรวม 501,208,491.46 บาท</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUMN 2: CENTER (ENLARGED TABLE & HIGH-IMPACT HIGHLIGHTS) -->
+                    <div class="report-card">
+                        <div class="card-header-line">
+                            <span class="card-header-icon">📋</span>
+                            <span contenteditable="true" id="c2-title">2. ผลการอนุมัติเงินกู้ยืมข้าราชการครู (ประจำปีบัญชี 2569)</span>
+                        </div>
+
+                        <!-- Table of Approval Rounds -->
+                        <div class="table-wrapper">
+                            <table class="kpi-table">
+                                <thead>
+                                    <tr>
+                                        <th contenteditable="true" id="th-r-1" style="width: 135px;">การอนุมัติ</th>
+                                        <th contenteditable="true" id="th-r-2" style="width: 110px;">วันที่มีมติ</th>
+                                        <th contenteditable="true" id="th-r-3" style="width: 75px;">อนุมัติ<br>(ราย)</th>
+                                        <th contenteditable="true" id="th-r-4">จำนวนเงินอนุมัติ<br>(บาท)</th>
+                                        <th contenteditable="true" id="th-r-5" style="width: 75px;">ไม่อนุมัติ<br>(ราย)</th>
+                                        <th contenteditable="true" id="th-r-6" style="width: 115px;">% สะสมเทียบแผน<br>(250 ล้านบาท)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="trow-kpi3-1">
+                                        <td contenteditable="true" id="td3-round-1" style="font-weight: 700;">ครั้งที่ 1 (มติ 2/2569)</td>
+                                        <td contenteditable="true" id="td3-date-1">27 ก.พ. 69</td>
+                                        <td contenteditable="true" id="td3-appr-1">293</td>
+                                        <td contenteditable="true" id="td3-amt-1" style="text-align: right; font-weight: 700;">118,006,505.74</td>
+                                        <td contenteditable="true" id="td3-rej-1">20</td>
+                                        <td contenteditable="true" id="td3-pct-1" style="font-weight: 700; color: #005691;">47.20%</td>
+                                    </tr>
+                                    <tr id="trow-kpi3-2">
+                                        <td contenteditable="true" id="td3-round-2" style="font-weight: 700;">ครั้งที่ 2 (มติ 3/2569)</td>
+                                        <td contenteditable="true" id="td3-date-2">27 มี.ค. 69</td>
+                                        <td contenteditable="true" id="td3-appr-2">329</td>
+                                        <td contenteditable="true" id="td3-amt-2" style="text-align: right; font-weight: 700;">131,879,572.76</td>
+                                        <td contenteditable="true" id="td3-rej-2">34</td>
+                                        <td contenteditable="true" id="td3-pct-2" style="font-weight: 700; color: #005691;">99.95%</td>
+                                    </tr>
+                                    <tr id="trow-kpi3-3">
+                                        <td contenteditable="true" id="td3-round-3" style="font-weight: 700;">ครั้งที่ 3 (มติ 7/2569)</td>
+                                        <td contenteditable="true" id="td3-date-3">21 ส.ค. 69</td>
+                                        <td contenteditable="true" id="td3-appr-3">68</td>
+                                        <td contenteditable="true" id="td3-amt-3" style="text-align: right; font-weight: 700;">28,603,087.69</td>
+                                        <td contenteditable="true" id="td3-rej-3">-</td>
+                                        <td contenteditable="true" id="td3-pct-3" style="font-weight: 700; color: #047857;">113.07%</td>
+                                    </tr>
+                                    <tr id="trow-kpi3-total" class="total-row">
+                                        <td contenteditable="true" id="td3-tot-lbl" colspan="2" style="text-align: left; padding-left: 14px;">รวมผลการอนุมัติเงินกู้ยืม (ทั้งสิ้น 3 ครั้ง)</td>
+                                        <td contenteditable="true" id="td3-tot-appr">690</td>
+                                        <td contenteditable="true" id="td3-tot-amt" style="text-align: right; font-size: 16.5px; color: #004b87;">282,677,903.58</td>
+                                        <td contenteditable="true" id="td3-tot-rej">54</td>
+                                        <td contenteditable="true" id="td3-tot-pct" style="color: #047857; font-size: 17.5px;">113.07%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- High-Impact Key Highlights Card (Clean, prestigious, executive) -->
+                        <div class="highlight-summary-box">
+                            <div class="hl-header">
+                                <span>🎯</span>
+                                <span contenteditable="true" id="hl-box-title">สรุปสาระสำคัญผลการดำเนินงานด้านการให้กู้ยืม (ประจำปี 2569)</span>
+                            </div>
+                            <div class="hl-grid">
+                                <div class="hl-card">
+                                    <span class="hl-card-title">💰 อนุมัติเงินกู้เกินกว่าแผนจัดสรร</span>
+                                    <span contenteditable="true" id="hl-c1-val" class="hl-card-val" style="color: #047857;">+32,677,903.58 บาท (113.07%)</span>
+                                    <span contenteditable="true" id="hl-c1-sub" class="hl-card-sub">จัดสรรเงินกู้เต็มศักยภาพเกินเป้าหมายตามแผนปฏิบัติการ (250 ล้านบาท)</span>
+                                </div>
+                                <div class="hl-card">
+                                    <span class="hl-card-title">🏦 การบริหารจัดการวงเงินและการจ่ายจริง</span>
+                                    <span contenteditable="true" id="hl-c2-val" class="hl-card-val" style="color: #004b87;">จ่ายกู้สำเร็จ 619 ราย (249.79 ลบ.)</span>
+                                    <span contenteditable="true" id="hl-c2-sub" class="hl-card-sub">นำวงเงินที่ได้คืนจากการสละสิทธิ์จัดสรรต่อให้แก่ผู้ผ่านการอนุมัติสำรองครบถ้วน</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUMN 3: RIGHT (OFFICIAL EVALUATION FLOW & SCORECARD) -->
+                    <div class="card-eval-vertical">
+                        <div class="card-header-line">
+                            <span class="card-header-icon">🏆</span>
+                            <span contenteditable="true" id="c3-title">3. สรุปผลการประเมินตัวชี้วัด</span>
+                        </div>
+
+                        <div class="eval-v-steps">
+                            <!-- Step 1: Approved Amount -->
+                            <div class="vstep-card">
+                                <span contenteditable="true" id="vstep-1-val" class="vstep-val">282,677,903.58 บาท</span>
+                                <span contenteditable="true" id="vstep-1-lbl" class="vstep-lbl">จำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืมรวม (690 ราย)</span>
+                            </div>
+
+                            <div class="vstep-arrow">⬇️ เทียบกับวงเงินให้กู้ยืมตามแผน 250,000,000.00 บาท</div>
+
+                            <!-- Step 2: Percentage -->
+                            <div class="vstep-blue-card">
+                                <span contenteditable="true" id="vstep-2-val" class="vstep-val">113.07%</span>
+                                <span contenteditable="true" id="vstep-2-lbl" class="vstep-lbl">ร้อยละของจำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืม</span>
+                                <span contenteditable="true" id="vstep-2-formula" class="vstep-formula">(282,677,903.58 × 100) ÷ 250,000,000</span>
+                            </div>
+
+                            <div class="vstep-arrow">⬇️ เมื่อเทียบกับค่าเกณฑ์วัด (ระดับ 5 = 100)</div>
+
+                            <!-- Step 3: Evaluation Score -->
+                            <div class="vstep-gold-card">
+                                <div contenteditable="true" id="vstep-3-val" class="vstep-val">ระดับ 5.0000 คะแนน</div>
+                                <div contenteditable="true" id="vstep-3-stars" class="vstep-stars">⭐⭐⭐⭐⭐</div>
+                            </div>
+                        </div>
+
+                        <!-- Evaluation Summary Box -->
+                        <div class="eval-summary-text-box">
+                            <div contenteditable="true" id="eval-summary-desc">
+                                <strong>สรุปผลการประเมิน:</strong> คณะอนุกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติอนุมัติเงินกู้ยืมรวม 3 ครั้ง จำนวน 690 ราย เป็นเงินรวมทั้งสิ้น <strong>282,677,903.58 บาท</strong> คิดเป็นร้อยละ <strong>113.07</strong> ของวงเงินตามแผน (250,000,000.00 บาท) ส่งผลให้ผลการดำเนินงานบรรลุค่าเป้าหมายสูงสุด อยู่ใน <strong>ระดับ 5.0000 คะแนน</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER BAR -->
+            <div class="footer-bar">
+                <div contenteditable="true" id="ftr-left" class="footer-left">
+                    สำนักงานคณะกรรมการข้าราชการครูและบุคลากรทางการศึกษา (ก.ค.ศ.)
+                </div>
+                <div contenteditable="true" id="ftr-right" class="footer-right">
+                    คุณภาพการบริหาร เพื่อครู เพื่ออนาคตการศึกษาไทย
+                </div>
+            </div>
+
+        </div> <!-- #report-canvas -->
+
+    </div> <!-- End .page-wrapper -->
+    <div id="toast-notification">ข้อความแจ้งเตือน</div>
+
+    <script>
+        let lastFocusedElement = null;
+        let activeQuarter = 4;
+        let defaultSnapshot = null;
+
+        // Quarter Defaults for KPI 3.1 (Official Authentic Data from รวมไตรมาส 4 ปี 69 ล่าสุด.docx)
+        const quarterDefaults31 = {
+            1: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 1",
+                wctS1Val: "3,528 ราย",
+                wctS2Val: "2,237 ราย",
+                wctS3Val: "1,291 ราย",
+                wctS3Amt: "วงเงินรวม 501,208,491.46 บาท",
+                tableRows: [
+                    ["ครั้งที่ 1 (มติ 2/2569)", "27 ก.พ. 69", "รอการอนุมัติ", "-", "-", "-"],
+                    ["ครั้งที่ 2 (มติ 3/2569)", "27 มี.ค. 69", "รอการอนุมัติ", "-", "-", "-"],
+                    ["ครั้งที่ 3 (มติ 7/2569)", "21 ส.ค. 69", "รอการอนุมัติ", "-", "-", "-"]
+                ],
+                totalRow: ["อยู่ระหว่างเปิดรับคำขอกู้ WCT", "-", "-", "-", "0.00%"],
+                hl1Val: "อยู่ระหว่างรับคำขอกู้ WCT",
+                hl1Sub: "เปิดรับคำขอกู้ยืมผ่านระบบ WCT โดยมีผู้ยื่นผ่านสำเร็จ 1,291 ราย",
+                hl2Val: "เตรียมเสนอคณะอนุกรรมการฯ",
+                hl2Sub: "รวบรวมคำขอและตรวจสอบคุณสมบัติเพื่อเตรียมเสนออนุมัติในไตรมาส 2",
+                vstep1Val: "อยู่ระหว่างรับคำขอกู้",
+                vstep1Lbl: "จำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืมรวม",
+                vstep2Val: "0.00%",
+                vstep2Formula: "(0.00 × 100) ÷ 250,000,000",
+                vstep3Val: "ระดับ 1.0000 คะแนน",
+                vstep3Stars: "⭐",
+                evalNote: "<strong>สรุปผลการประเมิน ไตรมาส 1:</strong> อยู่ระหว่างประชาสัมพันธ์และเปิดรับคำขอกู้ยืมผ่านระบบ WCT โดยมีผู้ยื่นกู้สำเร็จ 1,291 ราย วงเงิน 501.21 ล้านบาท และเตรียมนำเข้าพิจารณาอนุมัติในไตรมาส 2"
+            },
+            2: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 2",
+                wctS1Val: "3,528 ราย",
+                wctS2Val: "2,237 ราย",
+                wctS3Val: "1,291 ราย",
+                wctS3Amt: "วงเงินรวม 501,208,491.46 บาท",
+                tableRows: [
+                    ["ครั้งที่ 1 (มติ 2/2569)", "27 ก.พ. 69", "293", "118,006,505.74", "20", "47.20%"],
+                    ["ครั้งที่ 2 (มติ 3/2569)", "27 มี.ค. 69", "329", "131,879,572.76", "34", "99.95%"],
+                    ["ครั้งที่ 3 (มติ 7/2569)", "21 ส.ค. 69", "-", "-", "-", "-"]
+                ],
+                totalRow: ["รวมผลการอนุมัติเงินกู้ยืม (2 ครั้ง)", "622", "249,886,078.50", "54", "99.95%"],
+                hl1Val: "อนุมัติแล้ว 249,886,078.50 บาท (99.95%)",
+                hl1Sub: "อนุมัติเงินกู้ยืมแล้ว 2 ครั้ง รวม 622 ราย (คงเหลือ 113,921.50 บาท)",
+                hl2Val: "ส่ง ธ.ก.ส. ทำสัญญาจ่ายเงินกู้",
+                hl2Sub: "ส่งรายชื่อผู้ผ่านการอนุมัติให้ ธ.ก.ส. เพื่อจัดทำสัญญาและจ่ายเงินกู้จริง",
+                vstep1Val: "249,886,078.50 บาท",
+                vstep1Lbl: "จำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืมรวม (622 ราย)",
+                vstep2Val: "99.95%",
+                vstep2Formula: "(249,886,078.50 × 100) ÷ 250,000,000",
+                vstep3Val: "ระดับ 4.9900 คะแนน",
+                vstep3Stars: "⭐⭐⭐⭐⭐",
+                evalNote: "<strong>สรุปผลการประเมิน ไตรมาส 2:</strong> คณะอนุกรรมการฯ มีมติอนุมัติเงินกู้ยืม 2 ครั้ง รวม 622 ราย เป็นเงิน 249,886,078.50 บาท คิดเป็นร้อยละ 99.95 ของวงเงินตามแผน (250,000,000 บาท) ส่งผลให้ผลการดำเนินงานอยู่ในระดับ 4.9900 คะแนน"
+            },
+            3: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 3",
+                wctS1Val: "3,528 ราย",
+                wctS2Val: "2,237 ราย",
+                wctS3Val: "1,291 ราย",
+                wctS3Amt: "วงเงินรวม 501,208,491.46 บาท",
+                tableRows: [
+                    ["ครั้งที่ 1 (มติ 2/2569)", "27 ก.พ. 69", "293", "118,006,505.74", "20", "47.20%"],
+                    ["ครั้งที่ 2 (มติ 3/2569)", "27 มี.ค. 69", "329", "131,879,572.76", "34", "99.95%"],
+                    ["ครั้งที่ 3 (มติ 7/2569)", "21 ส.ค. 69", "-", "-", "-", "-"]
+                ],
+                totalRow: ["รวมผลการอนุมัติเงินกู้ยืม (2 ครั้ง)", "622", "249,886,078.50", "54", "99.95%"],
+                hl1Val: "อนุมัติแล้ว 249,886,078.50 บาท (99.95%)",
+                hl1Sub: "อนุมัติเงินกู้ยืมแล้ว 2 ครั้ง รวม 622 ราย (คงเหลือ 113,921.50 บาท)",
+                hl2Val: "สละสิทธิ์คืนวงเงิน 28.64 ล้านบาท",
+                hl2Sub: "มีผู้สละสิทธิ์ 71 ราย วงเงินคืนมา 28.64 ล้านบาท เพื่อเตรียมจัดสรรต่อในไตรมาส 4",
+                vstep1Val: "249,886,078.50 บาท",
+                vstep1Lbl: "จำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืมรวม (622 ราย)",
+                vstep2Val: "99.95%",
+                vstep2Formula: "(249,886,078.50 × 100) ÷ 250,000,000",
+                vstep3Val: "ระดับ 4.9900 คะแนน",
+                vstep3Stars: "⭐⭐⭐⭐⭐",
+                evalNote: "<strong>สรุปผลการประเมิน ไตรมาส 3:</strong> อนุมัติเงินกู้รวม 2 ครั้ง 249,886,078.50 บาท (ร้อยละ 99.95 ระดับ 4.9900 คะแนน) ธ.ก.ส. จ่ายเงินกู้แล้ว 551 ราย โดยมีผู้สละสิทธิ์ 71 ราย มีวงเงินคืนกลับมา 28.64 ล้านบาท เตรียมจัดสรรต่อในครั้งที่ 3"
+            },
+            4: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 4",
+                wctS1Val: "3,528 ราย",
+                wctS2Val: "2,237 ราย",
+                wctS3Val: "1,291 ราย",
+                wctS3Amt: "วงเงินรวม 501,208,491.46 บาท",
+                tableRows: [
+                    ["ครั้งที่ 1 (มติ 2/2569)", "27 ก.พ. 69", "293", "118,006,505.74", "20", "47.20%"],
+                    ["ครั้งที่ 2 (มติ 3/2569)", "27 มี.ค. 69", "329", "131,879,572.76", "34", "99.95%"],
+                    ["ครั้งที่ 3 (มติ 7/2569)", "21 ส.ค. 69", "68", "28,603,087.69", "-", "113.07%"]
+                ],
+                totalRow: ["รวมผลการอนุมัติเงินกู้ยืม (ทั้งสิ้น 3 ครั้ง)", "690", "282,677,903.58", "54", "113.07%"],
+                hl1Val: "+32,677,903.58 บาท (113.07%)",
+                hl1Sub: "จัดสรรเงินกู้เต็มศักยภาพเกินเป้าหมายตามแผนปฏิบัติการ (250 ล้านบาท)",
+                hl2Val: "จ่ายกู้สำเร็จ 619 ราย (249.79 ลบ.)",
+                hl2Sub: "นำวงเงินที่ได้คืนจากการสละสิทธิ์จัดสรรต่อให้แก่ผู้ผ่านการอนุมัติสำรองครบถ้วน",
+                vstep1Val: "282,677,903.58 บาท",
+                vstep1Lbl: "จำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืมรวม (690 ราย)",
+                vstep2Val: "113.07%",
+                vstep2Formula: "(282,677,903.58 × 100) ÷ 250,000,000",
+                vstep3Val: "ระดับ 5.0000 คะแนน",
+                vstep3Stars: "⭐⭐⭐⭐⭐",
+                evalNote: "<strong>สรุปผลการประเมิน:</strong> คณะอนุกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติอนุมัติเงินกู้ยืมรวม 3 ครั้ง จำนวน 690 ราย เป็นเงินรวมทั้งสิ้น <strong>282,677,903.58 บาท</strong> คิดเป็นร้อยละ <strong>113.07</strong> ของวงเงินตามแผน (250,000,000.00 บาท) ส่งผลให้ผลการดำเนินงานบรรลุค่าเป้าหมายสูงสุด อยู่ใน <strong>ระดับ 5.0000 คะแนน</strong>"
+            }
+        };
+
+        // Storage Key Versioning (Clean Prefix to prevent old cache override)
+        const STORAGE_KEY_PREFIX = 'kpi_official_31_Q';
+
+        function getStorageKey(q) {
+            return `${STORAGE_KEY_PREFIX}${q}`;
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        // Quick Fiscal Year Updater
+        function quickUpdateFiscalYear(yearVal) {
+            const yNum = parseInt(yearVal) || 2569;
+            const hdrSub = document.getElementById('hdr-sub-title');
+            if (hdrSub) hdrSub.innerHTML = `พิจารณาจากร้อยละของจำนวนเงินที่อนุมัติให้แก่ผู้กู้ยืมภายในปีบัญชี ${yNum} เทียบกับวงเงินให้กู้ยืมตามแผนปฏิบัติการ (250,000,000.00 บาท)`;
+
+            saveCurrentQuarter(false);
+            showToast(`📅 ปรับปีเป็น ${yearVal} เรียบร้อยแล้ว`);
+        }
+
+        /* Safe Per-Quarter State Management */
+        function captureCurrentState() {
+            const editables = {};
+            document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                const key = el.id || ('ed_' + idx);
+                editables[key] = {
+                    html: el.innerHTML,
+                    style: el.getAttribute('style') || ''
+                };
+            });
+
+            return {
+                fiscalYear: (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value,
+                editables: editables
+            };
+        }
+
+        function applyCapturedState(state) {
+            if (!state) return;
+
+            if (state.editables) {
+                document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                    const key = el.id || ('ed_' + idx);
+                    if (state.editables[key]) {
+                        el.innerHTML = state.editables[key].html;
+                        el.setAttribute('style', state.editables[key].style);
+                    }
+                });
+            }
+
+            if (state.fiscalYear) (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value = state.fiscalYear;
+        }
+
+        function saveCurrentQuarter(showMsg = true) {
+            const state = captureCurrentState();
+            localStorage.setItem(getStorageKey(activeQuarter), JSON.stringify(state));
+            if (showMsg) {
+                showToast(`💾 บันทึกข้อมูล "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+            }
+        }
+
+        function switchQuarter(newQ) {
+            newQ = parseInt(newQ);
+            if (newQ === activeQuarter) return;
+
+            // 1. Auto-save current quarter
+            saveCurrentQuarter(false);
+
+            // 2. Switch quarter
+            activeQuarter = newQ;
+
+            // 3. Load saved or apply quarter default
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved) {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                }
+            } else {
+                applyQuarterDefault(activeQuarter);
+            }
+
+            document.getElementById('quarter-badge').innerText = `📂 ข้อมูลแยกเฉพาะ: ไตรมาส ${activeQuarter}`;
+            showToast(`📂 สลับมาที่ "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+        }
+
+        function applyQuarterDefault(q) {
+            const def = quarterDefaults31[q] || quarterDefaults31[4];
+
+            if (document.getElementById('wct-s1-val')) document.getElementById('wct-s1-val').innerText = def.wctS1Val;
+            if (document.getElementById('wct-s2-val')) document.getElementById('wct-s2-val').innerText = def.wctS2Val;
+            if (document.getElementById('wct-s3-val')) document.getElementById('wct-s3-val').innerText = def.wctS3Val;
+            if (document.getElementById('wct-s3-amt')) document.getElementById('wct-s3-amt').innerText = def.wctS3Amt;
+
+            for (let r = 1; r <= 3; r++) {
+                const tr = document.getElementById(`trow-kpi3-${r}`);
+                if (r <= def.tableRows.length) {
+                    if (tr) tr.style.display = 'table-row';
+                    if (document.getElementById(`td3-round-${r}`)) document.getElementById(`td3-round-${r}`).innerText = def.tableRows[r-1][0];
+                    if (document.getElementById(`td3-date-${r}`)) document.getElementById(`td3-date-${r}`).innerText = def.tableRows[r-1][1];
+                    if (document.getElementById(`td3-appr-${r}`)) document.getElementById(`td3-appr-${r}`).innerText = def.tableRows[r-1][2];
+                    if (document.getElementById(`td3-amt-${r}`)) document.getElementById(`td3-amt-${r}`).innerText = def.tableRows[r-1][3];
+                    if (document.getElementById(`td3-rej-${r}`)) document.getElementById(`td3-rej-${r}`).innerText = def.tableRows[r-1][4];
+                    if (document.getElementById(`td3-pct-${r}`)) document.getElementById(`td3-pct-${r}`).innerText = def.tableRows[r-1][5];
+                } else {
+                    if (tr) tr.style.display = 'none';
+                }
+            }
+
+            if (document.getElementById('td3-tot-lbl')) document.getElementById('td3-tot-lbl').innerText = def.totalRow[0];
+            if (document.getElementById('td3-tot-appr')) document.getElementById('td3-tot-appr').innerText = def.totalRow[1];
+            if (document.getElementById('td3-tot-amt')) document.getElementById('td3-tot-amt').innerText = def.totalRow[2];
+            if (document.getElementById('td3-tot-rej')) document.getElementById('td3-tot-rej').innerText = def.totalRow[3];
+            if (document.getElementById('td3-tot-pct')) document.getElementById('td3-tot-pct').innerText = def.totalRow[4];
+
+            if (document.getElementById('hl-c1-val') && def.hl1Val) document.getElementById('hl-c1-val').innerText = def.hl1Val;
+            if (document.getElementById('hl-c1-sub') && def.hl1Sub) document.getElementById('hl-c1-sub').innerText = def.hl1Sub;
+            if (document.getElementById('hl-c2-val') && def.hl2Val) document.getElementById('hl-c2-val').innerText = def.hl2Val;
+            if (document.getElementById('hl-c2-sub') && def.hl2Sub) document.getElementById('hl-c2-sub').innerText = def.hl2Sub;
+
+            if (document.getElementById('vstep-1-val')) document.getElementById('vstep-1-val').innerText = def.vstep1Val;
+            if (document.getElementById('vstep-1-lbl') && def.vstep1Lbl) document.getElementById('vstep-1-lbl').innerText = def.vstep1Lbl;
+            if (document.getElementById('vstep-2-val')) document.getElementById('vstep-2-val').innerText = def.vstep2Val;
+            if (document.getElementById('vstep-2-formula')) document.getElementById('vstep-2-formula').innerText = def.vstep2Formula;
+            if (document.getElementById('vstep-3-val')) document.getElementById('vstep-3-val').innerText = def.vstep3Val;
+            if (document.getElementById('vstep-3-stars')) document.getElementById('vstep-3-stars').innerText = def.vstep3Stars;
+            if (document.getElementById('eval-summary-desc')) document.getElementById('eval-summary-desc').innerHTML = def.evalNote;
+        }
+
+        function resetCurrentQuarter() {
+            if (confirm(`ต้องการคืนค่าเริ่มต้นเฉพาะ "ไตรมาส ${activeQuarter}" ใช่หรือไม่?`)) {
+                localStorage.removeItem(getStorageKey(activeQuarter));
+                applyQuarterDefault(activeQuarter);
+                showToast(`🔄 คืนค่าเริ่มต้น "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+            }
+        }
+
+        // Auto-save on input
+        document.getElementById('report-canvas').addEventListener('input', function() {
+            saveCurrentQuarter(false);
+        });
+
+        /* -------------------------------------------------------------------------
+           TEXT FORMATTING CONTROLS
+        -------------------------------------------------------------------------- */
+        function updateActiveTarget(el) {
+            if (!el) return;
+            const editable = el.closest('[contenteditable="true"]') || (el.tagName === 'INPUT' && el.type === 'text' ? el : null);
+            if (editable) {
+                lastFocusedElement = editable;
+                const name = editable.id || editable.className || editable.tagName;
+                const previewText = editable.innerText || editable.value || '';
+                const shortPreview = previewText.length > 22 ? previewText.substring(0, 22) + '...' : previewText;
+                const targetNameEl = document.getElementById('active-target-name');
+                if (targetNameEl) {
+                    targetNameEl.innerText = shortPreview ? `"${shortPreview.trim()}"` : `[${name}]`;
+                    targetNameEl.style.color = '#005691';
+                    targetNameEl.style.fontWeight = '700';
+                }
+
+                // Update live font size badge
+                const currentSize = Math.round(parseFloat(window.getComputedStyle(editable).fontSize)) || 14;
+                const fsBadge = document.getElementById('font-size-val');
+                if (fsBadge) fsBadge.innerText = currentSize + 'px';
+            }
+        }
+
+        document.addEventListener('focusin', e => updateActiveTarget(e.target));
+        document.addEventListener('click', e => updateActiveTarget(e.target));
+        document.addEventListener('keyup', e => updateActiveTarget(e.target));
+
+        // Adjust Font Size (+ / -)
+        function adjustFontSize(delta) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการปรับขนาดก่อนครับ');
+                return;
+            }
+            const currentSize = parseFloat(window.getComputedStyle(lastFocusedElement).fontSize) || 14;
+            const newSize = Math.max(8, Math.min(68, Math.round(currentSize + delta)));
+            lastFocusedElement.style.fontSize = newSize + 'px';
+
+            const fsBadge = document.getElementById('font-size-val');
+            if (fsBadge) fsBadge.innerText = newSize + 'px';
+
+            saveCurrentQuarter(false);
+        }
+
+        // Set Text Alignment
+        function setTextAlign(align) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการจัดตำแหน่งก่อนครับ');
+                return;
+            }
+            lastFocusedElement.style.textAlign = align;
+            saveCurrentQuarter(false);
+        }
+
+        // Toggle Bold
+        function toggleBold() {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการปรับตัวหนาก่อนครับ');
+                return;
+            }
+            const currentWeight = window.getComputedStyle(lastFocusedElement).fontWeight;
+            if (currentWeight === 'bold' || parseInt(currentWeight) >= 700) {
+                lastFocusedElement.style.fontWeight = 'normal';
+            } else {
+                lastFocusedElement.style.fontWeight = 'bold';
+            }
+            saveCurrentQuarter(false);
+        }
+
+        // Set Text Color
+        function setTextColor(color) {
+            if (!lastFocusedElement) return;
+            lastFocusedElement.style.color = color;
+            saveCurrentQuarter(false);
+        }
+
+        /* Text Highlight */
+        function toggleHighlightMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const menu = document.getElementById('highlight-palette');
+            const isShown = menu.style.display === 'block';
+            closeAllToolPopups();
+            if (!isShown) menu.style.display = 'block';
+        }
+
+        function applyHighlight(color) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการไฮไลท์ก่อนครับ');
+                return;
+            }
+            const selection = window.getSelection();
+            if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
+                if (color === 'transparent') {
+                    document.execCommand('removeFormat', false, null);
+                } else {
+                    document.execCommand('hiliteColor', false, color);
+                    document.execCommand('backColor', false, color);
+                }
+            } else {
+                if (color === 'transparent') {
+                    lastFocusedElement.style.backgroundColor = '';
+                } else {
+                    lastFocusedElement.style.backgroundColor = color;
+                }
+            }
+            closeAllToolPopups();
+            saveCurrentQuarter(false);
+            showToast(color === 'transparent' ? 'ล้างสีไฮไลท์แล้ว' : 'ใส่สีไฮไลท์เรียบร้อยแล้ว');
+        }
+
+        /* Symbol / Emoji Insertion */
+        function toggleSymbolMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const menu = document.getElementById('symbol-palette');
+            const isShown = menu.style.display === 'block';
+            closeAllToolPopups();
+            if (!isShown) menu.style.display = 'block';
+        }
+
+        function insertSymbol(sym) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการแทรกสัญลักษณ์ก่อนครับ');
+                return;
+            }
+            lastFocusedElement.focus();
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0) {
+                const range = sel.getRangeAt(0);
+                range.deleteContents();
+                const node = document.createTextNode(sym + ' ');
+                range.insertNode(node);
+                range.setStartAfter(node);
+                range.setEndAfter(node);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } else {
+                lastFocusedElement.innerText += ' ' + sym;
+            }
+            closeAllToolPopups();
+            saveCurrentQuarter(false);
+            showToast(`แทรกสัญลักษณ์ "${sym}" เรียบร้อยแล้ว`);
+        }
+
+        function closeAllToolPopups() {
+            const hl = document.getElementById('highlight-palette');
+            if (hl) hl.style.display = 'none';
+            const sym = document.getElementById('symbol-palette');
+            if (sym) sym.style.display = 'none';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-wrapper')) {
+                closeAllToolPopups();
+            }
+        });
+
+        /* Export PNG */
+        function exportPNG() {
+            const canvasEl = document.getElementById('report-canvas');
+            const originalShadow = canvasEl.style.boxShadow;
+            canvasEl.style.boxShadow = 'none';
+
+            html2canvas(canvasEl, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                canvasEl.style.boxShadow = originalShadow;
+                const link = document.createElement('a');
+                const year = (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value;
+                link.download = `รายงานตัวชี้วัด_3.1_ปี_${year}_ไตรมาส_${activeQuarter}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Window Onload
+        window.onload = function() {
+            activeQuarter = parseInt(document.getElementById('quarter-focus').value) || 4;
+            defaultSnapshot = captureCurrentState();
+
+            // Clear legacy stale storage keys from previous versions
+            for (let q = 1; q <= 4; q++) {
+                localStorage.removeItem(`kpi_v3_1_auth_Q${q}`);
+                localStorage.removeItem(`kpi_clean_v3_1_Q${q}`);
+            }
+
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved) {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                }
+            } else {
+                applyQuarterDefault(activeQuarter);
+            }
+
+            document.getElementById('quarter-badge').innerText = `📂 ข้อมูลแยกเฉพาะ: ไตรมาส ${activeQuarter}`;
+        };
+    
+        // Compatibility Aliases & Safe Callbacks for KPI 3.1
+        if (typeof changeFiscalYear === 'undefined') {
+            function changeFiscalYear(yr) {
+                if (typeof quickUpdateFiscalYear === 'function') {
+                    quickUpdateFiscalYear(yr);
+                }
+                const sel = document.getElementById('select-year');
+                if (sel) sel.value = yr;
+                showToast(`📅 ปรับปีบัญชีเป็น ${yr} เรียบร้อยแล้ว`);
+            }
+        }
+
+        if (typeof resetQuarterDefaults === 'undefined') {
+            function resetQuarterDefaults() {
+                if (typeof resetToDefault === 'function') {
+                    resetToDefault();
+                } else if (typeof resetCurrentQuarter === 'function') {
+                    resetCurrentQuarter();
+                }
+            }
+        }
+    
+
+        // ============================================================
+        // MODERN TOOLBAR, DUAL-MODE, EXPORT & DATA PERSISTENCE SUITE
+        // ============================================================
+        let currentAppMode = 'preview'; // 'preview' or 'edit'
+        const KPI_KEY = '3.1';
+        // duplicate prefix removed
+
+
+        function navigateToKPI(targetKey) {
+                                                            const routes = {
+                '1.1': 'ตัวชี้วัดที่ 1.1.html',
+                '1.2.1': 'ตัวชี้วัดที่ 1.2.1.html',
+                '1.2.2': 'ตัวชี้วัดที่ 1.2.2.html',
+                '2.1': 'ตัวชี้วัดที่ 2.1.html',
+                '2.2': 'ตัวชี้วัดที่ 2.2.html',
+                '3.1': 'ตัวชี้วัดที่ 3.1.html',
+                '3.2': 'ตัวชี้วัดที่ 3.2.html',
+                '3.3': 'ตัวชี้วัดที่ 3.3.html',
+                '4.1': 'ตัวชี้วัดที่ 4.1.html',
+                '4.2': 'ตัวชี้วัดที่ 4.2.html',
+                '4.3': 'ตัวชี้วัดที่ 4.3.html',
+                '5.1': 'ตัวชี้วัดที่ 5.1.html',
+                '5.2': 'ตัวชี้วัดที่ 5.2.html',
+                '6.1': 'ตัวชี้วัดที่ 6.1.html'
+            };
+            if (routes[targetKey] && !window.location.pathname.endsWith(encodeURI(routes[targetKey])) && !window.location.pathname.endsWith(routes[targetKey])) {
+                showToast(`⏳ กำลังเปิด ${routes[targetKey]}...`);
+                setTimeout(() => {
+                    window.location.href = routes[targetKey];
+                }, 300);
+            }
+        }
+
+        function setAppMode(mode) {
+            currentAppMode = mode;
+            const btnPreview = document.getElementById('btn-mode-preview');
+            const btnEdit = document.getElementById('btn-mode-edit');
+            const formatBar = document.getElementById('full-format-bar');
+
+            if (mode === 'preview') {
+                document.body.classList.remove('app-mode-edit');
+                document.body.classList.add('app-mode-preview');
+                if (btnPreview) btnPreview.classList.add('active');
+                if (btnEdit) btnEdit.classList.remove('active', 'edit-active');
+                if (formatBar) formatBar.classList.add('mode-hidden');
+                showToast('👁️ สลับสู่โหมดนำเสนอ (Preview) - แสดงภาพสไลด์ Infographic สะอาดตา');
+            } else {
+                document.body.classList.remove('app-mode-preview');
+                document.body.classList.add('app-mode-edit');
+                if (btnPreview) btnPreview.classList.remove('active');
+                if (btnEdit) btnEdit.classList.add('active', 'edit-active');
+                if (formatBar) formatBar.classList.remove('mode-hidden');
+                showToast('✏️ สลับสู่โหมดแก้ไข (Edit) - เปิดแถบเครื่องมือปรับแต่งข้อความและเกณฑ์');
+            }
+        }
+
+        function copyImageToClipboard() {
+            showToast('⏳ กำลังเรนเดอร์และคัดลอกภาพลงคลิปบอร์ด...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    canvas.toBlob(blob => {
+                        if (!navigator.clipboard || !navigator.clipboard.write) {
+                            showToast('⚠️ เบราว์เซอร์ไม่รองรับ Direct Clipboard (ใช้ปุ่มส่งออกภาพ PNG แทนได้ครับ)');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                            return;
+                        }
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        navigator.clipboard.write([item]).then(() => {
+                            showToast('📋 คัดลอกภาพสไลด์แล้ว! สามารถกด Ctrl+V วางใน PowerPoint หรือ LINE ได้ทันที');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        }).catch(err => {
+                            console.error(err);
+                            showToast('⚠️ ไม่สามารถเขียนลงคลิปบอร์ดได้ กรุณาใช้ปุ่มส่งออกภาพ PNG');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        });
+                    }, 'image/png');
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้างภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToImage() {
+            showToast('⏳ กำลังเรนเดอร์ภาพความละเอียดสูง (โหมดสไลด์นำเสนอ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvas = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvas, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(renderedCanvas => {
+                    const link = document.createElement('a');
+                    link.download = `รายงานตัวชี้วัด_3.1_ไตรมาส${activeQuarter}_Infographic.png`;
+                    link.href = renderedCanvas.toDataURL('image/png');
+                    link.click();
+                    showToast('✅ ส่งออกภาพสำเร็จแล้ว!');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการบันทึกภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToPDF() {
+            showToast('⏳ กำลังสร้างไฟล์ PDF เต็มแผ่น (คมชัดระดับเดียวกับรูปภาพ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    const { jsPDF } = window.jspdf;
+                    const imgWidthPt = (canvas.width / 2) * 0.75;
+                    const imgHeightPt = (canvas.height / 2) * 0.75;
+                    const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+
+                    const pdf = new jsPDF({
+                        orientation: orientation,
+                        unit: 'pt',
+                        format: [imgWidthPt, imgHeightPt]
+                    });
+
+                    const imgData = canvas.toDataURL('image/png');
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidthPt, imgHeightPt, undefined, 'FAST');
+                    pdf.save(`รายงานตัวชี้วัด_3.1_ไตรมาส${activeQuarter}_Infographic.pdf`);
+                    showToast('✅ ส่งออกไฟล์ PDF สำเร็จ (เต็มแผ่นไร้ขอบขาว เหมือนรูปภาพ 100%)!');
+
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้าง PDF');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    showToast('⛶ เข้าสู่โหมดเต็มหน้าจอแล้ว (กด Esc เพื่อออกจากเต็มจอ)');
+                }).catch(err => {
+                    console.error(err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    showToast('ออกจากโหมดเต็มหน้าจอแล้ว');
+                }
+            }
+        }
+
+        function insertDateStamp() {
+            const today = new Date();
+            const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const dateStr = `ข้อมูล ณ วันที่ ${today.getDate()} ${thaiMonths[today.getMonth()]} ${today.getFullYear() + 543}`;
+            document.execCommand('insertText', false, dateStr);
+            showToast(`📅 แทรกวันที่: "${dateStr}" สำเร็จ`);
+        }
+
+        function toggleBackupMenu() {
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.toggle('show');
+        }
+
+        function exportDataBackup() {
+            const backupData = {
+                app: 'KPI_Report_System',
+                kpi: '3.1',
+                fiscalYear: typeof currentFiscalYear !== 'undefined' ? currentFiscalYear : '2569',
+                exportedAt: new Date().toISOString(),
+                storage: {}
+            };
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k.startsWith('kpi_official_31_Q')) {
+                    backupData.storage[k] = localStorage.getItem(k);
+                }
+            }
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `backup_kpi_3.1_${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            showToast('📤 ส่งออกไฟล์สำรองข้อมูลสำเร็จ!');
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function importDataBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data && data.storage) {
+                        for (let k in data.storage) {
+                            localStorage.setItem(k, data.storage[k]);
+                        }
+                        showToast('📥 กู้คืนข้อมูลสำเร็จ! กำลังรีโหลดหน้าจอ...');
+                        setTimeout(() => location.reload(), 600);
+                    } else {
+                        showToast('❌ รูปแบบไฟล์สำรองไม่ถูกต้อง');
+                    }
+                } catch(err) {
+                    showToast('❌ เกิดข้อผิดพลาดในการอ่านไฟล์สำรอง');
+                }
+            };
+            reader.readAsText(file);
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function adjustFontSize(delta) {
+            if (!lastFocusedElement) return;
+            const curSize = parseInt(window.getComputedStyle(lastFocusedElement).fontSize) || 14;
+            const newSize = Math.max(9, Math.min(36, curSize + delta));
+            lastFocusedElement.style.fontSize = newSize + 'px';
+            const badge = document.getElementById('font-size-val');
+            if (badge) badge.innerText = newSize + 'px';
+        }
+
+        function setTextAlign(align) {
+            if (!lastFocusedElement) return;
+            lastFocusedElement.style.textAlign = align;
+        }
+
+        function toggleBold() {
+            document.execCommand('bold', false, null);
+        }
+
+        function setTextColor(color) {
+            document.execCommand('foreColor', false, color);
+        }
+
+        function toggleHighlightMenu() {
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function applyHighlight(color) {
+            document.execCommand('hiliteColor', false, color);
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        function toggleSymbolMenu() {
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function insertSymbol(sym) {
+            document.execCommand('insertText', false, sym);
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        /* duplicate showToast */
+
+        function bindEditableEvents() {
+            const editables = document.querySelectorAll('[contenteditable="true"]');
+            editables.forEach(el => {
+                el.addEventListener('focus', () => {
+                    lastFocusedElement = el;
+                    const pill = document.getElementById('active-target-name');
+                    if (pill) {
+                        const text = (el.innerText || el.textContent || '').trim();
+                        pill.innerText = text.length > 25 ? text.slice(0, 22) + '...' : text || el.id || 'กำลังเลือก';
+                    }
+                    const sz = parseInt(window.getComputedStyle(el).fontSize) || 14;
+                    const badge = document.getElementById('font-size-val');
+                    if (badge) badge.innerText = sz + 'px';
+                });
+            });
+        }
+    
+    </script>
+</body>
+</html>

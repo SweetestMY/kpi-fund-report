@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มรายงานผลตัวชี้วัดที่ 3.2 ความสำเร็จในการแก้ไขปัญหาและบรรเทาภาระหนี้สินตามวัตถุประสงค์ของเงินทุนหมุนเวียน (KPI Presentation Dashboard)</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- html2canvas & jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --primary-navy: #002b49;
+            --primary-blue: #005691;
+            --accent-blue: #0088cc;
+            --accent-gold: #ffcc00;
+            --accent-green: #059669;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --border-light: #e2e8f0;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --primary-gradient: linear-gradient(135deg, #002244 0%, #004080 50%, #005691 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--text-dark);
+            padding: 16px;
+            font-size: 14px;
+        }
+
+        .page-wrapper {
+            max-width: 1560px;
+            min-width: 1024px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        
+        /* -------------------------------------------------------------
+           STANDARDIZED DUAL-MODE & MODERN RIBBON TOOLBAR
+        ------------------------------------------------------------- */
+        .toolbar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Main Action Ribbon */
+        .toolbar-ribbon {
+            background: #ffffff;
+            border: 1px solid rgba(188, 219, 242, 0.85);
+            border-radius: 12px;
+            padding: 8px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 40, 80, 0.04);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ribbon-left, .ribbon-center, .ribbon-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* DUAL MODE SEGMENTED TOGGLE SWITCH */
+        .mode-segmented-control {
+            display: flex;
+            background: #e2edf6;
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid #bcdbf2;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #486581;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn:hover {
+            color: #003666;
+        }
+
+        .mode-btn.active {
+            background: #ffffff;
+            color: #004b87;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.15);
+        }
+
+        .mode-btn.active.edit-active {
+            color: #b45309;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #002b49;
+        }
+
+        .select-input {
+            appearance: none;
+            background: #f8fbfe url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004b87' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 10px center;
+            background-size: 12px;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 8px;
+            padding: 4px 26px 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .select-input:focus, .select-input:hover {
+            border-color: #0077b6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.12);
+        }
+
+        .quarter-active-badge {
+            background: #eef6fc;
+            border: 1px solid #bce0f8;
+            color: #005691;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5.5px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            border: 1.2px solid #bcdbf2;
+            color: #004b87;
+        }
+
+        .btn-outline:hover {
+            background: #f0f7fd;
+            border-color: #0077b6;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #005691 0%, #003d6b 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.18);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0066aa 0%, #004b87 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(4, 120, 87, 0.18);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #b45309, #92400e);
+            transform: translateY(-1px);
+        }
+
+        /* -------------------------------------------------------------
+           FULL EDITING TOOLBAR (VISIBLE IN EDIT MODE ONLY)
+        ------------------------------------------------------------- */
+        .format-bar {
+            background: #ffffff;
+            border: 1.5px solid #fed7aa; /* amber tint for edit mode */
+            border-radius: 10px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 3px 12px rgba(217, 119, 6, 0.08);
+            font-size: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .format-bar.mode-hidden {
+            display: none !important;
+        }
+
+        .format-title {
+            font-weight: 700;
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-tool {
+            background: #f8fbfe;
+            border: 1px solid #bcdbf2;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-tool:hover {
+            background: #e6f2fc;
+            border-color: #0077b6;
+        }
+
+        .font-size-badge {
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #003865;
+            background: #eef6fc;
+            border: 1px solid #b5d3ed;
+            border-radius: 5px;
+            padding: 3px 5px;
+        }
+
+        .format-sep {
+            width: 1px;
+            height: 20px;
+            background: #d4e4f2;
+            margin: 0 2px;
+        }
+
+        .popup-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: #ffffff;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 8px 24px rgba(0, 40, 80, 0.16);
+            z-index: 1000;
+        }
+
+        .popup-menu.show { display: block; }
+
+        .color-palette-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .color-chip {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .color-chip:hover { transform: scale(1.15); }
+
+        .btn-clear-hl {
+            font-size: 10.5px;
+            padding: 3px 6px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .popup-menu-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #004b87;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #e1edf7;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 3px;
+        }
+
+        .sym-tile {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            border: 1px solid #d4e4f2;
+            background: #f7fbfe;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .sym-tile:hover {
+            background: #e1eef8;
+            border-color: #005691;
+            transform: scale(1.12);
+        }
+
+        .active-target-pill {
+            font-size: 11px;
+            color: #b45309;
+            font-weight: 600;
+            background: #fffbeb;
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px dashed #fcd34d;
+        }
+
+        .menu-action-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 7px 12px;
+            font-size: 11.5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #003666;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .menu-action-item:hover {
+            background: #f0f7fd;
+        }
+
+        /* -------------------------------------------------------------
+           EDIT MODE VISUAL INDICATORS
+        ------------------------------------------------------------- */
+        body.app-mode-edit [contenteditable="true"] {
+            box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.35);
+        }
+
+        body.app-mode-edit [contenteditable="true"]:hover {
+            box-shadow: 0 0 0 1.5px #f59e0b !important;
+        }
+
+        body.app-mode-preview [contenteditable="true"]:hover {
+            background: rgba(0, 119, 182, 0.05);
+            box-shadow: 0 0 0 1px rgba(0, 119, 182, 0.25);
+        }
+
+        [contenteditable="true"]:focus {
+            background: #ffffff !important;
+            box-shadow: 0 0 0 2px #0077b6 !important;
+            color: #002b49 !important;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #002244;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Print Media Styles */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            html, body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                overflow: hidden !important;
+            }
+            .toolbar-container, #toast-notification, .filter-tabs-bar {
+                display: none !important;
+            }
+            .page-wrapper {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #report-canvas {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                width: 1400px !important;
+                max-width: 1400px !important;
+                zoom: 74% !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+
+
+        /* -------------------------------------------------------------
+           REPORT CANVAS & HEADER BANNER
+        ------------------------------------------------------------- */
+        #report-canvas {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 20px rgba(0, 40, 80, 0.08);
+            border: 1px solid #cbd5e1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-banner {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            padding: 15px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3.5px solid var(--accent-gold);
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon-box {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .header-main-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .header-sub-title {
+            font-size: 13px;
+            color: #e2e8f0;
+            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        .header-quote {
+            text-align: right;
+            font-size: 12.5px;
+            color: #cbd5e1;
+            font-style: italic;
+            border-left: 2px solid rgba(255, 255, 255, 0.25);
+            padding-left: 14px;
+        }
+
+        /* -------------------------------------------------------------
+           META SUB-BANNER (Pills & Rubric)
+        ------------------------------------------------------------- */
+        .meta-bar {
+            background: #f8fafc;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding: 10px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pills-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pill {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 12.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .meta-pill span.pill-lbl {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .meta-pill span.pill-val {
+            color: #002b49;
+            font-weight: 700;
+        }
+
+        .rubric-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rubric-lbl {
+            font-size: 12px;
+            font-weight: 700;
+            color: #002b49;
+            margin-right: 4px;
+        }
+
+        .rubric-chip {
+            border-radius: 6px;
+            border: 1px solid #94a3b8;
+            background: #ffffff;
+            padding: 4px 10px;
+            font-size: 11.5px;
+            text-align: center;
+            min-width: 52px;
+        }
+
+        .rubric-chip .r-lvl {
+            display: block;
+            font-size: 9.5px;
+            color: #ffffff;
+            background: #005691;
+            border-radius: 3px;
+            padding: 1px 4px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .rubric-chip .r-val {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .rubric-chip.active-r5 {
+            border: 2px solid #047857;
+            background: #ecfdf5;
+            box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.15);
+        }
+
+        .rubric-chip.active-r5 .r-lvl {
+            background: #047857;
+        }
+
+        .rubric-chip.active-r5 .r-val {
+            color: #047857;
+        }
+
+        /* -------------------------------------------------------------
+           MAIN CONTENT GRID (SPACIOUS 3 COLUMNS)
+        ------------------------------------------------------------- */
+        .content-grid {
+            padding: 24px 26px;
+            display: grid;
+            grid-template-columns: 340px 1fr 340px;
+            gap: 22px;
+            background: #f8fbfe;
+            align-items: stretch;
+        }
+
+        .grid-col {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1.5px solid #dbeafe;
+            box-shadow: 0 4px 14px rgba(0, 40, 80, 0.05);
+            padding: 22px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .card-header-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #f0f6fc;
+            padding-bottom: 12px;
+        }
+
+        .card-header-icon {
+            font-size: 20px;
+        }
+
+        .card-header-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #003666;
+            letter-spacing: 0.1px;
+        }
+
+        /* COLUMN 1: 3 DIMENSIONS BREAKDOWN */
+        .stat-box-large {
+            background: linear-gradient(135deg, #f0f7fd 0%, #e1effa 100%);
+            border: 2px solid #bcd8f0;
+            border-radius: 14px;
+            padding: 18px 16px;
+            text-align: center;
+            box-shadow: inset 0 2px 4px rgba(0, 60, 120, 0.04);
+        }
+
+        .stat-num-large {
+            font-size: 48px;
+            font-weight: 800;
+            color: #004b87;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-unit-large {
+            font-size: 14px;
+            color: #334155;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .breakdown-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .breakdown-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 11px 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        .breakdown-card:hover {
+            border-color: #93c5fd;
+            background: #f8fbfe;
+            transform: translateY(-1px);
+        }
+
+        .breakdown-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .breakdown-title {
+            font-size: 12.5px;
+            color: #1e293b;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .breakdown-val {
+            font-size: 14.5px;
+            font-weight: 800;
+            color: #005691;
+            white-space: nowrap;
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 7px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .breakdown-subtext {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.35;
+        }
+
+        .info-note-box {
+            margin-top: auto;
+            background: #f1f7fc;
+            border: 1px solid #d0e3f5;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 12px;
+            color: #334155;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        /* COLUMN 2: QUARTERLY RESULTS TABLE */
+        .quarter-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 13.5px;
+            margin: auto 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .quarter-table th {
+            background: linear-gradient(180deg, #004b87 0%, #003666 100%);
+            color: #ffffff;
+            padding: 13px 12px;
+            font-weight: 700;
+            font-size: 13px;
+            text-align: center;
+            border-bottom: 2px solid #cbd5e1;
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .quarter-table th:last-child {
+            border-right: none;
+        }
+
+        .quarter-table td {
+            padding: 16px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            vertical-align: middle;
+            line-height: 1.45;
+        }
+
+        .quarter-table td:last-child {
+            border-right: none;
+        }
+
+        .quarter-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .quarter-table tr:nth-child(even) td {
+            background: #fafcfe;
+        }
+
+        .quarter-table tr.highlight-q4 td {
+            background: #ecfdf5;
+            font-weight: 600;
+        }
+
+        .quarter-table tr.highlight-q4 td:first-child {
+            border-left: 4.5px solid #059669;
+        }
+
+        /* COLUMN 3: EXECUTIVE SCORECARDS */
+        .score-box-main {
+            background: linear-gradient(135deg, #004b87 0%, #002b49 100%);
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 43, 73, 0.22);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .score-box-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+            letter-spacing: 0.2px;
+        }
+
+        .score-box-num {
+            font-size: 54px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+
+        .score-box-unit {
+            font-size: 13px;
+            color: #7dd3fc;
+            font-weight: 600;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .arrow-down-divider {
+            text-align: center;
+            color: #005691;
+            font-size: 22px;
+            margin: 2px 0;
+            font-weight: bold;
+        }
+
+        .rating-badge-card {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 22px 18px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(217, 119, 6, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rating-title {
+            font-size: 13.5px;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .rating-val-text {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .rating-stars {
+            font-size: 22px;
+            color: #fef08a;
+            letter-spacing: 4px;
+            margin-top: 2px;
+        }
+
+        /* -------------------------------------------------------------
+           FOOTER STRIP
+        ------------------------------------------------------------- */
+        .canvas-footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 10px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11.5px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="app-mode-preview">
+
+    <div class="page-wrapper">
+
+        <!-- TOP CONTROL TOOLBARS (WITH DUAL MODE SWITCHER) -->
+        <div class="toolbar-container">
+            <!-- 1. Primary Action Ribbon -->
+            <div class="toolbar-ribbon">
+                <div class="ribbon-left">
+                    <!-- KPI Quick Switcher -->
+                    <div class="control-item">
+                        <span>📑 ตัวชี้วัด:</span>
+                        <select id="select-kpi-page" class="select-input" onchange="navigateToKPI(this.value)" style="font-weight: 600; color: #0a4480; background: #eff6ff;">
+                <option value="1.1">1.1 ร้อยละการรับชำระหนี้</option>
+                <option value="1.2.1">1.2.1 หนี้ไม่เกิน 1 ปี</option>
+                <option value="1.2.2">1.2.2 หนี้เกิน 1 ปี</option>
+                <option value="2.1">2.1 ร้อยละความพึงพอใจฯ</option>
+                <option value="2.2">2.2 ความสำเร็จโครงการเสริมสร้างวินัยฯ</option>
+                <option value="3.1">3.1 ร้อยละเงินอนุมัติให้กู้ยืม</option>
+                <option value="3.2" selected>3.2 ความสำเร็จการแก้ไขปัญหาหนี้สินฯ (ปัจจุบัน)</option>
+                <option value="3.3">3.3 การจัดเก็บข้อมูลประเมินผลลัพธ์ปี 2570</option>
+                <option value="4.1">4.1 การบริหารความเสี่ยงฯ</option>
+                <option value="4.2">4.2 การตรวจสอบภายใน</option>
+                <option value="4.3">4.3 การบริหารจัดการสารสนเทศและดิจิทัล</option>
+                <option value="5.1">5.1 บทบาทคณะกรรมการบริหารทุนหมุนเวียน</option>
+                <option value="5.2">5.2 การบริหารทรัพยากรบุคคล</option>
+                <option value="6.1">6.1 การเบิกจ่ายเงินตามแผนฯ</option>
+            </select>
+                    </div>
+
+                    <!-- Quarter Selector -->
+                    <div class="control-item">
+                        <span>📊 รายงานถึง:</span>
+                        <select id="quarter-focus" class="select-input" onchange="switchQuarter(this.value)">
+                <option value="1">ไตรมาส 1 (ต.ค. - ธ.ค.)</option>
+                <option value="2">ไตรมาส 2 (ต.ค. - มี.ค.)</option>
+                <option value="3">ไตรมาส 3 (ต.ค. - มิ.ย.)</option>
+                <option value="4" selected>ไตรมาส 4 (ครบปี ต.ค. - ก.ย.)</option>
+            </select>
+                    </div>
+
+                    <span id="quarter-badge" class="quarter-active-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        ไตรมาส 4
+                    </span>
+
+                    <!-- Fiscal Year Selector -->
+                    <div class="control-item" style="margin-left: 4px;">
+                        <span>📅 ปี:</span>
+                        <select id="select-year" class="select-input" onchange="changeFiscalYear(this.value)">
+                            <option value="2568">ปี 2568</option>
+                            <option value="2569" selected>ปี 2569</option>
+                            <option value="2570">ปี 2570</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 2. Dual Mode Segmented Switcher (Center of Ribbon) -->
+                <div class="ribbon-center">
+                    <div class="mode-segmented-control">
+                        <button class="mode-btn active" id="btn-mode-preview" onclick="setAppMode('preview')" title="โหมดนำเสนอ สะอาดตา ไร้เครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            โหมดนำเสนอ (Preview)
+                        </button>
+                        <button class="mode-btn" id="btn-mode-edit" onclick="setAppMode('edit')" title="โหมดแก้ไขข้อความ เปิดแถบเครื่องมือจัดฟอร์มแบบจัดเต็ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            โหมดแก้ไขข้อความ (Edit)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ribbon-right">
+                    <!-- Save Current Quarter -->
+                    <button class="btn btn-outline" onclick="saveCurrentQuarter(true)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        บันทึก
+                    </button>
+
+                    <!-- Copy Image to Clipboard -->
+                    <button class="btn btn-outline" onclick="copyImageToClipboard()" title="คัดลอกรูปภาพลงคลิปบอร์ดทันที (นำไปกด Ctrl+V วางใน PowerPoint หรือ LINE ได้เลย)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        คัดลอกภาพ
+                    </button>
+
+                    <!-- Export PNG -->
+                    <button class="btn btn-primary" onclick="exportToImage()" title="ส่งออกเป็นรูปภาพ PNG คุณภาพสูง">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        ส่งออกภาพ (PNG)
+                    </button>
+
+                    <!-- Export Direct PDF (Full Bleed) -->
+                    <button class="btn btn-warning" onclick="exportToPDF()" title="ดาวน์โหลดไฟล์ PDF คุณภาพสูง สัดส่วนเต็มแผ่นเหมือนรูปภาพ 100% ไร้ขอบขาว">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        ส่งออก PDF (เต็มแผ่น)
+                    </button>
+
+                    <!-- Print Browser Dialog -->
+                    <button class="btn btn-success" onclick="window.print()" title="เปิดหน้าต่างสั่งพิมพ์ของเบราว์เซอร์ (ปรับพอดีหน้า A4 แนวนอนอัตโนมัติ ไม่ตกขอบ)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        พิมพ์ (Print)
+                    </button>
+
+                    <!-- Fullscreen Presentation Toggle -->
+                    <button class="btn btn-outline" id="btn-fullscreen" onclick="toggleFullscreen()" title="โหมดนำเสนอเต็มหน้าจอ (สำหรับจอโปรเจกเตอร์/ทีวี)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        เต็มจอ
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Full Formatting Bar (Controlled by Mode Switcher) -->
+            <div class="format-bar mode-hidden" id="full-format-bar">
+                <div class="format-title">
+                    <span>✏️ แถบเครื่องมือจัดข้อความ (Edit Toolbar):</span>
+                </div>
+
+                <!-- History: Undo / Redo -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('undo')" title="ย้อนกลับการแก้ไข (Undo)">↶ ย้อนกลับ</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('redo')" title="ทำซ้ำ (Redo)">↷ ทำซ้ำ</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Font Size with Live Indicator -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(-1)" title="ลดขนาดตัวอักษร (-1px)">🅰️- ย่อ</button>
+                    <span id="font-size-val" class="font-size-badge" title="ขนาดฟอนต์ปัจจุบัน">14px</span>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(1)" title="เพิ่มขนาดตัวอักษร (+1px)">🅰️+ ขยาย</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Alignment -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('left')" title="จัดชิดซ้าย">⫷ ชิดซ้าย</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('center')" title="จัดกึ่งกลาง">≡ กึ่งกลาง</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('right')" title="จัดชิดขวา">⫸ ชิดขวา</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Bold & Color -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBold()" title="ตัวหนา"><strong>𝐁 หนา</strong></button>
+                    <label for="text-color-picker" style="font-size: 11.5px; margin-left: 2px;">🎨 สี:</label>
+                    <input type="color" id="text-color-picker" value="#002b49" style="width: 24px; height: 22px; border: none; cursor: pointer; border-radius: 4px;" onchange="setTextColor(this.value)">
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Text Highlight Palette Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleHighlightMenu()" title="ไฮไลท์ข้อความ">
+                        <span>🖍️ ไฮไลท์</span> ▾
+                    </button>
+                    <div id="highlight-palette-menu" class="popup-menu">
+                        <div class="color-palette-row">
+                            <div class="color-chip" style="background: #fef08a;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fef08a')" title="สีเหลืองพาสเทล"></div>
+                            <div class="color-chip" style="background: #bbf7d0;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bbf7d0')" title="สีเขียวมินต์พาสเทล"></div>
+                            <div class="color-chip" style="background: #bae6fd;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bae6fd')" title="สีฟ้าอ่อนพาสเทล"></div>
+                            <div class="color-chip" style="background: #fed7aa;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fed7aa')" title="สีส้มพาสเทล"></div>
+                            <div class="color-chip" style="background: #fbcfe8;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fbcfe8')" title="สีชมพูพาสเทล"></div>
+                            <button class="btn-clear-hl" onmousedown="event.preventDefault()" onclick="applyHighlight('transparent')">ลบไฮไลท์</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insert Symbol Popup Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleSymbolMenu()" title="แทรกสัญลักษณ์/ไอคอน">
+                        <span>🎯 สัญลักษณ์</span> ▾
+                    </button>
+                    <div id="symbol-palette-menu" class="popup-menu" style="min-width: 240px;">
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">📋 เอกสาร & เป้าหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📋')">📋</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📊')">📊</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📈')">📈</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🎯')">🎯</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⚖️')">⚖️</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🌟')">🌟</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🏆')">🏆</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🥇')">🥇</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⭐')">⭐</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('💡')">💡</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📌')">📌</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('😊')">😊</button>
+                            </div>
+                        </div>
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">➔ ลูกศร & เครื่องหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➔')">➔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➜')">➜</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('•')">•</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('✔')">✔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🔴')">🔴</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🟢')">🟢</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Clear Format & Insert Date -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('removeFormat')" title="ล้างการจัดรูปแบบกลับเป็นมาตรฐาน">🧹 ล้างฟอร์แมต</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="insertDateStamp()" title="แทรกวันที่ปัจจุบัน ณ ตำแหน่งเคอร์เซอร์">📅 ลงวันที่</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Reset & Backup Data Utilities -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" style="color: #b91c1c; border-color: #fca5a5;" onmousedown="event.preventDefault()" onclick="resetQuarterDefaults()" title="คืนค่าตัวเลขเริ่มต้นของไตรมาสนี้">🔄 คืนค่าเริ่มต้น</button>
+                    
+                    <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                        <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBackupMenu()" title="สำรองหรือกู้คืนข้อมูล JSON">
+                            <span>📦 สำรอง/กู้คืน</span> ▾
+                        </button>
+                        <div id="backup-menu" class="popup-menu" style="min-width: 190px;">
+                            <button class="menu-action-item" onclick="exportDataBackup()">📤 ดาวน์โหลดไฟล์สำรอง (.json)</button>
+                            <button class="menu-action-item" onclick="document.getElementById('backup-file-input').click()">📥 นำเข้าไฟล์สำรอง (.json)</button>
+                            <input type="file" id="backup-file-input" style="display:none;" accept=".json" onchange="importDataBackup(event)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Target Indicator -->
+                <div class="ribbon-left">
+                    <span style="color: #92400e; font-size: 11px;">กำลังเลือก:</span>
+                    <span id="active-target-name" class="active-target-pill">คลิกข้อความใดก็ได้เพื่อปรับแต่ง</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16:9 EXECUTIVE PRESENTATION CANVAS -->
+        <div id="report-canvas">
+
+            <!-- HEADER BANNER -->
+            <div class="header-banner">
+                <div class="header-title-box">
+                    <div class="header-icon-box">🤝</div>
+                    <div>
+                        <div contenteditable="true" id="hdr-main-title" class="header-main-title">
+                            ด้านที่ 3 การปฏิบัติการ | ตัวชี้วัดที่ 3.2 ความสำเร็จในการแก้ไขปัญหาและบรรเทาภาระหนี้สินตามวัตถุประสงค์ของเงินทุนหมุนเวียน
+                        </div>
+                        <div contenteditable="true" id="hdr-sub-title" class="header-sub-title">
+                            พิจารณาจากผลการสำรวจความคิดเห็นของผู้กู้ยืมเงินทุนหมุนเวียนในการแก้ไขปัญหาและบรรเทาภาระหนี้สิน ประจำปีบัญชี 2569
+                        </div>
+                    </div>
+                </div>
+                <div contenteditable="true" id="hdr-quote" class="header-quote">
+                    บรรเทาภาระหนี้ ปลดเปลื้องทุกข์ครูไทย<br>ยกระดับคุณภาพชีวิตสู่ความมั่นคงอย่างยั่งยืน
+                </div>
+            </div>
+
+            <!-- META SUB-BANNER (Pills & Rubric) -->
+            <div class="meta-bar">
+                <div class="meta-pills-group">
+                    <div class="meta-pill">
+                        <span class="pill-lbl">📌 ตัวชี้วัด:</span>
+                        <span contenteditable="true" id="pill-kpi-name" class="pill-val">3.2 ความสำเร็จการแก้ไขปัญหาและบรรเทาภาระหนี้สินฯ</span>
+                    </div>
+                    <div class="meta-pill">
+                        <span class="pill-lbl">🎯 หน่วยวัด:</span>
+                        <span contenteditable="true" id="pill-unit" class="pill-val">ระดับ</span>
+                    </div>
+                    <div class="meta-pill">
+                        <span class="pill-lbl">⚖️ ค่าน้ำหนัก:</span>
+                        <span contenteditable="true" id="pill-weight" class="pill-val">ร้อยละ 10</span>
+                    </div>
+                    <div class="meta-pill">
+                        <span class="pill-lbl">📏 ค่าเกณฑ์วัด:</span>
+                        <span contenteditable="true" id="pill-criterion" class="pill-val">(-/+ 1)</span>
+                    </div>
+                </div>
+
+                <div class="rubric-group">
+                    <span class="rubric-lbl">เกณฑ์การประเมิน:</span>
+                    <div class="rubric-chip">
+                        <span class="r-lvl">ระดับ 1</span>
+                        <span class="r-val" contenteditable="true" id="rubric-r1">&ge; 65.00%</span>
+                    </div>
+                    <div class="rubric-chip">
+                        <span class="r-lvl">ระดับ 2</span>
+                        <span class="r-val" contenteditable="true" id="rubric-r2">&ge; 70.00%</span>
+                    </div>
+                    <div class="rubric-chip">
+                        <span class="r-lvl">ระดับ 3</span>
+                        <span class="r-val" contenteditable="true" id="rubric-r3">&ge; 75.00%</span>
+                    </div>
+                    <div class="rubric-chip">
+                        <span class="r-lvl">ระดับ 4</span>
+                        <span class="r-val" contenteditable="true" id="rubric-r4">&ge; 80.00%</span>
+                    </div>
+                    <div class="rubric-chip active-r5">
+                        <span class="r-lvl">ระดับ 5</span>
+                        <span class="r-val" contenteditable="true" id="rubric-r5">&ge; 85.00%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT GRID (SPACIOUS 3 COLUMNS) -->
+            <div class="content-grid">
+
+                <!-- COLUMN 1: 3 DIMENSIONS BREAKDOWN -->
+                <div class="grid-col">
+                    <div class="card">
+                        <div class="card-header-line">
+                            <span class="card-header-icon">📊</span>
+                            <span contenteditable="true" id="card1-title" class="card-header-title">ผลการสำรวจจำแนก 3 มิติสำคัญ</span>
+                        </div>
+
+                        <!-- Big Overall Score Box -->
+                        <div class="stat-box-large">
+                            <div contenteditable="true" id="stat-total-num" class="stat-num-large">85.38%</div>
+                            <div contenteditable="true" id="stat-total-unit" class="stat-unit-large">คะแนนเฉลี่ย 4.27 เต็ม 5 (ระดับมากที่สุด)</div>
+                        </div>
+
+                        <!-- 3 Dimension Cards -->
+                        <div class="breakdown-list">
+                            <!-- Dimension 3: Debt Relief Success -->
+                            <div class="breakdown-card">
+                                <div class="breakdown-top">
+                                    <div class="breakdown-title">
+                                        <span>🎯 ความสำเร็จในการแก้ไขปัญหาและบรรเทาหนี้</span>
+                                    </div>
+                                    <div contenteditable="true" id="d3-score" class="breakdown-val" style="color: #047857;">89.04%</div>
+                                </div>
+                                <div class="progress-bg">
+                                    <div class="progress-bar-fill" style="width: 89.04%; background: linear-gradient(90deg, #059669, #10b981);"></div>
+                                </div>
+                                <div class="breakdown-subtext">
+                                    คะแนนเฉลี่ย 4.45 จาก 5 (ช่วยลดดอกเบี้ย รวมหนี้ และผ่อนชำระได้จริง)
+                                </div>
+                            </div>
+
+                            <!-- Dimension 2: Quality of Life -->
+                            <div class="breakdown-card">
+                                <div class="breakdown-top">
+                                    <div class="breakdown-title">
+                                        <span>🌱 การยกระดับคุณภาพชีวิต (สุขภาพ/ครอบครัว)</span>
+                                    </div>
+                                    <div contenteditable="true" id="d2-score" class="breakdown-val" style="color: #0284c7;">87.06%</div>
+                                </div>
+                                <div class="progress-bg">
+                                    <div class="progress-bar-fill" style="width: 87.06%; background: linear-gradient(90deg, #0284c7, #38bdf8);"></div>
+                                </div>
+                                <div class="breakdown-subtext">
+                                    คะแนนเฉลี่ย 4.35 จาก 5 (คลายความกังวล ครอบครัวมีความสุข มีสมาธิในการสอน)
+                                </div>
+                            </div>
+
+                            <!-- Dimension 1: Economic & Financial System -->
+                            <div class="breakdown-card">
+                                <div class="breakdown-top">
+                                    <div class="breakdown-title">
+                                        <span>💰 ด้านเศรษฐกิจและการบริหารเงิน</span>
+                                    </div>
+                                    <div contenteditable="true" id="d1-score" class="breakdown-val" style="color: #4f46e5;">80.03%</div>
+                                </div>
+                                <div class="progress-bg">
+                                    <div class="progress-bar-fill" style="width: 80.03%; background: linear-gradient(90deg, #4f46e5, #818cf8);"></div>
+                                </div>
+                                <div class="breakdown-subtext">
+                                    คะแนนเฉลี่ย 4.00 จาก 5 (รายรับ-รายจ่ายคล่องตัวขึ้น ปริมาณภาระหนี้สินลดลง)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Operational Note -->
+                        <div class="info-note-box">
+                            <span style="font-size: 16px;">📋</span>
+                            <div contenteditable="true" id="card1-footer-note">
+                                สำรวจจากกลุ่มเป้าหมายผู้กู้ยืมเงินทุนหมุนเวียนปี 2568 (478 คน) ครอบคลุม 108 หน่วยงานต้นสังกัด ผ่านแบบสอบถามที่ได้รับความเห็นชอบจากกรมบัญชีกลางและทริส
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMN 2: QUARTERLY RESULTS TABLE -->
+                <div class="grid-col">
+                    <div class="card">
+                        <div class="card-header-line">
+                            <span class="card-header-icon">📈</span>
+                            <span contenteditable="true" id="card2-title" class="card-header-title">ผลการดำเนินงานรายไตรมาส (ประจำปีบัญชี 2569)</span>
+                        </div>
+
+                        <table class="quarter-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 90px;">ไตรมาส</th>
+                                    <th>กิจกรรมและความคืบหน้าการสำรวจ</th>
+                                    <th style="width: 110px;">กลุ่มเป้าหมาย</th>
+                                    <th style="width: 140px;">ร้อยละการบรรเทาภาระหนี้</th>
+                                    <th style="width: 120px;">ระดับคะแนน</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center; font-weight: 700; color: #003666;">ไตรมาส 1</td>
+                                    <td contenteditable="true" id="td-q1-act">จัดทำแผนประเมินผลลัพธ์และแบบสอบถาม ได้รับความเห็นชอบจากกรมบัญชีกลางและทริส (17 ธ.ค. 68)</td>
+                                    <td contenteditable="true" id="td-q1-resp" style="text-align: center; font-weight: 600;">478 คน</td>
+                                    <td contenteditable="true" id="td-q1-pct" style="text-align: center; color: #64748b; font-weight: 600;">N/A (อยู่ระหว่างยกร่าง)</td>
+                                    <td contenteditable="true" id="td-q1-score" style="text-align: center; color: #64748b; font-weight: 600;">N/A</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: 700; color: #003666;">ไตรมาส 2</td>
+                                    <td contenteditable="true" id="td-q2-act">ส่งแบบสอบถามออนไลน์ไปยังหน่วยงาน 108 แห่ง ให้ผู้กู้ยืมปี 68 ตอบแบบสอบถาม (27 ก.พ. 69)</td>
+                                    <td contenteditable="true" id="td-q2-resp" style="text-align: center; font-weight: 600;">478 คน</td>
+                                    <td contenteditable="true" id="td-q2-pct" style="text-align: center; color: #64748b; font-weight: 600;">N/A (อยู่ระหว่างรวบรวม)</td>
+                                    <td contenteditable="true" id="td-q2-score" style="text-align: center; color: #64748b; font-weight: 600;">N/A</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: 700; color: #003666;">ไตรมาส 3</td>
+                                    <td contenteditable="true" id="td-q3-act">รวบรวมข้อมูล ตรวจสอบ วิเคราะห์และประมวลผลเบื้องต้น ณ 30 มิ.ย. 69</td>
+                                    <td contenteditable="true" id="td-q3-resp" style="text-align: center; font-weight: 700; color: #005691;">478 คน</td>
+                                    <td contenteditable="true" id="td-q3-pct" style="text-align: center; font-weight: 700; color: #005691;">85.38% (เฉลี่ย 4.27)</td>
+                                    <td contenteditable="true" id="td-q3-score" style="text-align: center; font-weight: 700; color: #005691;">ระดับ 5.0000</td>
+                                </tr>
+                                <tr class="highlight-q4">
+                                    <td style="text-align: center; font-weight: 800; color: #047857;">ไตรมาส 4 (สิ้นปี)</td>
+                                    <td contenteditable="true" id="td-q4-act">สรุปผลสำรวจสมบูรณ์ จำแนก 3 มิติ และจัดทำรายงานผลเสนอผู้บริหาร ก.ค.ศ.</td>
+                                    <td contenteditable="true" id="td-q4-resp" style="text-align: center; font-weight: 800; color: #047857;">478 คน</td>
+                                    <td contenteditable="true" id="td-q4-pct" style="text-align: center; font-weight: 800; color: #047857; font-size: 15px;">85.38% (เฉลี่ย 4.27)</td>
+                                    <td contenteditable="true" id="td-q4-score" style="text-align: center; font-weight: 800; color: #047857; font-size: 15px;">ระดับ 5.0000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- COLUMN 3: EXECUTIVE SCORECARDS -->
+                <div class="grid-col">
+                    <div class="card" style="justify-content: space-around;">
+                        <div class="card-header-line">
+                            <span class="card-header-icon">🏆</span>
+                            <span contenteditable="true" id="card3-title" class="card-header-title">สรุปผลการประเมินตัวชี้วัดที่ 3.2</span>
+                        </div>
+
+                        <!-- Main Big Metric Box -->
+                        <div class="score-box-main">
+                            <div contenteditable="true" id="score-main-lbl" class="score-box-title">ผลการบรรเทาภาระหนี้สินรวม</div>
+                            <div contenteditable="true" id="score-main-val" class="score-box-num">85.38%</div>
+                            <div contenteditable="true" id="score-main-unit" class="score-box-unit">จากเกณฑ์ระดับ 5 กำหนดไว้ไม่น้อยกว่า 85.00% (ค่าเฉลี่ย 4.27 เต็ม 5 ระดับมากที่สุด)</div>
+                        </div>
+
+                        <div class="arrow-down-divider">▼</div>
+
+                        <!-- Rating Badge Card -->
+                        <div class="rating-badge-card">
+                            <div contenteditable="true" id="rating-title" class="rating-title">คะแนนประเมินเทียบกับเกณฑ์วัด (น้ำหนัก 10%)</div>
+                            <div contenteditable="true" id="rating-badge-val" class="rating-val-text">ระดับ 5.0000 คะแนน</div>
+                            <div class="rating-stars">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CANVAS FOOTER -->
+            <div class="canvas-footer">
+                <div>สำนักงานคณะกรรมการข้าราชการครูและบุคลากรทางการศึกษา (ก.ค.ศ.)</div>
+                <div>คุณภาพการบริหาร เพื่อครู เพื่ออนาคตการศึกษาไทย</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT SUITE -->
+    <script>
+        let lastFocusedElement = null;
+        let activeQuarter = 4;
+
+        // Quarter Defaults for KPI 3.2 (Official Authentic Data)
+        const quarterDefaults32 = {
+            1: {
+                scoreMainVal: "N/A",
+                scoreMainUnit: "อยู่ระหว่างยกร่างแผนประเมินและแบบสอบถาม",
+                ratingBadgeVal: "อยู่ระหว่างดำเนินการ"
+            },
+            2: {
+                scoreMainVal: "N/A",
+                scoreMainUnit: "อยู่ระหว่างรวบรวมข้อมูลแบบสอบถามออนไลน์",
+                ratingBadgeVal: "อยู่ระหว่างดำเนินการ"
+            },
+            3: {
+                scoreMainVal: "85.38%",
+                scoreMainUnit: "ผลการประเมินเบื้องต้น ณ 30 มิ.ย. 69",
+                ratingBadgeVal: "ระดับ 5.0000 คะแนน"
+            },
+            4: {
+                scoreMainVal: "85.38%",
+                scoreMainUnit: "จากเกณฑ์ระดับ 5 กำหนดไว้ไม่น้อยกว่า 85.00% (ค่าเฉลี่ย 4.27)",
+                ratingBadgeVal: "ระดับ 5.0000 คะแนน"
+            }
+        };
+
+        function applyQuarterDefault(q) {
+            const def = quarterDefaults32[q] || quarterDefaults32[4];
+            if (document.getElementById('score-main-val')) document.getElementById('score-main-val').innerText = def.scoreMainVal;
+            if (document.getElementById('score-main-unit')) document.getElementById('score-main-unit').innerText = def.scoreMainUnit;
+            if (document.getElementById('rating-badge-val')) document.getElementById('rating-badge-val').innerText = def.ratingBadgeVal;
+        }
+
+        function switchQuarter(newQ) {
+            newQ = parseInt(newQ);
+            if (newQ === activeQuarter) return;
+
+            saveCurrentQuarter(false);
+            activeQuarter = newQ;
+            document.getElementById('quarter-focus').value = newQ;
+
+            const badge = document.getElementById('quarter-badge');
+            if (badge) {
+                badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg> ไตรมาส ${activeQuarter}`;
+            }
+
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved) {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                    applyQuarterDefault(activeQuarter);
+                }
+            } else {
+                applyQuarterDefault(activeQuarter);
+            }
+
+            showToast(`📂 สลับข้อมูลเป็น ไตรมาส ${activeQuarter}`);
+        }
+
+        function saveCurrentQuarter(showMsg = true) {
+            const state = captureCurrentState();
+            localStorage.setItem(getStorageKey(activeQuarter), JSON.stringify(state));
+            if (showMsg) {
+                showToast(`💾 บันทึกข้อมูล "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+            }
+        }
+
+        function resetQuarterDefaults() {
+            if (confirm(`ต้องการคืนค่าเริ่มต้นสำหรับ "ไตรมาส ${activeQuarter}" ใช่หรือไม่? ข้อมูลที่แก้ไขจะถูกรีเซ็ต`)) {
+                localStorage.removeItem(getStorageKey(activeQuarter));
+                applyQuarterDefault(activeQuarter);
+                showToast(`🔄 คืนค่าเริ่มต้นไตรมาส ${activeQuarter} แล้ว`);
+            }
+        }
+
+        function changeFiscalYear(yr) {
+            const el = document.getElementById('select-year');
+            if (el) el.value = yr;
+            const sub = document.getElementById('hdr-sub-title');
+            if (sub) sub.innerText = `พิจารณาจากผลการสำรวจความคิดเห็นของผู้กู้ยืมเงินทุนหมุนเวียนในการแก้ไขปัญหาและบรรเทาภาระหนี้สิน ประจำปีบัญชี ${yr}`;
+            saveCurrentQuarter(false);
+            showToast(`📅 ปรับปีบัญชีเป็น ${yr} เรียบร้อยแล้ว`);
+        }
+
+        function captureCurrentState() {
+            const editables = {};
+            document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                const key = el.id || ('ed_' + idx);
+                editables[key] = {
+                    html: el.innerHTML,
+                    style: el.getAttribute('style') || ''
+                };
+            });
+
+            return {
+                kpi: '3.2',
+                quarter: activeQuarter,
+                fiscalYear: document.getElementById('select-year') ? document.getElementById('select-year').value : '2569',
+                editables: editables
+            };
+        }
+
+        function applyCapturedState(state) {
+            if (!state) return;
+            if (state.kpi && state.kpi !== '3.2') {
+                console.warn('Blocked foreign KPI state:', state.kpi);
+                applyQuarterDefault(activeQuarter);
+                return;
+            }
+
+            if (state.editables) {
+                document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                    const key = el.id || ('ed_' + idx);
+                    if (state.editables[key]) {
+                        el.innerHTML = state.editables[key].html;
+                        el.setAttribute('style', state.editables[key].style);
+                    }
+                });
+            }
+
+            if (state.fiscalYear && document.getElementById('select-year')) {
+                document.getElementById('select-year').value = state.fiscalYear;
+            }
+            bindEditableEvents();
+        }
+
+
+        // ============================================================
+        // MODERN TOOLBAR, DUAL-MODE, EXPORT & DATA PERSISTENCE SUITE
+        // ============================================================
+        let currentAppMode = 'preview'; // 'preview' or 'edit'
+        const KPI_KEY = '3.2';
+        const STORAGE_KEY_PREFIX = 'kpi_official_32_Q';
+
+        function getStorageKey(q) {
+            return `${STORAGE_KEY_PREFIX}${q}`;
+        }
+
+        function navigateToKPI(targetKey) {
+                                    const routes = {
+                '1.1': 'ตัวชี้วัดที่ 1.1.html',
+                '1.2.1': 'ตัวชี้วัดที่ 1.2.1.html',
+                '1.2.2': 'ตัวชี้วัดที่ 1.2.2.html',
+                '2.1': 'ตัวชี้วัดที่ 2.1.html',
+                '2.2': 'ตัวชี้วัดที่ 2.2.html',
+                '3.1': 'ตัวชี้วัดที่ 3.1.html',
+                '3.2': 'ตัวชี้วัดที่ 3.2.html',
+                '3.3': 'ตัวชี้วัดที่ 3.3.html',
+                '4.1': 'ตัวชี้วัดที่ 4.1.html',
+                '4.2': 'ตัวชี้วัดที่ 4.2.html',
+                '4.3': 'ตัวชี้วัดที่ 4.3.html',
+                '5.1': 'ตัวชี้วัดที่ 5.1.html',
+                '5.2': 'ตัวชี้วัดที่ 5.2.html',
+                '6.1': 'ตัวชี้วัดที่ 6.1.html'
+            };
+            if (routes[targetKey] && !window.location.pathname.endsWith(encodeURI(routes[targetKey])) && !window.location.pathname.endsWith(routes[targetKey])) {
+                showToast(`⏳ กำลังเปิด ${routes[targetKey]}...`);
+                setTimeout(() => {
+                    window.location.href = routes[targetKey];
+                }, 300);
+            }
+        }
+
+        function setAppMode(mode) {
+            currentAppMode = mode;
+            const btnPreview = document.getElementById('btn-mode-preview');
+            const btnEdit = document.getElementById('btn-mode-edit');
+            const formatBar = document.getElementById('full-format-bar');
+
+            if (mode === 'preview') {
+                document.body.classList.remove('app-mode-edit');
+                document.body.classList.add('app-mode-preview');
+                if (btnPreview) btnPreview.classList.add('active');
+                if (btnEdit) btnEdit.classList.remove('active', 'edit-active');
+                if (formatBar) formatBar.classList.add('mode-hidden');
+                showToast('👁️ สลับสู่โหมดนำเสนอ (Preview) - แสดงภาพสไลด์ Infographic สะอาดตา');
+            } else {
+                document.body.classList.remove('app-mode-preview');
+                document.body.classList.add('app-mode-edit');
+                if (btnPreview) btnPreview.classList.remove('active');
+                if (btnEdit) btnEdit.classList.add('active', 'edit-active');
+                if (formatBar) formatBar.classList.remove('mode-hidden');
+                showToast('✏️ สลับสู่โหมดแก้ไข (Edit) - เปิดแถบเครื่องมือปรับแต่งข้อความและเกณฑ์');
+            }
+        }
+
+        function copyImageToClipboard() {
+            showToast('⏳ กำลังเรนเดอร์และคัดลอกภาพลงคลิปบอร์ด...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    canvas.toBlob(blob => {
+                        if (!navigator.clipboard || !navigator.clipboard.write) {
+                            showToast('⚠️ เบราว์เซอร์ไม่รองรับ Direct Clipboard (ใช้ปุ่มส่งออกภาพ PNG แทนได้ครับ)');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                            return;
+                        }
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        navigator.clipboard.write([item]).then(() => {
+                            showToast('📋 คัดลอกภาพสไลด์แล้ว! สามารถกด Ctrl+V วางใน PowerPoint หรือ LINE ได้ทันที');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        }).catch(err => {
+                            console.error(err);
+                            showToast('⚠️ ไม่สามารถเขียนลงคลิปบอร์ดได้ กรุณาใช้ปุ่มส่งออกภาพ PNG');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        });
+                    }, 'image/png');
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้างภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToImage() {
+            showToast('⏳ กำลังเรนเดอร์ภาพความละเอียดสูง (โหมดสไลด์นำเสนอ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvas = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvas, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(renderedCanvas => {
+                    const link = document.createElement('a');
+                    link.download = `รายงานตัวชี้วัด_3.2_ไตรมาส${activeQuarter}_Infographic.png`;
+                    link.href = renderedCanvas.toDataURL('image/png');
+                    link.click();
+                    showToast('✅ ส่งออกภาพสำเร็จแล้ว!');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการบันทึกภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToPDF() {
+            showToast('⏳ กำลังสร้างไฟล์ PDF เต็มแผ่น (คมชัดระดับเดียวกับรูปภาพ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    const { jsPDF } = window.jspdf;
+                    const imgWidthPt = (canvas.width / 2) * 0.75;
+                    const imgHeightPt = (canvas.height / 2) * 0.75;
+                    const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+
+                    const pdf = new jsPDF({
+                        orientation: orientation,
+                        unit: 'pt',
+                        format: [imgWidthPt, imgHeightPt]
+                    });
+
+                    const imgData = canvas.toDataURL('image/png');
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidthPt, imgHeightPt, undefined, 'FAST');
+                    pdf.save(`รายงานตัวชี้วัด_3.2_ไตรมาส${activeQuarter}_Infographic.pdf`);
+                    showToast('✅ ส่งออกไฟล์ PDF สำเร็จ (เต็มแผ่นไร้ขอบขาว เหมือนรูปภาพ 100%)!');
+
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้าง PDF');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    showToast('⛶ เข้าสู่โหมดเต็มหน้าจอแล้ว (กด Esc เพื่อออกจากเต็มจอ)');
+                }).catch(err => {
+                    console.error(err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    showToast('ออกจากโหมดเต็มหน้าจอแล้ว');
+                }
+            }
+        }
+
+        function insertDateStamp() {
+            const today = new Date();
+            const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const dateStr = `ข้อมูล ณ วันที่ ${today.getDate()} ${thaiMonths[today.getMonth()]} ${today.getFullYear() + 543}`;
+            document.execCommand('insertText', false, dateStr);
+            showToast(`📅 แทรกวันที่: "${dateStr}" สำเร็จ`);
+        }
+
+        function toggleBackupMenu() {
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.toggle('show');
+        }
+
+        function exportDataBackup() {
+            const backupData = {
+                app: 'KPI_Report_System',
+                kpi: '3.2',
+                fiscalYear: typeof currentFiscalYear !== 'undefined' ? currentFiscalYear : '2569',
+                exportedAt: new Date().toISOString(),
+                storage: {}
+            };
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k.startsWith('kpi_official_32_Q')) {
+                    backupData.storage[k] = localStorage.getItem(k);
+                }
+            }
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `backup_kpi_3.2_${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            showToast('📤 ส่งออกไฟล์สำรองข้อมูลสำเร็จ!');
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function importDataBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data && data.storage) {
+                        for (let k in data.storage) {
+                            localStorage.setItem(k, data.storage[k]);
+                        }
+                        showToast('📥 กู้คืนข้อมูลสำเร็จ! กำลังรีโหลดหน้าจอ...');
+                        setTimeout(() => location.reload(), 600);
+                    } else {
+                        showToast('❌ รูปแบบไฟล์สำรองไม่ถูกต้อง');
+                    }
+                } catch(err) {
+                    showToast('❌ เกิดข้อผิดพลาดในการอ่านไฟล์สำรอง');
+                }
+            };
+            reader.readAsText(file);
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function adjustFontSize(delta) {
+            if (!lastFocusedElement) return;
+            const curSize = parseInt(window.getComputedStyle(lastFocusedElement).fontSize) || 14;
+            const newSize = Math.max(9, Math.min(36, curSize + delta));
+            lastFocusedElement.style.fontSize = newSize + 'px';
+            const badge = document.getElementById('font-size-val');
+            if (badge) badge.innerText = newSize + 'px';
+        }
+
+        function setTextAlign(align) {
+            if (!lastFocusedElement) return;
+            lastFocusedElement.style.textAlign = align;
+        }
+
+        function toggleBold() {
+            document.execCommand('bold', false, null);
+        }
+
+        function setTextColor(color) {
+            document.execCommand('foreColor', false, color);
+        }
+
+        function toggleHighlightMenu() {
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function applyHighlight(color) {
+            document.execCommand('hiliteColor', false, color);
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        function toggleSymbolMenu() {
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function insertSymbol(sym) {
+            document.execCommand('insertText', false, sym);
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        function showToast(msg) {
+            let toast = document.getElementById('toast-notification');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast-notification';
+                toast.className = 'toast';
+                document.body.appendChild(toast);
+            }
+            toast.innerText = msg;
+            toast.classList.add('show');
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2300);
+        }
+
+        function bindEditableEvents() {
+            const editables = document.querySelectorAll('[contenteditable="true"]');
+            editables.forEach(el => {
+                el.addEventListener('focus', () => {
+                    lastFocusedElement = el;
+                    const pill = document.getElementById('active-target-name');
+                    if (pill) {
+                        const text = (el.innerText || el.textContent || '').trim();
+                        pill.innerText = text.length > 25 ? text.slice(0, 22) + '...' : text || el.id || 'กำลังเลือก';
+                    }
+                    const sz = parseInt(window.getComputedStyle(el).fontSize) || 14;
+                    const badge = document.getElementById('font-size-val');
+                    if (badge) badge.innerText = sz + 'px';
+                });
+            });
+        }
+    
+
+        // Window Onload
+        window.onload = function() {
+            activeQuarter = parseInt(document.getElementById('quarter-focus').value) || 4;
+            bindEditableEvents();
+
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved) {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                    applyQuarterDefault(activeQuarter);
+                }
+            } else {
+                applyQuarterDefault(activeQuarter);
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown-wrapper')) {
+                    const hp = document.getElementById('highlight-palette-menu');
+                    if (hp) hp.classList.remove('show');
+                    const sp = document.getElementById('symbol-palette-menu');
+                    if (sp) sp.classList.remove('show');
+                    const bm = document.getElementById('backup-menu');
+                    if (bm) bm.classList.remove('show');
+                }
+            });
+        };
+    </script>
+</body>
+</html>

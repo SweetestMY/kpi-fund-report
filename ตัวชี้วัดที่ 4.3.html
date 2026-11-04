@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มรายงานผลตัวชี้วัดที่ 4.3 การบริหารจัดการสารสนเทศและดิจิทัล (KPI Presentation Dashboard)</title>
+    <!-- Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- html2canvas & jsPDF for Direct Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #004b87;
+            --primary-dark: #002647;
+            --primary-light: #0077b6;
+            --primary-gradient: linear-gradient(135deg, #001f38 0%, #004b87 50%, #0077b6 100%);
+            --navy: #00172e;
+            --card-border: #9ec5e8;
+            --accent-gold: #ffcc00;
+            --accent-amber: #d97706;
+            --accent-green: #059669;
+            --text-dark: #0f172a;
+            --text-body: #1e293b;
+            --text-muted: #334155;
+            --bg-page: #e8f1f8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            padding: 16px;
+            min-height: 100vh;
+            overflow-x: auto;
+            box-sizing: border-box;
+        }
+
+        .page-wrapper {
+            max-width: 1560px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toolbar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+        }
+
+        .toolbar-ribbon {
+            background: #ffffff;
+            border: 1px solid rgba(188, 219, 242, 0.85);
+            border-radius: 12px;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(0, 40, 85, 0.08);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .ribbon-left, .ribbon-center, .ribbon-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #004b87;
+        }
+
+        .select-input {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #9ec5e8;
+            background: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            color: #0f172a;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .select-input:hover, .select-input:focus {
+            border-color: #004b87;
+            box-shadow: 0 0 0 2px rgba(0, 75, 135, 0.15);
+        }
+
+        .quarter-active-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid #bae6fd;
+        }
+
+        .mode-segmented-control {
+            display: flex;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            gap: 2px;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: #004b87;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 75, 135, 0.25);
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            color: #004b87;
+            border: 1px solid #9ec5e8;
+        }
+        .btn-outline:hover {
+            background: #f0f7ff;
+            border-color: #004b87;
+        }
+
+        .btn-primary {
+            background: #004b87;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background: #003661;
+        }
+
+        .btn-success {
+            background: #059669;
+            color: #ffffff;
+        }
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn-warning {
+            background: #d97706;
+            color: #ffffff;
+        }
+        .btn-warning:hover {
+            background: #b45309;
+        }
+
+        .btn-fmt {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+        }
+        .btn-fmt:hover {
+            background: #e2e8f0;
+        }
+
+        .tab-btn {
+            border: 1px solid #9ec5e8;
+            background: #f8fbfe;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #004b87;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background: #e0f2fe;
+            border-color: #0284c7;
+        }
+
+        .tab-btn.active {
+            background: #004b87;
+            color: #ffffff;
+            border-color: #003661;
+            box-shadow: 0 3px 8px rgba(0, 75, 135, 0.25);
+        }
+
+        .tab-btn.active .tab-pct {
+            background: rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+        }
+
+        /* 16:9 Presentation Frame */
+        .dashboard-container {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid rgba(188, 219, 242, 0.9);
+            box-shadow: 0 6px 20px rgba(0, 40, 85, 0.08);
+            padding: 22px 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 820px;
+            position: relative;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            padding: 14px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 31, 56, 0.25);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-icon-box {
+            font-size: 28px;
+            background: rgba(255, 255, 255, 0.12);
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .main-heading {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            color: #ffffff;
+        }
+
+        .sub-heading {
+            font-size: 13.5px;
+            color: #bae6fd;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        .header-right-tag {
+            text-align: right;
+            font-size: 12.5px;
+            font-style: italic;
+            color: #e0f2fe;
+            line-height: 1.4;
+        }
+
+        /* KPI Metadata Bar */
+        .kpi-meta-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fbfe;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 9px 18px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pills-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e3a8a;
+            background: #ffffff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .meta-pill .val {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .meta-pill-accent {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+
+        .rubric-target-inline {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .target-scale-box {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .target-step-cell {
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            line-height: 1.2;
+        }
+
+        .target-step-cell.active-target {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0369a1;
+            box-shadow: 0 1px 4px rgba(2, 132, 199, 0.3);
+        }
+
+        /* Content Views */
+        .content-view {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .content-view.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* View 0: Overview 2 Columns Layout */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .card-panel {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0, 40, 85, 0.04);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 10px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #004b87;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Overview Table */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 13.5px;
+        }
+
+        .data-table th {
+            background: #004b87;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 10px 12px;
+            text-align: center;
+            border-bottom: 1px solid #002647;
+        }
+
+        .data-table th:first-child { text-align: center; }
+        .data-table th:nth-child(2) { text-align: left; }
+
+        .data-table td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--text-body);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f0f7ff;
+        }
+
+        .data-table tfoot tr {
+            background: #f8fafc;
+            font-weight: 700;
+        }
+
+        .data-table tfoot td {
+            padding: 11px 12px;
+            border-top: 2px solid #cbd5e1;
+            color: #004b87;
+        }
+
+        /* Right Big Score Card */
+        .score-hero-box {
+            background: linear-gradient(135deg, #001f38 0%, #003661 100%);
+            border-radius: 12px;
+            padding: 22px 20px;
+            color: #ffffff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 31, 56, 0.2);
+            border: 1px solid #004b87;
+        }
+
+        .score-hero-label {
+            font-size: 14.5px;
+            color: #bae6fd;
+            font-weight: 500;
+        }
+
+        .score-hero-number {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--accent-gold);
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .stars-container {
+            color: #facc15;
+            font-size: 18px;
+            letter-spacing: 3px;
+        }
+
+        .summary-card-inner {
+            background: #f8fbfe;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .summary-inner-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #004b87;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-inner-desc {
+            font-size: 13.5px;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .status-pills-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .status-metric-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 12px 14px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .status-metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #166534;
+        }
+
+        .status-metric-val {
+            font-size: 18px;
+            font-weight: 800;
+            color: #15803d;
+        }
+
+        /* Subtopic Views: Rubric Scales Row */
+        .rubric-strip {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .rubric-cell {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 12px;
+            line-height: 1.45;
+            color: #334155;
+            transition: all 0.2s;
+        }
+
+        .rubric-cell .level-badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            width: fit-content;
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .rubric-cell.active {
+            background: #eff6ff;
+            border: 2px solid #004b87;
+            box-shadow: 0 3px 10px rgba(0, 75, 135, 0.15);
+        }
+
+        .rubric-cell.active .level-badge {
+            background: #004b87;
+            color: #ffffff;
+        }
+
+        .rubric-cell.achieved-gold {
+            background: #fffbeb;
+            border: 2px solid #d97706;
+            box-shadow: 0 3px 10px rgba(217, 119, 6, 0.2);
+        }
+
+        .rubric-cell.achieved-gold .level-badge {
+            background: #d97706;
+            color: #ffffff;
+        }
+
+        /* Detail Work Cards */
+        .subview-grid-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .subview-single-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .work-card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 2px 6px rgba(0, 40, 85, 0.03);
+        }
+
+        .work-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1.5px solid #e0f2fe;
+            padding-bottom: 8px;
+        }
+
+        .work-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #004b87;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .work-card-body {
+            font-size: 13.5px;
+            color: #1e293b;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Milestone Flow Steps */
+        .milestone-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: #f8fbfe;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 12px 16px;
+            flex-wrap: wrap;
+        }
+
+        .step-item {
+            flex: 1;
+            min-width: 130px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 9px 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .step-item.step-complete {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+
+        .step-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #004b87;
+        }
+
+        .step-sub {
+            font-size: 11.5px;
+            color: #475569;
+        }
+
+        .step-arrow {
+            color: #94a3b8;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* Bottom Score Strip */
+        .bottom-score-strip {
+            background: linear-gradient(135deg, #001f38 0%, #003661 100%);
+            border-radius: 10px;
+            padding: 14px 22px;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #004b87;
+            box-shadow: 0 4px 12px rgba(0, 31, 56, 0.15);
+        }
+
+        .bottom-score-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .bottom-score-label {
+            font-size: 13px;
+            color: #bae6fd;
+            font-weight: 500;
+        }
+
+        .bottom-score-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .dashboard-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 10px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Edit Mode Styles */
+        body.app-mode-edit [contenteditable="true"] {
+            outline: 1.5px dashed #38bdf8 !important;
+            outline-offset: 2px;
+            cursor: text;
+        }
+
+        body.app-mode-edit [contenteditable="true"]:hover {
+            background-color: rgba(224, 242, 254, 0.4);
+        }
+
+        body.app-mode-edit [contenteditable="true"]:focus {
+            outline: 2px solid #0284c7 !important;
+            background-color: #ffffff;
+        }
+
+        body.app-mode-preview [contenteditable="true"] {
+            outline: none !important;
+            cursor: default;
+        }
+
+        @media print {
+            body { background: #ffffff; padding: 0; }
+            .toolbar-container { display: none !important; }
+            .dashboard-container { box-shadow: none; border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body class="app-mode-preview">
+
+    <div class="page-wrapper">
+
+        <!-- TOOLBAR RIBBON -->
+        <div class="toolbar-container">
+            <div class="toolbar-ribbon">
+                <div class="ribbon-left">
+                    <!-- KPI Selector: strictly 1.1 through 4.3 -->
+                    <div class="control-item">
+                        <span>📑 ตัวชี้วัด:</span>
+                        <select id="select-kpi-page" class="select-input" onchange="navigateToKPI(this.value)" style="font-weight: 600; color: #0a4480; background: #eff6ff;">
+                <option value="1.1">1.1 ร้อยละการรับชำระหนี้</option>
+                <option value="1.2.1">1.2.1 หนี้ไม่เกิน 1 ปี</option>
+                <option value="1.2.2">1.2.2 หนี้เกิน 1 ปี</option>
+                <option value="2.1">2.1 ร้อยละความพึงพอใจฯ</option>
+                <option value="2.2">2.2 ความสำเร็จโครงการเสริมสร้างวินัยฯ</option>
+                <option value="3.1">3.1 ร้อยละเงินอนุมัติให้กู้ยืม</option>
+                <option value="3.2">3.2 ความสำเร็จการแก้ไขปัญหาหนี้สินฯ</option>
+                <option value="3.3">3.3 การจัดเก็บข้อมูลประเมินผลลัพธ์ปี 2570</option>
+                <option value="4.1">4.1 การบริหารความเสี่ยงฯ</option>
+                <option value="4.2">4.2 การตรวจสอบภายใน</option>
+                <option value="4.3" selected>4.3 การบริหารจัดการสารสนเทศและดิจิทัล (ปัจจุบัน)</option>
+                <option value="5.1">5.1 บทบาทคณะกรรมการบริหารทุนหมุนเวียน</option>
+                <option value="5.2">5.2 การบริหารทรัพยากรบุคคล</option>
+                <option value="6.1">6.1 การเบิกจ่ายเงินตามแผนฯ</option>
+            </select>
+                    </div>
+
+                    <!-- Quarter Selector -->
+                    <div class="control-item">
+                        <span>📊 รายงานถึง:</span>
+                        <select id="quarter-focus" class="select-input" onchange="switchQuarter(this.value)">
+                <option value="1">ไตรมาส 1 (ต.ค. - ธ.ค.)</option>
+                <option value="2">ไตรมาส 2 (ต.ค. - มี.ค.)</option>
+                <option value="3">ไตรมาส 3 (ต.ค. - มิ.ย.)</option>
+                <option value="4" selected>ไตรมาส 4 (ครบปี ต.ค. - ก.ย.)</option>
+            </select>
+                    </div>
+
+                    <span id="quarter-badge" class="quarter-active-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        ไตรมาส 4
+                    </span>
+
+                    <!-- Year Selector -->
+                    <div class="control-item" style="margin-left: 4px;">
+                        <span>📅 ปี:</span>
+                        <select id="select-year" class="select-input" onchange="changeFiscalYear(this.value)">
+                            <option value="2568">ปี 2568</option>
+                            <option value="2569" selected>ปี 2569</option>
+                            <option value="2570">ปี 2570</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dual Mode Segmented Control -->
+                <div class="ribbon-center">
+                    <div class="mode-segmented-control">
+                        <button class="mode-btn active" id="btn-mode-preview" onclick="setAppMode('preview')" title="โหมดนำเสนอ สะอาดตา ไร้เครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            โหมดนำเสนอ (Preview)
+                        </button>
+                        <button class="mode-btn" id="btn-mode-edit" onclick="setAppMode('edit')" title="โหมดแก้ไขข้อความ เปิดแถบเครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            โหมดแก้ไขข้อความ (Edit)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ribbon-right">
+                    <button class="btn btn-outline" onclick="saveCurrentQuarter(true)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        บันทึก
+                    </button>
+                    <button class="btn btn-outline" onclick="copyImageToClipboard()" title="คัดลอกรูปภาพลงคลิปบอร์ดทันที">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        คัดลอกภาพ
+                    </button>
+                    <button class="btn btn-primary" onclick="exportToImage()" title="ส่งออกเป็นรูปภาพ PNG">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        ส่งออกภาพ (PNG)
+                    </button>
+                    <button class="btn btn-warning" onclick="exportToPDF()" title="ดาวน์โหลดไฟล์ PDF เต็มแผ่น">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        ส่งออก PDF (เต็มแผ่น)
+                    </button>
+                    <button class="btn btn-success" onclick="window.print()" title="พิมพ์">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        พิมพ์ (Print)
+                    </button>
+                    <button class="btn btn-outline" id="btn-fullscreen" onclick="toggleFullscreen()" title="เต็มจอ">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        เต็มจอ
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formatting Toolbar for Edit Mode -->
+            <div class="format-toolbar" id="format-toolbar" style="display: none; background: #ffffff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 6px 14px; gap: 8px; align-items: center; box-shadow: 0 2px 6px rgba(0, 40, 85, 0.05);">
+                <span style="font-size: 12px; font-weight: 700; color: #1e3a8a; margin-right: 4px;">🛠️ จัดรูปแบบ:</span>
+                <button class="btn-fmt" onclick="formatDoc('bold')" title="ตัวหนา"><b>B</b></button>
+                <button class="btn-fmt" onclick="formatDoc('italic')" title="ตัวเอียง"><i>I</i></button>
+                <button class="btn-fmt" onclick="formatDoc('underline')" title="ขีดเส้นใต้"><u>U</u></button>
+                <div style="width: 1px; height: 16px; background: #cbd5e1; margin: 0 4px;"></div>
+                <button class="btn-fmt" onclick="changeFontSize(1)" title="ขยายตัวหนังสือ">A+</button>
+                <button class="btn-fmt" onclick="changeFontSize(-1)" title="ลดขนาดตัวหนังสือ">A-</button>
+                <div style="width: 1px; height: 16px; background: #cbd5e1; margin: 0 4px;"></div>
+                <input type="color" onchange="formatDoc('foreColor', this.value)" title="เปลี่ยนสีข้อความ" style="width: 24px; height: 24px; border: none; cursor: pointer; border-radius: 4px;">
+                <span style="font-size: 11.5px; color: #64748b; margin-left: 8px;">คลิกข้อความใดก็ได้บนการ์ดเพื่อพิมพ์แก้ไข</span>
+            </div>
+
+            <!-- Sub-topic Interactive Filter Tab Bar -->
+            <div class="filter-tabs-bar" style="background: #ffffff; border: 1px solid rgba(188, 219, 242, 0.85); border-radius: 10px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <div class="filter-tab-title" style="font-size: 12.5px; font-weight: 700; color: #004b87; margin-right: 4px;">
+                    <span>📑 ตัวกรองหัวข้อ (Sub-topics):</span>
+                </div>
+                <button class="tab-btn active" id="tab-btn-0" onclick="switchTopicView(0)">
+                    <span>📊 ภาพรวม 2 ข้อ</span>
+                    <span class="tab-pct" style="background: #005691; color: white; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">100%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-1" onclick="switchTopicView(1)">
+                    <span>1.1 แผนดิจิทัลระยะยาว &amp; ปี 70</span>
+                    <span class="tab-pct" style="background: #e0f2fe; color: #004b87; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">30%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-2" onclick="switchTopicView(2)">
+                    <span>1.2 ขับเคลื่อนแผนปี 69</span>
+                    <span class="tab-pct" style="background: #e0f2fe; color: #004b87; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">30%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-3" onclick="switchTopicView(3)">
+                    <span>2.1 ระบบ EIS/MIS</span>
+                    <span class="tab-pct" style="background: #e0f2fe; color: #004b87; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">20%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-4" onclick="switchTopicView(4)">
+                    <span>2.2 บริการภายใน</span>
+                    <span class="tab-pct" style="background: #e0f2fe; color: #004b87; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">10%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-5" onclick="switchTopicView(5)">
+                    <span>2.3 บริการภายนอก</span>
+                    <span class="tab-pct" style="background: #e0f2fe; color: #004b87; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">10%</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 16:9 PRESENTATION FRAME CANVAS -->
+        <div class="dashboard-container" id="report-canvas">
+
+            <!-- HEADER BANNER -->
+            <div class="header-banner">
+                <div class="header-left">
+                    <div class="header-icon-box">💻</div>
+                    <div class="header-titles">
+                        <div contenteditable="true" id="hdr-main-title" class="main-heading">ด้านที่ 4 การบริหารจัดการทุนหมุนเวียน | ตัวชี้วัดที่ 4.3 การบริหารจัดการสารสนเทศและดิจิทัล</div>
+                        <div contenteditable="true" id="hdr-sub-title" class="sub-heading">กรณีที่ 2 ทุนหมุนเวียนที่อยู่ระหว่างพัฒนาการบริหารจัดการ พิจารณาผลการดำเนินงาน 2 ข้อ (5 ประเด็นย่อย)</div>
+                    </div>
+                </div>
+                <div class="header-right-tag">
+                    <div>บริหารอย่างมีประสิทธิภาพ</div>
+                    <div>โปร่งใส เพื่อการพัฒนาที่ยั่งยืน</div>
+                </div>
+            </div>
+
+            <!-- KPI METADATA STRIP -->
+            <div class="kpi-meta-strip">
+                <div class="meta-pills-group">
+                    <div class="meta-pill">
+                        <span>🏷️ ตัวชี้วัด:</span>
+                        <span class="val">4.3 สารสนเทศและดิจิทัล</span>
+                    </div>
+                    <div class="meta-pill">
+                        <span>🎯 หน่วยวัด:</span>
+                        <span class="val">ระดับคะแนน (1 - 5)</span>
+                    </div>
+                    <div class="meta-pill meta-pill-accent">
+                        <span>⚖️ ค่าน้ำหนัก:</span>
+                        <span class="val">ร้อยละ 4 (4%)</span>
+                    </div>
+                    <div class="meta-pill">
+                        <span>📐 ค่าเกณฑ์วัด:</span>
+                        <span class="val">เกณฑ์ 5 ระดับ (กรณีที่ 2)</span>
+                    </div>
+                </div>
+
+                <div class="rubric-target-inline">
+                    <span style="font-size: 12px; font-weight: 700; color: #1e3a8a; margin-right: 2px;">เกณฑ์:</span>
+                    <div class="target-scale-box">
+                        <div class="target-step-cell">ระดับ 1<br>1.00</div>
+                        <div class="target-step-cell">ระดับ 2<br>2.00</div>
+                        <div class="target-step-cell">ระดับ 3<br>3.00</div>
+                        <div class="target-step-cell">ระดับ 4<br>4.00</div>
+                        <div class="target-step-cell active-target">ระดับ 5<br>5.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 0: ภาพรวมสรุป 2 ข้อ (5 ประเด็นย่อย) ================= -->
+            <div class="content-view active" id="view-topic-0">
+                <div class="overview-grid">
+                    <!-- Left: Table Card -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <span>📊 ผลการดำเนินงานรวม 2 ข้อ 5 ประเด็น (ตัวชี้วัดที่ 4.3)</span>
+                            </div>
+                            <span class="tab-pct" style="background: #004b87; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: 700;">น้ำหนักรวม 100%</span>
+                        </div>
+
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">ข้อ</th>
+                                    <th style="width: 50%;">ประเด็นย่อยที่ใช้พิจารณา</th>
+                                    <th style="width: 14%;">น้ำหนัก (%)</th>
+                                    <th style="width: 13%;">ระดับคะแนน</th>
+                                    <th style="width: 13%;">คะแนนถ่วงน้ำหนัก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr onclick="switchTopicView(1)" title="คลิกเพื่อดูรายละเอียดข้อ 1.1">
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;">1.1</td>
+                                    <td>แผนปฏิบัติการดิจิทัล (ระยะยาว) และแผนประจำปี 2570</td>
+                                    <td style="text-align: center; font-weight: 600;">30%</td>
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;" id="tbl-score-1">5.0000</td>
+                                    <td style="text-align: center; font-weight: 700; color: #0284c7;" id="tbl-wscore-1">1.5000</td>
+                                </tr>
+                                <tr onclick="switchTopicView(2)" title="คลิกเพื่อดูรายละเอียดข้อ 1.2">
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;">1.2</td>
+                                    <td>การดำเนินการตามแผนปฏิบัติการดิจิทัล ปี 2569</td>
+                                    <td style="text-align: center; font-weight: 600;">30%</td>
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;" id="tbl-score-2">2.0000</td>
+                                    <td style="text-align: center; font-weight: 700; color: #0284c7;" id="tbl-wscore-2">0.6000</td>
+                                </tr>
+                                <tr onclick="switchTopicView(3)" title="คลิกเพื่อดูรายละเอียดข้อ 2.1">
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;">2.1</td>
+                                    <td>ความเพียงพอของระบบ EIS/MIS สนับสนุนการตัดสินใจ</td>
+                                    <td style="text-align: center; font-weight: 600;">20%</td>
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;" id="tbl-score-3">5.0000</td>
+                                    <td style="text-align: center; font-weight: 700; color: #0284c7;" id="tbl-wscore-3">1.0000</td>
+                                </tr>
+                                <tr onclick="switchTopicView(4)" title="คลิกเพื่อดูรายละเอียดข้อ 2.2">
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;">2.2</td>
+                                    <td>ระบบสารสนเทศสนับสนุนผู้ใช้บริการภายใน (Internal)</td>
+                                    <td style="text-align: center; font-weight: 600;">10%</td>
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;" id="tbl-score-4">3.0000</td>
+                                    <td style="text-align: center; font-weight: 700; color: #0284c7;" id="tbl-wscore-4">0.3000</td>
+                                </tr>
+                                <tr onclick="switchTopicView(5)" title="คลิกเพื่อดูรายละเอียดข้อ 2.3">
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;">2.3</td>
+                                    <td>ระบบสารสนเทศสนับสนุนผู้ใช้บริการภายนอก (External)</td>
+                                    <td style="text-align: center; font-weight: 600;">10%</td>
+                                    <td style="text-align: center; font-weight: 700; color: #004b87;" id="tbl-score-5">5.0000</td>
+                                    <td style="text-align: center; font-weight: 700; color: #0284c7;" id="tbl-wscore-5">0.5000</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align: center; font-weight: 700;">รวมผลการประเมินถ่วงน้ำหนักทั้งหมด</td>
+                                    <td style="text-align: center; font-weight: 800;">100%</td>
+                                    <td style="text-align: center; font-weight: 800; color: #004b87;" id="tbl-total-level">ระดับ 3.9</td>
+                                    <td style="text-align: center; font-weight: 800; color: #059669;" id="tbl-total-wscore">3.9000 คะแนน</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #166534; line-height: 1.5;">
+                            <b>💡 สรุปความเชื่อมโยง:</b> ข้อ 1.1 จัดทำแผนดิจิทัลระยะยาว 3 ปี (2570-2572) และแผนปี 2570 แล้วเสร็จผ่านมติ คกก.บริหารฯ (ระดับ 5) | ข้อ 1.2 ดำเนินงานตามแผนปี 69 สำเร็จร้อยละ 90 (ระดับ 2) | ข้อ 2.1-2.3 ระบบ EIS/MIS และระบบสารสนเทศสนับสนุนภารกิจหลัก WCT ให้บริการทั้งภายในและภายนอกมีประสิทธิภาพ
+                        </div>
+                    </div>
+
+                    <!-- Right: Big Score Card & Achievement -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <span>🏆 สรุปคะแนนผลการประเมินภาพรวม</span>
+                            </div>
+                            <span id="score-status-badge" style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 12px; font-size: 11.5px; font-weight: 700; border: 1px solid #fde68a;">ระดับ 3.9000</span>
+                        </div>
+
+                        <!-- Big Score Hero -->
+                        <div class="score-hero-box">
+                            <div class="score-hero-label" id="score-hero-label">ผลการดำเนินงานเทียบเท่า</div>
+                            <div class="score-hero-number" id="score-hero-val">ระดับ 3.9000 คะแนน</div>
+                            <div class="stars-container" id="score-hero-stars">★★★★☆</div>
+                        </div>
+
+                        <!-- Executive Key Summary -->
+                        <div class="summary-card-inner">
+                            <div class="summary-inner-title">
+                                <span>🎯 สรุปผลการดำเนินงานสำคัญ:</span>
+                            </div>
+                            <div contenteditable="true" id="summary-overview-desc" class="summary-inner-desc">
+                                จัดทำแผนปฏิบัติการดิจิทัลระยะยาว 3 ปี (พ.ศ. 2570–2572) และแผนประจำปี 2570 มีคุณภาพครบถ้วนและได้รับความเห็นชอบจาก คกก.บริหารฯ เรียบร้อยก่อนเริ่มปีบัญชี (ระดับ 5) ดำเนินการตามแผนปี 2569 ได้ร้อยละ 90 มีระบบ EIS/MIS สนับสนุนการตัดสินใจ และระบบ WCT/LINE OA/เว็บ ให้บริการภายในและภายนอกสนับสนุนภารกิจหลักอย่างมีประสิทธิภาพ
+                            </div>
+                        </div>
+
+                        <!-- Metric Status Row -->
+                        <div class="status-pills-row">
+                            <div class="status-metric-card" id="card-metric-complete">
+                                <span class="status-metric-label">ความสำเร็จ</span>
+                                <span class="status-metric-val" id="metric-complete-val">ครบ 5 ประเด็น</span>
+                            </div>
+                            <div class="status-metric-card" id="card-metric-grade">
+                                <span class="status-metric-label">สถานะประเมิน</span>
+                                <span class="status-metric-val" id="metric-grade-val">ระดับ 3.90 (ผ่านเกณฑ์)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 1: ข้อ 1.1 แผนปฏิบัติการดิจิทัล (ระยะยาว) และแผนปี 2570 ================= -->
+            <div class="content-view" id="view-topic-1">
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>📘 1.1 แผนปฏิบัติการดิจิทัล (ระยะยาว) และแผนประจำปีบัญชี 2570 (น้ำหนัก 30%)</span>
+                        </div>
+                        <span class="tab-pct" id="v1-score-pill" style="background: #004b87; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">น้ำหนัก 30% | ผลงานระดับ 5</span>
+                    </div>
+
+                    <!-- 5 Rubric Scales -->
+                    <div class="rubric-strip">
+                        <div class="rubric-cell" id="v1-rubric-1">
+                            <span class="level-badge">ระดับ 1</span>
+                            <span>จัดทำ/ทบทวนแผนระยะยาว และแผนปี 2570 แล้วเสร็จ แต่ยังไม่สมบูรณ์</span>
+                        </div>
+                        <div class="rubric-cell" id="v1-rubric-2">
+                            <span class="level-badge">ระดับ 2</span>
+                            <span>ร่างแผนปฏิบัติการดิจิทัล (ระยะยาว) และแผนปี 2570 แล้วเสร็จ</span>
+                        </div>
+                        <div class="rubric-cell" id="v1-rubric-3">
+                            <span class="level-badge">ระดับ 3</span>
+                            <span>แผนทั้ง 2 ฉบับแล้วเสร็จ ได้รับความเห็นชอบจาก คกก.บริหารฯ ก่อนเริ่มปีบัญชี และสื่อสาร 2 ช่องทาง (ระบบ IT + ประชุมชี้แจง)</span>
+                        </div>
+                        <div class="rubric-cell" id="v1-rubric-4">
+                            <span class="level-badge">ระดับ 4</span>
+                            <span>ผ่านเกณฑ์ระดับ 3 และแผนปฏิบัติการดิจิทัล (ระยะยาว) มีคุณภาพและองค์ประกอบครบถ้วน</span>
+                        </div>
+                        <div class="rubric-cell achieved-gold" id="v1-rubric-5">
+                            <span class="level-badge">ระดับ 5 ★</span>
+                            <span>ผ่านเกณฑ์ระดับ 3 และแผนระยะยาว + แผนประจำปี 2570 มีคุณภาพและองค์ประกอบครบถ้วน</span>
+                        </div>
+                    </div>
+
+                    <!-- Process Steps / Milestones -->
+                    <div class="milestone-stepper">
+                        <div class="step-item step-complete">
+                            <div class="step-title">1. วิเคราะห์บริบท</div>
+                            <div class="step-sub">McKinsey 7S, PESTEL, TOWS, Impact vs Effort</div>
+                        </div>
+                        <div class="step-arrow">➔</div>
+                        <div class="step-item step-complete">
+                            <div class="step-title">2. แผนระยะยาว 3 ปี</div>
+                            <div class="step-sub">พ.ศ. 2570–2572 สอดคล้องยุทธศาสตร์ชาติ/ศธ.</div>
+                        </div>
+                        <div class="step-arrow">➔</div>
+                        <div class="step-item step-complete">
+                            <div class="step-title">3. แผนปีบัญชี 2570</div>
+                            <div class="step-sub">5 กิจกรรม กรอบงบรวม 1,208,600 บาท</div>
+                        </div>
+                        <div class="step-arrow">➔</div>
+                        <div class="step-item step-complete">
+                            <div class="step-title">4. อนุมัติ & สื่อสาร</div>
+                            <div class="step-sub" id="v1-step4-sub">มติ คกก.บริหารฯ 28 ส.ค. 69 + เว็บไซต์/ประชุมชี้แจง</div>
+                        </div>
+                    </div>
+
+                    <!-- 2 Cards Grid -->
+                    <div class="subview-grid-cards">
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">📑 สาระสำคัญของแผนดิจิทัลทั้ง 2 ฉบับ</div>
+                                <span style="font-size: 11.5px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 10px; font-weight: 600;">คุณภาพครบถ้วน</span>
+                            </div>
+                            <div contenteditable="true" id="v1-card-left" class="work-card-body">
+                                <div>• <b>แผนระยะยาว 3 ปี (พ.ศ. 2570–2572):</b> วิเคราะห์บริบทผ่าน McKinsey 7S, PESTEL, Digital Gap Analysis และ Impact vs Effort Matrix กำหนดยุทธศาสตร์และโครงการ 3 ปี เพื่อสนับสนุนการแก้ไขหนี้สินครู</div>
+                                <div>• <b>แผนประจำปีบัญชี 2570:</b> ถ่ายทอดจากแผนระยะยาว ประกอบด้วย 5 กิจกรรม กรอบงบประมาณ 1,208,600 บาท (งบลงทุน 760,600 บาท, งบดำเนินงาน 448,000 บาท)</div>
+                                <div>• <b>เอกสารอ้างอิง:</b> แผนดิจิทัลระยะยาว 3 ปี (เอกสาร 1), แผนดิจิทัลปี 2570 (เอกสาร 2)</div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">📢 การเห็นชอบและการสื่อสารองค์กร (ระดับ 5)</div>
+                                <span style="font-size: 11.5px; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 10px; font-weight: 700;">มติ คกก. 28 ส.ค. 69</span>
+                            </div>
+                            <div contenteditable="true" id="v1-card-right" class="work-card-body">
+                                <div>• <b>มติ คณะกรรมการบริหารเงินทุนหมุนเวียนฯ:</b> เห็นชอบแผนปฏิบัติการดิจิทัลระยะยาว 3 ปี และแผนประจำปี 2570 ในการประชุมครั้งที่ 5/2569 เมื่อ 28 ส.ค. 2569 (ก่อนเริ่มปีบัญชี)</div>
+                                <div>• <b>ช่องทางสื่อสารที่ 1 (เว็บไซต์):</b> เผยแพร่ผ่านเว็บไซต์สำนักงาน ให้บุคลากรและผู้เกี่ยวข้องเข้าถึงได้ตลอดเวลา (เอกสาร 4)</div>
+                                <div>• <b>ช่องทางสื่อสารที่ 2 (ประชุมชี้แจง):</b> จัดประชุมชี้แจงสร้างความเข้าใจสาระสำคัญของแผนแก่บุคลากรภายในเงินทุนหมุนเวียน (เอกสาร 5)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Score Strip -->
+                    <div class="bottom-score-strip">
+                        <div class="bottom-score-left">
+                            <div class="bottom-score-label">ผลการดำเนินงานข้อ 1.1 (น้ำหนัก 30%)</div>
+                            <div class="bottom-score-value" id="v1-bottom-val">ระดับ 5.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★★★</span></div>
+                        </div>
+                        <div style="text-align: right; font-size: 12.5px; color: #bae6fd;" id="v1-bottom-callout">
+                            บรรลุเกณฑ์ระดับ 5 ครบถ้วน (แผนระยะยาว + แผนประจำปี มีคุณภาพ คกก.เห็นชอบก่อนเริ่มปี สื่อสารครบ 2 ช่องทาง)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 2: ข้อ 1.2 การดำเนินงานตามแผนปฏิบัติการดิจิทัล ปี 2569 ================= -->
+            <div class="content-view" id="view-topic-2">
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>🚀 1.2 การดำเนินการตามแผนปฏิบัติการดิจิทัล ประจำปีบัญชี 2569 (น้ำหนัก 30%)</span>
+                        </div>
+                        <span class="tab-pct" id="v2-score-pill" style="background: #004b87; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">น้ำหนัก 30% | ผลงานระดับ 2</span>
+                    </div>
+
+                    <!-- 5 Rubric Scales -->
+                    <div class="rubric-strip">
+                        <div class="rubric-cell" id="v2-rubric-1">
+                            <span class="level-badge">ระดับ 1</span>
+                            <span>ดำเนินการตามแผนปฏิบัติการดิจิทัล ปี 2569 ได้ร้อยละ 80</span>
+                        </div>
+                        <div class="rubric-cell achieved-gold" id="v2-rubric-2">
+                            <span class="level-badge">ระดับ 2 ★</span>
+                            <span>ดำเนินการตามแผนปฏิบัติการดิจิทัล ปี 2569 ได้ร้อยละ 90</span>
+                        </div>
+                        <div class="rubric-cell" id="v2-rubric-3">
+                            <span class="level-badge">ระดับ 3</span>
+                            <span>ดำเนินการตามแผนปฏิบัติการดิจิทัล ปี 2569 ได้ร้อยละ 100</span>
+                        </div>
+                        <div class="rubric-cell" id="v2-rubric-4">
+                            <span class="level-badge">ระดับ 4</span>
+                            <span>ดำเนินการได้ร้อยละ 100 และมีผลงานดีกว่าเป้าหมายทุกแผนงาน</span>
+                        </div>
+                        <div class="rubric-cell" id="v2-rubric-5">
+                            <span class="level-badge">ระดับ 5</span>
+                            <span>สรุปปัจจัยสำเร็จ/ปัญหาและแนวทางแก้ไขที่มีคุณภาพเสนอ คกก.บริหารฯ หรือผู้บริหาร</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Cards Grid -->
+                    <div class="subview-grid-cards">
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">📦 ผลการขับเคลื่อน 7 โครงการ/กิจกรรมสำคัญ</div>
+                                <span style="font-size: 11.5px; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 10px; font-weight: 700;">ร้อยละ 90</span>
+                            </div>
+                            <div contenteditable="true" id="v2-card-left" class="work-card-body">
+                                <div>1. <b>บำรุงรักษาระบบสารสนเทศ WCT:</b> จ้างบำรุงรักษาและลงนามสัญญาเรียบร้อย ให้บริการต่อเนื่อง</div>
+                                <div>2. <b>จัดหาโครงสร้างพื้นฐาน IT:</b> ผ่านความเห็นชอบ DCIO ศธ. จัดซื้อและติดตั้งครุภัณฑ์เรียบร้อย</div>
+                                <div>3. <b>คลาวด์ภาครัฐ (Government Cloud):</b> ปรับใช้ระบบคลาวด์ภาครัฐตาม นร 0505/ว 335 เรียบร้อย</div>
+                                <div>4. <b>สื่อประชาสัมพันธ์และสารสนเทศ:</b> จัดทำสื่อให้กู้ยืม สรุปจัดสรรเงินกู้ และอินโฟกราฟิกติดตามหนี้</div>
+                                <div>5. <b>จัดซื้อโปรแกรมป้องกันไวรัส:</b> จัดซื้อจัดจ้างแล้วเสร็จเมื่อ 10 กันยายน 2569</div>
+                                <div>6. <b>ทบทวนหลักเกณฑ์ IT & แผนดิจิทัล:</b> จัดทำแผน 3 ปี และแผนปี 70 ผ่าน คกก.บริหารฯ 28 ส.ค. 69</div>
+                                <div>7. <b>พัฒนาศักยภาพบุคลากรด้วย AI:</b> อบรมประยุกต์ใช้ AI ในการทำงาน เมื่อ 31 มีนาคม 2569 เรียบร้อย</div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">📊 สรุปผลความก้าวหน้าและการรายงาน</div>
+                                <span style="font-size: 11.5px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 10px; font-weight: 600;">เอกสารหมายเลข 6, 7</span>
+                            </div>
+                            <div contenteditable="true" id="v2-card-right" class="work-card-body">
+                                <div>• <b>ร้อยละความสำเร็จของแผน:</b> จากการติดตามพบว่าสามารถดำเนินโครงการ/กิจกรรมได้ตามแผนงานที่กำหนด คิดเป็นร้อยละ 90 ของแผนปฏิบัติการดิจิทัลประจำปีบัญชี 2569 เทียบเท่าเกณฑ์ <b>ระดับ 2</b></div>
+                                <div>• <b>การนำเสนอรายงาน:</b> จัดทำรายงานสรุปผลการดำเนินงานด้านสารสนเทศ ประจำปีบัญชี 2569 (เอกสารหมายเลข 6) และเตรียมนำเสนอต่อคณะกรรมการบริหารเงินทุนหมุนเวียนฯ เพื่อทราบ</div>
+                                <div>• <b>ปัจจัยสนับสนุน:</b> ผู้บริหารให้ความสำคัญด้านเทคโนโลยีดิจิทัล และมีนโยบายภาครัฐรองรับการใช้งานคลาวด์ภาครัฐอย่างมั่นคงปลอดภัย</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Score Strip -->
+                    <div class="bottom-score-strip">
+                        <div class="bottom-score-left">
+                            <div class="bottom-score-label">ผลการดำเนินงานข้อ 1.2 (น้ำหนัก 30%)</div>
+                            <div class="bottom-score-value" id="v2-bottom-val">ระดับ 2.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★☆☆☆</span></div>
+                        </div>
+                        <div style="text-align: right; font-size: 12.5px; color: #bae6fd;" id="v2-bottom-callout">
+                            ผลงานคิดเป็นร้อยละ 90 ของแผนปฏิบัติการดิจิทัลประจำปีบัญชี 2569 (คะแนนถ่วงน้ำหนัก 0.6000)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 3: ข้อ 2.1 ความเพียงพอของระบบ EIS/MIS ================= -->
+            <div class="content-view" id="view-topic-3">
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>📈 2.1 ความเพียงพอของระบบ EIS/MIS สนับสนุนการตัดสินใจ (น้ำหนัก 20%)</span>
+                        </div>
+                        <span class="tab-pct" id="v3-score-pill" style="background: #004b87; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">น้ำหนัก 20% | ผลงานระดับ 5</span>
+                    </div>
+
+                    <!-- 5 Rubric Scales -->
+                    <div class="rubric-strip">
+                        <div class="rubric-cell" id="v3-rubric-1">
+                            <span class="level-badge">ระดับ 1</span>
+                            <span>มีระบบรายงานผล แต่ข้อมูลไม่ทันกาล และไม่มีการเทียบกับเป้าหมาย</span>
+                        </div>
+                        <div class="rubric-cell" id="v3-rubric-2">
+                            <span class="level-badge">ระดับ 2</span>
+                            <span>มีระบบรายงานผล ข้อมูลทันกาล แต่ไม่มีการเทียบกับเป้าหมาย</span>
+                        </div>
+                        <div class="rubric-cell" id="v3-rubric-3">
+                            <span class="level-badge">ระดับ 3</span>
+                            <span>มีระบบรายงานผล ข้อมูลทันกาล และมีการเทียบกับเป้าหมายระดับทุนหมุนเวียน</span>
+                        </div>
+                        <div class="rubric-cell" id="v3-rubric-4">
+                            <span class="level-badge">ระดับ 4</span>
+                            <span>ผ่านเกณฑ์ระดับ 3 กำหนดตัวชี้วัดประเมินการใช้งานผ่านระบบ และเป็นไปตามเป้าหมาย</span>
+                        </div>
+                        <div class="rubric-cell achieved-gold" id="v3-rubric-5">
+                            <span class="level-badge">ระดับ 5 ★</span>
+                            <span>ผ่านระดับ 4 ผลการดำเนินงานตามตัวชี้วัดดีกว่าเป้าหมายและดีขึ้นต่อเนื่องอย่างน้อย 2 ปี</span>
+                        </div>
+                    </div>
+
+                    <!-- Cards Grid -->
+                    <div class="subview-grid-cards">
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">🖥️ รายงานสารสนเทศเพื่อการตัดสินใจ 4 ด้าน (Info Graphic)</div>
+                                <span style="font-size: 11.5px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 10px; font-weight: 600;">Information มิใช่ Data</span>
+                            </div>
+                            <div contenteditable="true" id="v3-card-left" class="work-card-body">
+                                <div>• <b>ด้านจัดสรรเงินกู้:</b> สื่อและรายงานสรุปผลการจัดสรรเงินกู้ยืมรูปแบบอินโฟกราฟิกเสนอผู้บริหาร (เอกสาร 8)</div>
+                                <div>• <b>ด้านบริหารจัดการลูกหนี้:</b> รายงานสถานะลูกหนี้ปกติและค้างชำระเป็นประจำทุกเดือน รูปแบบกราฟผ่านฐานข้อมูล WCT เสนอ คกก.บริหารฯ ทุกครั้งที่มีประชุม (เอกสาร 9)</div>
+                                <div>• <b>ด้านติดตามบันทึกข้อตกลง 13 ตัวชี้วัด:</b> รายงานผลงานจริงเปรียบเทียบค่าเป้าหมายระดับ 1-5 ครบ 13 ตัวชี้วัด เสนอผู้บริหารและ คกก.บริหารฯ (เอกสาร 10)</div>
+                                <div>• <b>ด้านการเงิน:</b> รายงานผลรายจ่ายเงินทุนหมุนเวียนประจำเดือนและรายไตรมาสผ่านระบบบัญชี (เอกสาร 11)</div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">🎯 Goal Cascading & การประเมินประสิทธิภาพ (ระดับ 5)</div>
+                                <span style="font-size: 11.5px; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 10px; font-weight: 700;">ดีขึ้นต่อเนื่อง 2 ปี</span>
+                            </div>
+                            <div contenteditable="true" id="v3-card-right" class="work-card-body">
+                                <div>• <b>การถ่ายทอดเป้าหมาย (Goal Cascading):</b> ถ่ายทอดตัวชี้วัดจากบนลงล่างตามบันทึกข้อตกลงปี 2569 สู่กลุ่มงานและผู้รับผิดชอบเรียบร้อย (เอกสาร 13)</div>
+                                <div>• <b>ตัวชี้วัดการประเมินการใช้ระบบ:</b> สำรวจความพึงพอใจของผู้บริหารและเจ้าหน้าที่ต่อระบบสารสนเทศ เพื่อประเมินการสนับสนุนการตัดสินใจ (เอกสาร 12)</div>
+                                <div>• <b>การใช้งานเต็มศักยภาพ:</b> ผู้บริหารเรียกดูข้อมูล WCT และกราฟสารสนเทศประกอบการประชุมและการตัดสินใจบริหารหนี้ต่อเนื่อง ผลสำรวจและประสิทธิภาพดีขึ้นต่อเนื่องอย่างน้อย 2 ปี</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Score Strip -->
+                    <div class="bottom-score-strip">
+                        <div class="bottom-score-left">
+                            <div class="bottom-score-label">ผลการดำเนินงานข้อ 2.1 (น้ำหนัก 20%)</div>
+                            <div class="bottom-score-value" id="v3-bottom-val">ระดับ 5.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★★★</span></div>
+                        </div>
+                        <div style="text-align: right; font-size: 12.5px; color: #bae6fd;" id="v3-bottom-callout">
+                            ข้อมูลทันกาล เทียบเป้าหมาย ถ่ายทอด Goal Cascading และมีผลประเมินการใช้งานดีขึ้นต่อเนื่อง 2 ปี (คะแนนถ่วงน้ำหนัก 1.0000)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 4: ข้อ 2.2 ระบบสารสนเทศสนับสนุนผู้ใช้บริการภายใน ================= -->
+            <div class="content-view" id="view-topic-4">
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>🏢 2.2 ระบบสารสนเทศสนับสนุนผู้ใช้บริการภายใน (Internal Services) (น้ำหนัก 10%)</span>
+                        </div>
+                        <span class="tab-pct" id="v4-score-pill" style="background: #004b87; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">น้ำหนัก 10% | ผลงานระดับ 3</span>
+                    </div>
+
+                    <!-- 5 Rubric Scales -->
+                    <div class="rubric-strip">
+                        <div class="rubric-cell" id="v4-rubric-1">
+                            <span class="level-badge">ระดับ 1</span>
+                            <span>มีระบบสนับสนุนประสิทธิภาพการทำงาน แต่ไม่มีการใช้งาน</span>
+                        </div>
+                        <div class="rubric-cell" id="v4-rubric-2">
+                            <span class="level-badge">ระดับ 2</span>
+                            <span>มีระบบสนับสนุนการทำงาน แต่ไม่ใช่การสนับสนุนภารกิจหลัก</span>
+                        </div>
+                        <div class="rubric-cell achieved-gold" id="v4-rubric-3">
+                            <span class="level-badge">ระดับ 3 ★</span>
+                            <span>มีระบบสนับสนุนการปฏิบัติงาน และเป็นการสนับสนุนภารกิจหลักของทุนหมุนเวียน</span>
+                        </div>
+                        <div class="rubric-cell" id="v4-rubric-4">
+                            <span class="level-badge">ระดับ 4</span>
+                            <span>ผ่านเกณฑ์ระดับ 3 กำหนดตัวชี้วัดประเมินประสิทธิภาพการใช้งานผ่านระบบ และเป็นไปตามเป้าหมาย</span>
+                        </div>
+                        <div class="rubric-cell" id="v4-rubric-5">
+                            <span class="level-badge">ระดับ 5</span>
+                            <span>ผ่านระดับ 4 ผลการดำเนินงานตามตัวชี้วัดดีกว่าเป้าหมายและดีขึ้นต่อเนื่องอย่างน้อย 2 ปี</span>
+                        </div>
+                    </div>
+
+                    <!-- Cards Grid -->
+                    <div class="subview-grid-cards">
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">💻 ระบบสารสนเทศที่สนับสนุนภารกิจหลัก</div>
+                                <span style="font-size: 11.5px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 10px; font-weight: 600;">WCT & Express</span>
+                            </div>
+                            <div contenteditable="true" id="v4-card-left" class="work-card-body">
+                                <div>• <b>ระบบย่อยการจัดสรรเงินกู้ (ระบบ WCT):</b> วิเคราะห์คุณสมบัติเบื้องต้นของข้าราชการครูและบุคลากรทางการศึกษาที่ขอกู้ยืมตามหลักเกณฑ์ พ.ศ. 2568 ผ่านเว็บไซต์ wct.otepc.go.th (เอกสาร 14)</div>
+                                <div>• <b>ระบบย่อยการบริหารจัดการหนี้ (ระบบ WCT):</b> กำกับและติดตามหนี้ แสดงรายละเอียดการรับชำระหนี้รายเดือน และติดตามรายงานผลจากส่วนราชการ/สพท. ทั่วประเทศ (เอกสาร 15)</div>
+                                <div>• <b>ระบบบัญชี Express:</b> บันทึกและประมวลผลข้อมูลทางบัญชีและการเงินของเงินทุนหมุนเวียนอย่างถูกต้อง (เอกสาร 16)</div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">📊 การวัดผลประสิทธิภาพและผลการใช้งาน</div>
+                                <span style="font-size: 11.5px; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 10px; font-weight: 700;">ระดับ 3 (0.3000)</span>
+                            </div>
+                            <div contenteditable="true" id="v4-card-right" class="work-card-body">
+                                <div>• <b>ตัวชี้วัดภารกิจหลักที่ระบบสนับสนุน:</b> ตัวชี้วัด 1.1 (ร้อยละการรับชำระหนี้), 1.2.1 (หนี้ค้างชำระไม่เกิน 1 ปี) และ 1.2.2 (หนี้ค้างชำระเกิน 1 ปี) ตามบันทึกข้อตกลงปี 2565–2569 (เอกสาร 17)</div>
+                                <div>• <b>การสำรวจความพึงพอใจภายใน:</b> สำรวจความพึงพอใจของผู้บริหารและเจ้าหน้าที่ผู้ปฏิบัติงานต่อระบบสารสนเทศ เพื่อนำข้อคิดเห็นมาปรับปรุงระบบอย่างต่อเนื่อง (เอกสาร 12)</div>
+                                <div>• <b>ผลสรุป:</b> มีระบบที่ใช้งานจริงในการสนับสนุนภารกิจหลักครบถ้วน สะดวกรวดเร็ว ตรวจสอบได้ เทียบเท่าเกณฑ์ <b>ระดับ 3</b></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Score Strip -->
+                    <div class="bottom-score-strip">
+                        <div class="bottom-score-left">
+                            <div class="bottom-score-label">ผลการดำเนินงานข้อ 2.2 (น้ำหนัก 10%)</div>
+                            <div class="bottom-score-value" id="v4-bottom-val">ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span></div>
+                        </div>
+                        <div style="text-align: right; font-size: 12.5px; color: #bae6fd;" id="v4-bottom-callout">
+                            ระบบ WCT และ Express สนับสนุนภารกิจหลักในการจัดสรรเงินกู้และบริหารหนี้สินครูอย่างมีประสิทธิภาพ (คะแนนถ่วงน้ำหนัก 0.3000)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW 5: ข้อ 2.3 ระบบสารสนเทศสนับสนุนผู้ใช้บริการภายนอก ================= -->
+            <div class="content-view" id="view-topic-5">
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>🌐 2.3 ระบบสารสนเทศสนับสนุนผู้ใช้บริการภายนอก (External Services) (น้ำหนัก 10%)</span>
+                        </div>
+                        <span class="tab-pct" id="v5-score-pill" style="background: #004b87; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">น้ำหนัก 10% | ผลงานระดับ 5</span>
+                    </div>
+
+                    <!-- 5 Rubric Scales -->
+                    <div class="rubric-strip">
+                        <div class="rubric-cell" id="v5-rubric-1">
+                            <span class="level-badge">ระดับ 1</span>
+                            <span>มีระบบสนับสนุนการอำนวยความสะดวก แต่ไม่มีการใช้งาน</span>
+                        </div>
+                        <div class="rubric-cell" id="v5-rubric-2">
+                            <span class="level-badge">ระดับ 2</span>
+                            <span>มีระบบสนับสนุน แต่ไม่ใช่การสนับสนุนภารกิจหลักของทุนหมุนเวียน</span>
+                        </div>
+                        <div class="rubric-cell" id="v5-rubric-3">
+                            <span class="level-badge">ระดับ 3</span>
+                            <span>มีระบบสนับสนุนการอำนวยความสะดวก และเป็นการสนับสนุนภารกิจหลักของทุนหมุนเวียน</span>
+                        </div>
+                        <div class="rubric-cell" id="v5-rubric-4">
+                            <span class="level-badge">ระดับ 4</span>
+                            <span>ผ่านระดับ 3 กำหนดตัวชี้วัดประเมินประสิทธิภาพผ่านระบบ และผลเป็นไปตามเป้าหมาย</span>
+                        </div>
+                        <div class="rubric-cell achieved-gold" id="v5-rubric-5">
+                            <span class="level-badge">ระดับ 5 ★</span>
+                            <span>ผ่านระดับ 4 ผลการดำเนินงานตามตัวชี้วัดดีกว่าเป้าหมายและดีขึ้นต่อเนื่องอย่างน้อย 2 ปี</span>
+                        </div>
+                    </div>
+
+                    <!-- Cards Grid -->
+                    <div class="subview-grid-cards">
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">📱 3 ช่องทางบริการดิจิทัลภายนอกที่สนับสนุนภารกิจหลัก</div>
+                                <span style="font-size: 11.5px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 10px; font-weight: 600;">เอกสารหมายเลข 18</span>
+                            </div>
+                            <div contenteditable="true" id="v5-card-left" class="work-card-body">
+                                <div>• <b>เว็บไซต์ทางการ (otepc.go.th):</b> ประชาสัมพันธ์และเผยแพร่ข้อมูลข่าวสาร หลักเกณฑ์ และแนวทางกู้ยืมเงินทุนหมุนเวียนฯ อย่างเปิดเผย โปร่งใส</div>
+                                <div>• <b>Line Official Account (@699uwyuo):</b> ช่องทางสื่อสาร ติดต่อสอบถาม และให้คำปรึกษาแก่ข้าราชการครูและบุคลากรทางการศึกษาทั่วประเทศ</div>
+                                <div>• <b>ระบบ WCT ออนไลน์ (wct.otepc.go.th):</b> ยื่นคำขอกู้ยืมออนไลน์ และระบบบริการสมาชิกตรวจสอบยอดหนี้คงเหลือตามสัญญา สะดวก รวดเร็ว ไร้รอยต่อ</div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-card-header">
+                                <div class="work-card-title">🏆 ผลงานตัวชี้วัดดีกว่าเป้าหมาย & ดีขึ้นต่อเนื่อง 2 ปี (ระดับ 5)</div>
+                                <span style="font-size: 11.5px; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 10px; font-weight: 700;">บรรลุระดับ 5</span>
+                            </div>
+                            <div contenteditable="true" id="v5-card-right" class="work-card-body">
+                                <div>• <b>ตัวชี้วัดที่ 2.1 (ความพึงพอใจผู้ใช้บริการ):</b> ความพึงพอใจด้านประชาสัมพันธ์/สิ่งอำนวยความสะดวกเพิ่มขึ้นต่อเนื่องทุกปี (ปี 64: 86.71% ➔ ปี 68: 90.81% ➔ ปี 69: 92.27%) บรรลุระดับ 5 ต่อเนื่อง 2 ปี (เอกสาร 19)</div>
+                                <div>• <b>ตัวชี้วัดที่ 3.1 (การจัดสรรเงินกู้ผ่านระบบ):</b> ปี 2569 อนุมัติเงินกู้ 282.68 ล้านบาท จากแผน 250 ล้านบาท (คิดเป็น 113.07% สูงกว่าเป้าหมาย 13.07%) และเพิ่มขึ้นต่อเนื่อง 3 ปี ล่าสุด (เอกสาร 20)</div>
+                                <div>• <b>สรุป:</b> ระบบสารสนเทศสนับสนุนภารกิจหลักอย่างมีผลสัมฤทธิ์เป็นรูปธรรมและดีขึ้นต่อเนื่อง เทียบเท่า <b>ระดับ 5 (เต็ม)</b></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Score Strip -->
+                    <div class="bottom-score-strip">
+                        <div class="bottom-score-left">
+                            <div class="bottom-score-label">ผลการดำเนินงานข้อ 2.3 (น้ำหนัก 10%)</div>
+                            <div class="bottom-score-value" id="v5-bottom-val">ระดับ 5.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★★★</span></div>
+                        </div>
+                        <div style="text-align: right; font-size: 12.5px; color: #bae6fd;" id="v5-bottom-callout">
+                            ผลประเมินตามตัวชี้วัดที่ 2.1 (92.27%) และตัวชี้วัดที่ 3.1 (113.07%) ดีกว่าเป้าหมายและดีขึ้นต่อเนื่อง 2 ปี บรรลุระดับ 5 เต็ม (คะแนนถ่วงน้ำหนัก 0.5000)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="dashboard-footer">
+                <div>สำนักงานคณะกรรมการข้าราชการครูและบุคลากรทางการศึกษา (ก.ค.ศ.) | สำนักบริหารเงินทุนหมุนเวียนเพื่อแก้ไขปัญหาหนี้สินข้าราชการครู</div>
+                <div>คุณภาพการบริหาร เพื่อครู เพื่ออนาคตการศึกษาไทย</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-notification" class="toast">บันทึกข้อมูลเรียบร้อยแล้ว</div>
+
+    <script>
+        let lastFocusedElement = null;
+        let activeQuarter = 4;
+        let activeTopic = 0; // 0=Overview, 1..5=Sub-topics
+        let currentAppMode = 'preview';
+
+        const topicNames = {
+            0: "ภาพรวมสรุป_2_ข้อ",
+            1: "ข้อ_1.1_แผนดิจิทัลระยะยาวและปี70",
+            2: "ข้อ_1.2_ดำเนินงานตามแผนปี69",
+            3: "ข้อ_2.1_ระบบEIS_MISผู้บริหาร",
+            4: "ข้อ_2.2_สารสนเทศบริการภายใน",
+            5: "ข้อ_2.3_สารสนเทศบริการภายนอก"
+        };
+
+        const STORAGE_KEY_PREFIX = 'kpi_official_43_v1_Q';
+
+        function getStorageKey(q) {
+            return `${STORAGE_KEY_PREFIX}${q}`;
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            if (!toast) return;
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        /* Navigation Switcher strictly for 1.1 to 4.3 */
+        function navigateToKPI(targetKey) {
+            const routes = {
+                '1.1': 'ตัวชี้วัดที่ 1.1.html',
+                '1.2.1': 'ตัวชี้วัดที่ 1.2.1.html',
+                '1.2.2': 'ตัวชี้วัดที่ 1.2.2.html',
+                '2.1': 'ตัวชี้วัดที่ 2.1.html',
+                '2.2': 'ตัวชี้วัดที่ 2.2.html',
+                '3.1': 'ตัวชี้วัดที่ 3.1.html',
+                '3.2': 'ตัวชี้วัดที่ 3.2.html',
+                '3.3': 'ตัวชี้วัดที่ 3.3.html',
+                '4.1': 'ตัวชี้วัดที่ 4.1.html',
+                '4.2': 'ตัวชี้วัดที่ 4.2.html',
+                '4.3': 'ตัวชี้วัดที่ 4.3.html',
+                '5.1': 'ตัวชี้วัดที่ 5.1.html',
+                '5.2': 'ตัวชี้วัดที่ 5.2.html',
+                '6.1': 'ตัวชี้วัดที่ 6.1.html'
+            };
+            if (routes[targetKey]) {
+                window.location.href = routes[targetKey];
+            }
+        }
+
+        /* Dual Mode Switcher */
+        function setAppMode(mode) {
+            currentAppMode = mode;
+            const btnPrev = document.getElementById('btn-mode-preview');
+            const btnEdit = document.getElementById('btn-mode-edit');
+            const fmtBar = document.getElementById('format-toolbar');
+
+            if (mode === 'edit') {
+                document.body.classList.remove('app-mode-preview');
+                document.body.classList.add('app-mode-edit');
+                btnEdit.classList.add('active');
+                btnPrev.classList.remove('active');
+                if (fmtBar) fmtBar.style.display = 'flex';
+                showToast("เข้าสู่โหมดแก้ไขข้อความ (คลิกข้อความบนการ์ดเพื่อแก้ไข)");
+            } else {
+                document.body.classList.remove('app-mode-edit');
+                document.body.classList.add('app-mode-preview');
+                btnPrev.classList.add('active');
+                btnEdit.classList.remove('active');
+                if (fmtBar) fmtBar.style.display = 'none';
+                showToast("เข้าสู่โหมดนำเสนอ (Preview)");
+            }
+        }
+
+        /* Format text commands */
+        function formatDoc(cmd, val = null) {
+            if (currentAppMode !== 'edit') return;
+            document.execCommand(cmd, false, val);
+        }
+
+        function changeFontSize(delta) {
+            if (currentAppMode !== 'edit') return;
+            const sel = window.getSelection();
+            if (!sel.rangeCount) return;
+            document.execCommand('fontSize', false, delta > 0 ? '4' : '2');
+        }
+
+        /* Topic Filter View Switcher */
+        function switchTopicView(topicIndex) {
+            activeTopic = topicIndex;
+            for (let i = 0; i <= 5; i++) {
+                const btn = document.getElementById(`tab-btn-${i}`);
+                const view = document.getElementById(`view-topic-${i}`);
+                if (btn) {
+                    if (i === topicIndex) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                }
+                if (view) {
+                    if (i === topicIndex) view.classList.add('active');
+                    else view.classList.remove('active');
+                }
+            }
+        }
+
+        /* Official Quarter Defaults */
+        const quarterDefaults = {
+            1: {
+                badgeText: 'ไตรมาส 1',
+                heroScore: 'ระดับ 1.3000 คะแนน',
+                heroStars: '★☆☆☆☆',
+                statusBadge: 'ระดับ 1.30 (เบื้องต้น)',
+                completeVal: 'เริ่มต้น 4 ประเด็น',
+                gradeVal: 'ระดับ 1.30 (เบื้องต้น)',
+                summaryDesc: 'ไตรมาสที่ 1: ดำเนินงานตามแผนปฏิบัติการดิจิทัลปี 2569 (เริ่มสัญญา WCT และจัดทำ TOR ครุภัณฑ์) มีระบบรายงานผลข้อมูลทันกาล มีระบบ WCT และ Express รองรับภารกิจหลักต่อเนื่อง ส่วนแผนดิจิทัลระยะยาว 3 ปี และแผนปี 2570 อยู่ในขั้นตอนเริ่มต้นเตรียมข้อมูล',
+                table: {
+                    s1: 'N/A', ws1: '0.0000',
+                    s2: '1.0000', ws2: '0.3000',
+                    s3: '2.0000', ws3: '0.4000',
+                    s4: '3.0000', ws4: '0.3000',
+                    s5: '3.0000', ws5: '0.3000',
+                    totLevel: 'ระดับ 1.3 (เบื้องต้น)', totWScore: '1.3000 คะแนน'
+                },
+                v1: {
+                    scorePill: 'น้ำหนัก 30% | ผลงาน N/A',
+                    activeRubric: 1,
+                    bottomVal: 'ระดับ N/A <span style="font-size: 18px; color: #94a3b8;">☆☆☆☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 1: อยู่ระหว่างเตรียมการรวบรวมข้อมูลและวิเคราะห์บริบทองค์กร ยังไม่ถึงรอบเสนอ คกก.',
+                    step4Sub: 'อยู่ระหว่างเตรียมการ'
+                },
+                v2: {
+                    scorePill: 'น้ำหนัก 30% | ผลงานระดับ 1',
+                    activeRubric: 1,
+                    bottomVal: 'ระดับ 1.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★☆☆☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 1: เริ่มต้นสัญญาจ้างบำรุงรักษา WCT และจัดทำ TOR ครุภัณฑ์คอมพิวเตอร์',
+                    cardLeft: '<div>1. <b>บำรุงรักษาระบบ WCT:</b> เริ่มสัญญาจ้างบำรุงรักษาประจำปีงบประมาณ 2569</div><div>2. <b>จัดหาโครงสร้างพื้นฐาน:</b> ยกร่าง TOR จัดซื้อครุภัณฑ์คอมพิวเตอร์</div><div>3. <b>คลาวด์ภาครัฐ:</b> ใช้งานระบบคลาวด์ภาครัฐต่อเนื่อง</div>'
+                },
+                v3: {
+                    scorePill: 'น้ำหนัก 20% | ผลงานระดับ 2',
+                    activeRubric: 2,
+                    bottomVal: 'ระดับ 2.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★☆☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 1: มีระบบรายงานผลการดำเนินงาน ข้อมูลมีความทันกาล (คะแนนถ่วงน้ำหนัก 0.4000)'
+                },
+                v4: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 1: ระบบ WCT และ Express สนับสนุนภารกิจหลักต่อเนื่อง (คะแนนถ่วงน้ำหนัก 0.3000)'
+                },
+                v5: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 1: เว็บไซต์, LINE OA และระบบ WCT ออนไลน์ เปิดให้บริการและสนับสนุนภารกิจหลัก (คะแนนถ่วงน้ำหนัก 0.3000)'
+                }
+            },
+            2: {
+                badgeText: 'ไตรมาส 2',
+                heroScore: 'ระดับ 1.5000 คะแนน',
+                heroStars: '★★☆☆☆',
+                statusBadge: 'ระดับ 1.50 (เบื้องต้น)',
+                completeVal: 'ดำเนินการ 4 ประเด็น',
+                gradeVal: 'ระดับ 1.50 (เบื้องต้น)',
+                summaryDesc: 'ไตรมาสที่ 2: ดำเนินงานตามแผนปฏิบัติการดิจิทัลปี 2569 ได้ร้อยละ 80 (จัดอบรม AI เมื่อ 31 มี.ค. 69, คลาวด์ภาครัฐเรียบร้อย) ระบบ EIS/MIS รายงานผลทันกาลเทียบเป้าหมาย ระบบ WCT และ Express ให้บริการภายในและภายนอกต่อเนื่อง ส่วนแผนดิจิทัลระยะยาว 3 ปี และแผนปี 2570 อยู่ในขั้นตอนวิเคราะห์ข้อมูลและบริบท',
+                table: {
+                    s1: 'N/A', ws1: '0.0000',
+                    s2: '1.0000', ws2: '0.3000',
+                    s3: '3.0000', ws3: '0.6000',
+                    s4: '3.0000', ws4: '0.3000',
+                    s5: '3.0000', ws5: '0.3000',
+                    totLevel: 'ระดับ 1.5 (เบื้องต้น)', totWScore: '1.5000 คะแนน'
+                },
+                v1: {
+                    scorePill: 'น้ำหนัก 30% | ผลงาน N/A',
+                    activeRubric: 1,
+                    bottomVal: 'ระดับ N/A <span style="font-size: 18px; color: #94a3b8;">☆☆☆☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 2: อยู่ในขั้นตอนการวิเคราะห์ข้อมูลและบริบทที่เกี่ยวข้องเพิ่มเติม เพื่อเตรียมความพร้อม',
+                    step4Sub: 'อยู่ระหว่างวิเคราะห์ข้อมูล'
+                },
+                v2: {
+                    scorePill: 'น้ำหนัก 30% | ผลงานระดับ 1',
+                    activeRubric: 1,
+                    bottomVal: 'ระดับ 1.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★☆☆☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 2: ดำเนินการตามแผนปฏิบัติการดิจิทัลปี 2569 ได้ร้อยละ 80 (คะแนนถ่วงน้ำหนัก 0.3000)',
+                    cardLeft: '<div>1. <b>บำรุงรักษาระบบ WCT:</b> ดำเนินการตามสัญญาต่อเนื่อง</div><div>2. <b>จัดหาโครงสร้างพื้นฐาน:</b> ขอความเห็นชอบ DCIO ศธ. เรียบร้อย</div><div>3. <b>คลาวด์ภาครัฐ:</b> ใช้งานระบบ Government Cloud เรียบร้อย</div><div>4. <b>พัฒนาบุคลากรด้วย AI:</b> อบรมประยุกต์ใช้ AI เมื่อ 31 มี.ค. 2569 เรียบร้อย</div>'
+                },
+                v3: {
+                    scorePill: 'น้ำหนัก 20% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 2: มีระบบรายงานผล ข้อมูลมีความทันกาล และเทียบเป้าหมายระดับทุนหมุนเวียน (คะแนนถ่วงน้ำหนัก 0.6000)'
+                },
+                v4: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 2: ระบบ WCT และ Express สนับสนุนภารกิจหลักอย่างมีประสิทธิภาพ (คะแนนถ่วงน้ำหนัก 0.3000)'
+                },
+                v5: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 2: ระบบบริการภายนอก (otepc.go.th, LINE OA, WCT ออนไลน์) สนับสนุนภารกิจหลัก (คะแนนถ่วงน้ำหนัก 0.3000)'
+                }
+            },
+            3: {
+                badgeText: 'ไตรมาส 3',
+                heroScore: 'ระดับ 1.8000 คะแนน',
+                heroStars: '★★★☆☆',
+                statusBadge: 'ระดับ 1.80 (เบื้องต้น)',
+                completeVal: 'ดำเนินการ 4 ประเด็น',
+                gradeVal: 'ระดับ 1.80 (เบื้องต้น)',
+                summaryDesc: 'ไตรมาสที่ 3: ดำเนินงานตามแผนปฏิบัติการดิจิทัลปี 2569 ได้ร้อยละ 90 (บำรุงรักษา WCT, ติดตั้งคอมพิวเตอร์, คลาวด์ภาครัฐ, สื่อประชาสัมพันธ์) ระบบ EIS/MIS รายงานผลทันกาลเทียบเป้าหมายและ Goal Cascading ครบถ้วน ส่วนแผนดิจิทัลระยะยาว 3 ปี และแผนปี 2570 อยู่ระหว่างจัดทำร่างแผนเพื่อเสนอ คกก. ในไตรมาส 4',
+                table: {
+                    s1: 'N/A', ws1: '0.0000',
+                    s2: '2.0000', ws2: '0.6000',
+                    s3: '3.0000', ws3: '0.6000',
+                    s4: '3.0000', ws4: '0.3000',
+                    s5: '3.0000', ws5: '0.3000',
+                    totLevel: 'ระดับ 1.8 (เบื้องต้น)', totWScore: '1.8000 คะแนน'
+                },
+                v1: {
+                    scorePill: 'น้ำหนัก 30% | ผลงาน N/A',
+                    activeRubric: 2,
+                    bottomVal: 'ระดับ N/A <span style="font-size: 18px; color: #94a3b8;">☆☆☆☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 3: อยู่ระหว่างจัดทำร่างแผนปฏิบัติการดิจิทัลระยะยาว 3 ปี และแผนปี 2570 พร้อมกำหนดงบประมาณและตัวชี้วัด',
+                    step4Sub: 'อยู่ระหว่างยกร่างแผน'
+                },
+                v2: {
+                    scorePill: 'น้ำหนัก 30% | ผลงานระดับ 2',
+                    activeRubric: 2,
+                    bottomVal: 'ระดับ 2.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★☆☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 3: ดำเนินการตามแผนปฏิบัติการดิจิทัลปี 2569 ได้ร้อยละ 90 (คะแนนถ่วงน้ำหนัก 0.6000)',
+                    cardLeft: '<div>1. <b>บำรุงรักษาระบบ WCT:</b> ผู้รับจ้างดูแลระบบต่อเนื่อง</div><div>2. <b>จัดหาโครงสร้างพื้นฐาน:</b> สัญญาจัดซื้อและติดตั้งครุภัณฑ์เรียบร้อย</div><div>3. <b>คลาวด์ภาครัฐ:</b> ใช้งาน Government Cloud สมบูรณ์</div><div>4. <b>สื่อประชาสัมพันธ์:</b> ผลิตสื่อประชาสัมพันธ์และอินโฟกราฟิกต่อเนื่อง</div><div>5. <b>จัดซื้อ Anti-virus:</b> กำหนดดำเนินการในไตรมาส 4</div><div>6. <b>พัฒนาบุคลากร AI:</b> ดำเนินการแล้วเสร็จ จัดทำรายงานสรุป</div>'
+                },
+                v3: {
+                    scorePill: 'น้ำหนัก 20% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 3: มีระบบรายงานผล ข้อมูลทันกาล เทียบเป้าหมาย และถ่ายทอด Goal Cascading (คะแนนถ่วงน้ำหนัก 0.6000)'
+                },
+                v4: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 3: ติดตามการใช้งานระบบ WCT และ Express ของเจ้าหน้าที่ สนับสนุนภารกิจหลัก (คะแนนถ่วงน้ำหนัก 0.3000)'
+                },
+                v5: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ไตรมาสที่ 3: เว็บไซต์, LINE OA และระบบกู้ยืมออนไลน์สนับสนุนภารกิจหลักอย่างมีประสิทธิภาพ (คะแนนถ่วงน้ำหนัก 0.3000)'
+                }
+            },
+            4: {
+                badgeText: 'ไตรมาส 4',
+                heroScore: 'ระดับ 3.9000 คะแนน',
+                heroStars: '★★★★☆',
+                statusBadge: 'ระดับ 3.9000',
+                completeVal: 'ครบ 5 ประเด็น',
+                gradeVal: 'ระดับ 3.90 (ผ่านเกณฑ์)',
+                summaryDesc: 'จัดทำแผนปฏิบัติการดิจิทัลระยะยาว 3 ปี (พ.ศ. 2570–2572) และแผนประจำปี 2570 มีคุณภาพครบถ้วนและได้รับความเห็นชอบจาก คกก.บริหารฯ เรียบร้อยก่อนเริ่มปีบัญชี (ระดับ 5) ดำเนินการตามแผนปี 2569 ได้ร้อยละ 90 มีระบบ EIS/MIS สนับสนุนการตัดสินใจ และระบบ WCT/LINE OA/เว็บ ให้บริการภายในและภายนอกสนับสนุนภารกิจหลักอย่างมีประสิทธิภาพ',
+                table: {
+                    s1: '5.0000', ws1: '1.5000',
+                    s2: '2.0000', ws2: '0.6000',
+                    s3: '5.0000', ws3: '1.0000',
+                    s4: '3.0000', ws4: '0.3000',
+                    s5: '5.0000', ws5: '0.5000',
+                    totLevel: 'ระดับ 3.9', totWScore: '3.9000 คะแนน'
+                },
+                v1: {
+                    scorePill: 'น้ำหนัก 30% | ผลงานระดับ 5',
+                    activeRubric: 5,
+                    bottomVal: 'ระดับ 5.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★★★</span>',
+                    bottomCallout: 'บรรลุเกณฑ์ระดับ 5 ครบถ้วน (แผนระยะยาว + แผนประจำปี มีคุณภาพ คกก.เห็นชอบก่อนเริ่มปี สื่อสารครบ 2 ช่องทาง)',
+                    step4Sub: 'มติ คกก.บริหารฯ 28 ส.ค. 69 + เว็บไซต์/ประชุมชี้แจง'
+                },
+                v2: {
+                    scorePill: 'น้ำหนัก 30% | ผลงานระดับ 2',
+                    activeRubric: 2,
+                    bottomVal: 'ระดับ 2.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★☆☆☆</span>',
+                    bottomCallout: 'ผลงานคิดเป็นร้อยละ 90 ของแผนปฏิบัติการดิจิทัลประจำปีบัญชี 2569 (คะแนนถ่วงน้ำหนัก 0.6000)',
+                    cardLeft: '<div>1. <b>บำรุงรักษาระบบสารสนเทศ WCT:</b> จ้างบำรุงรักษาและลงนามสัญญาเรียบร้อย ให้บริการต่อเนื่อง</div><div>2. <b>จัดหาโครงสร้างพื้นฐาน IT:</b> ผ่านความเห็นชอบ DCIO ศธ. จัดซื้อและติดตั้งครุภัณฑ์เรียบร้อย</div><div>3. <b>คลาวด์ภาครัฐ (Government Cloud):</b> ปรับใช้ระบบคลาวด์ภาครัฐตาม นร 0505/ว 335 เรียบร้อย</div><div>4. <b>สื่อประชาสัมพันธ์และสารสนเทศ:</b> จัดทำสื่อให้กู้ยืม สรุปจัดสรรเงินกู้ และอินโฟกราฟิกติดตามหนี้</div><div>5. <b>จัดซื้อโปรแกรมป้องกันไวรัส:</b> จัดซื้อจัดจ้างแล้วเสร็จเมื่อ 10 กันยายน 2569</div><div>6. <b>ทบทวนหลักเกณฑ์ IT & แผนดิจิทัล:</b> จัดทำแผน 3 ปี และแผนปี 70 ผ่าน คกก.บริหารฯ 28 ส.ค. 69</div><div>7. <b>พัฒนาศักยภาพบุคลากรด้วย AI:</b> อบรมประยุกต์ใช้ AI ในการทำงาน เมื่อ 31 มีนาคม 2569 เรียบร้อย</div>'
+                },
+                v3: {
+                    scorePill: 'น้ำหนัก 20% | ผลงานระดับ 5',
+                    activeRubric: 5,
+                    bottomVal: 'ระดับ 5.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★★★</span>',
+                    bottomCallout: 'ข้อมูลทันกาล เทียบเป้าหมาย ถ่ายทอด Goal Cascading และมีผลประเมินการใช้งานดีขึ้นต่อเนื่อง 2 ปี (คะแนนถ่วงน้ำหนัก 1.0000)'
+                },
+                v4: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 3',
+                    activeRubric: 3,
+                    bottomVal: 'ระดับ 3.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★☆☆</span>',
+                    bottomCallout: 'ระบบ WCT และ Express สนับสนุนภารกิจหลักในการจัดสรรเงินกู้และบริหารหนี้สินครูอย่างมีประสิทธิภาพ (คะแนนถ่วงน้ำหนัก 0.3000)'
+                },
+                v5: {
+                    scorePill: 'น้ำหนัก 10% | ผลงานระดับ 5',
+                    activeRubric: 5,
+                    bottomVal: 'ระดับ 5.0000 คะแนน <span style="font-size: 18px; color: #facc15;">★★★★★</span>',
+                    bottomCallout: 'ผลประเมินตามตัวชี้วัดที่ 2.1 (92.27%) และตัวชี้วัดที่ 3.1 (113.07%) ดีกว่าเป้าหมายและดีขึ้นต่อเนื่อง 2 ปี บรรลุระดับ 5 เต็ม (คะแนนถ่วงน้ำหนัก 0.5000)'
+                }
+            }
+        };
+
+        /* Switch Quarter Logic */
+        function switchQuarter(qNum) {
+            activeQuarter = parseInt(qNum);
+            const qSelect = document.getElementById('quarter-focus');
+            if (qSelect) qSelect.value = activeQuarter;
+
+            const qBadge = document.getElementById('quarter-badge');
+            if (qBadge) {
+                qBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg> ไตรมาส ${activeQuarter}`;
+            }
+
+            // Always apply official data directly in preview mode
+            applyQuarterData(activeQuarter);
+
+            // In edit mode only, if localStorage has custom saved edits for this quarter, load them
+            if (currentAppMode === 'edit') {
+                const saved = localStorage.getItem(getStorageKey(activeQuarter));
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        loadCustomEdits(parsed);
+                    } catch (e) {
+                        console.error("Failed to parse saved quarter data", e);
+                    }
+                }
+            }
+
+            showToast(`สลับข้อมูลเป็นไตรมาสที่ ${activeQuarter} เรียบร้อยแล้ว`);
+        }
+
+        function applyQuarterData(q) {
+            const data = quarterDefaults[q] || quarterDefaults[4];
+
+            // 1. Overview Elements
+            const heroScore = document.getElementById('score-hero-val');
+            if (heroScore) heroScore.innerText = data.heroScore;
+
+            const heroStars = document.getElementById('score-hero-stars');
+            if (heroStars) heroStars.innerText = data.heroStars;
+
+            const statusBadge = document.getElementById('score-status-badge');
+            if (statusBadge) statusBadge.innerText = data.statusBadge;
+
+            const metricComp = document.getElementById('metric-complete-val');
+            if (metricComp) metricComp.innerText = data.completeVal;
+
+            const metricGrade = document.getElementById('metric-grade-val');
+            if (metricGrade) metricGrade.innerText = data.gradeVal;
+
+            const sumDesc = document.getElementById('summary-overview-desc');
+            if (sumDesc) sumDesc.innerText = data.summaryDesc;
+
+            // Overview Table
+            document.getElementById('tbl-score-1').innerText = data.table.s1;
+            document.getElementById('tbl-wscore-1').innerText = data.table.ws1;
+            document.getElementById('tbl-score-2').innerText = data.table.s2;
+            document.getElementById('tbl-wscore-2').innerText = data.table.ws2;
+            document.getElementById('tbl-score-3').innerText = data.table.s3;
+            document.getElementById('tbl-wscore-3').innerText = data.table.ws3;
+            document.getElementById('tbl-score-4').innerText = data.table.s4;
+            document.getElementById('tbl-wscore-4').innerText = data.table.ws4;
+            document.getElementById('tbl-score-5').innerText = data.table.s5;
+            document.getElementById('tbl-wscore-5').innerText = data.table.ws5;
+            document.getElementById('tbl-total-level').innerText = data.table.totLevel;
+            document.getElementById('tbl-total-wscore').innerText = data.table.totWScore;
+
+            // 2. View 1 Updates
+            document.getElementById('v1-score-pill').innerText = data.v1.scorePill;
+            document.getElementById('v1-bottom-val').innerHTML = data.v1.bottomVal;
+            document.getElementById('v1-bottom-callout').innerText = data.v1.bottomCallout;
+            if (data.v1.step4Sub) document.getElementById('v1-step4-sub').innerText = data.v1.step4Sub;
+            updateRubricHighlight('v1', data.v1.activeRubric);
+
+            // 3. View 2 Updates
+            document.getElementById('v2-score-pill').innerText = data.v2.scorePill;
+            document.getElementById('v2-bottom-val').innerHTML = data.v2.bottomVal;
+            document.getElementById('v2-bottom-callout').innerText = data.v2.bottomCallout;
+            if (data.v2.cardLeft) document.getElementById('v2-card-left').innerHTML = data.v2.cardLeft;
+            updateRubricHighlight('v2', data.v2.activeRubric);
+
+            // 4. View 3 Updates
+            document.getElementById('v3-score-pill').innerText = data.v3.scorePill;
+            document.getElementById('v3-bottom-val').innerHTML = data.v3.bottomVal;
+            document.getElementById('v3-bottom-callout').innerText = data.v3.bottomCallout;
+            updateRubricHighlight('v3', data.v3.activeRubric);
+
+            // 5. View 4 Updates
+            document.getElementById('v4-score-pill').innerText = data.v4.scorePill;
+            document.getElementById('v4-bottom-val').innerHTML = data.v4.bottomVal;
+            document.getElementById('v4-bottom-callout').innerText = data.v4.bottomCallout;
+            updateRubricHighlight('v4', data.v4.activeRubric);
+
+            // 6. View 5 Updates
+            document.getElementById('v5-score-pill').innerText = data.v5.scorePill;
+            document.getElementById('v5-bottom-val').innerHTML = data.v5.bottomVal;
+            document.getElementById('v5-bottom-callout').innerText = data.v5.bottomCallout;
+            updateRubricHighlight('v5', data.v5.activeRubric);
+        }
+
+        function updateRubricHighlight(prefix, activeNum) {
+            for (let i = 1; i <= 5; i++) {
+                const cell = document.getElementById(`${prefix}-rubric-${i}`);
+                if (!cell) continue;
+                cell.classList.remove('active', 'achieved-gold');
+                if (i === activeNum) {
+                    cell.classList.add('achieved-gold');
+                }
+            }
+        }
+
+        /* Save & Load for Edit Mode */
+        function saveCurrentQuarter(showFeedback = false) {
+            const dataToSave = {
+                hdrMain: document.getElementById('hdr-main-title').innerText,
+                hdrSub: document.getElementById('hdr-sub-title').innerText,
+                summaryDesc: document.getElementById('summary-overview-desc').innerText,
+                v1CardLeft: document.getElementById('v1-card-left').innerHTML,
+                v1CardRight: document.getElementById('v1-card-right').innerHTML,
+                v2CardLeft: document.getElementById('v2-card-left').innerHTML,
+                v2CardRight: document.getElementById('v2-card-right').innerHTML,
+                v3CardLeft: document.getElementById('v3-card-left').innerHTML,
+                v3CardRight: document.getElementById('v3-card-right').innerHTML,
+                v4CardLeft: document.getElementById('v4-card-left').innerHTML,
+                v4CardRight: document.getElementById('v4-card-right').innerHTML,
+                v5CardLeft: document.getElementById('v5-card-left').innerHTML,
+                v5CardRight: document.getElementById('v5-card-right').innerHTML
+            };
+
+            localStorage.setItem(getStorageKey(activeQuarter), JSON.stringify(dataToSave));
+            if (showFeedback) {
+                showToast(`บันทึกข้อมูลไตรมาส ${activeQuarter} ลงในเครื่องเรียบร้อยแล้ว`);
+            }
+        }
+
+        function loadCustomEdits(obj) {
+            if (obj.hdrMain) document.getElementById('hdr-main-title').innerText = obj.hdrMain;
+            if (obj.hdrSub) document.getElementById('hdr-sub-title').innerText = obj.hdrSub;
+            if (obj.summaryDesc) document.getElementById('summary-overview-desc').innerText = obj.summaryDesc;
+            if (obj.v1CardLeft) document.getElementById('v1-card-left').innerHTML = obj.v1CardLeft;
+            if (obj.v1CardRight) document.getElementById('v1-card-right').innerHTML = obj.v1CardRight;
+            if (obj.v2CardLeft) document.getElementById('v2-card-left').innerHTML = obj.v2CardLeft;
+            if (obj.v2CardRight) document.getElementById('v2-card-right').innerHTML = obj.v2CardRight;
+            if (obj.v3CardLeft) document.getElementById('v3-card-left').innerHTML = obj.v3CardLeft;
+            if (obj.v3CardRight) document.getElementById('v3-card-right').innerHTML = obj.v3CardRight;
+            if (obj.v4CardLeft) document.getElementById('v4-card-left').innerHTML = obj.v4CardLeft;
+            if (obj.v4CardRight) document.getElementById('v4-card-right').innerHTML = obj.v4CardRight;
+            if (obj.v5CardLeft) document.getElementById('v5-card-left').innerHTML = obj.v5CardLeft;
+            if (obj.v5CardRight) document.getElementById('v5-card-right').innerHTML = obj.v5CardRight;
+        }
+
+        /* Year change */
+        function changeFiscalYear(yr) {
+            showToast(`เลือกดูข้อมูลปีงบประมาณ ${yr}`);
+        }
+
+        /* Fullscreen toggle */
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`ไม่สามารถเปิดโหมดเต็มจอได้: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        /* Direct Clipboard Copy (PNG) */
+        async function copyImageToClipboard() {
+            const canvasElem = document.getElementById('report-canvas');
+            if (!canvasElem) return;
+
+            showToast("กำลังสร้างรูปภาพและคัดลอกลงคลิปบอร์ด...");
+
+            try {
+                const canvas = await html2canvas(canvasElem, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+
+                canvas.toBlob(async function(blob) {
+                    if (!blob) {
+                        showToast("เกิดข้อผิดพลาดในการสร้าง Blob ภาพ");
+                        return;
+                    }
+                    try {
+                        const item = new ClipboardItem({ "image/png": blob });
+                        await navigator.clipboard.write([item]);
+                        showToast("คัดลอกรูปภาพลงคลิปบอร์ดแล้ว! วาง (Ctrl+V) ได้ทันที");
+                    } catch (err) {
+                        console.error("Clipboard API error:", err);
+                        // Fallback download if clipboard permission blocked
+                        const link = document.createElement('a');
+                        link.download = `KPI_4.3_Q${activeQuarter}_${topicNames[activeTopic]}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        showToast("เบราว์เซอร์ไม่อนุญาตคลิปบอร์ด จึงดาวน์โหลดเป็นไฟล์ PNG แทน");
+                    }
+                }, 'image/png');
+            } catch (error) {
+                console.error("html2canvas error:", error);
+                showToast("เกิดข้อผิดพลาดในการคัดลอกภาพ");
+            }
+        }
+
+        /* Export PNG */
+        async function exportToImage() {
+            const canvasElem = document.getElementById('report-canvas');
+            if (!canvasElem) return;
+
+            showToast("กำลังส่งออกรูปภาพ PNG คุณภาพสูง...");
+
+            try {
+                const canvas = await html2canvas(canvasElem, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+
+                const link = document.createElement('a');
+                link.download = `รายงานตัวชี้วัดที่_4.3_ไตรมาส${activeQuarter}_${topicNames[activeTopic]}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast("ดาวน์โหลดรูปภาพ PNG เรียบร้อยแล้ว");
+            } catch (error) {
+                console.error("Export Image error:", error);
+                showToast("เกิดข้อผิดพลาดในการส่งออกภาพ");
+            }
+        }
+
+        /* Direct PDF Export (Full Bleed) */
+        async function exportToPDF() {
+            const canvasElem = document.getElementById('report-canvas');
+            if (!canvasElem) return;
+
+            showToast("กำลังประมวลผล PDF เต็มแผ่นคุณภาพสูง...");
+
+            try {
+                const canvas = await html2canvas(canvasElem, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+
+                // Create PDF with exact aspect ratio of canvas
+                const pdfWidth = canvas.width;
+                const pdfHeight = canvas.height;
+                const orientation = pdfWidth > pdfHeight ? 'landscape' : 'portrait';
+
+                const pdf = new jsPDF({
+                    orientation: orientation,
+                    unit: 'px',
+                    format: [pdfWidth, pdfHeight]
+                });
+
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(`รายงานตัวชี้วัดที่_4.3_ไตรมาส${activeQuarter}_${topicNames[activeTopic]}.pdf`);
+                showToast("ดาวน์โหลดไฟล์ PDF เรียบร้อยแล้ว");
+            } catch (error) {
+                console.error("PDF Export error:", error);
+                showToast("เกิดข้อผิดพลาดในการสร้างไฟล์ PDF");
+            }
+        }
+
+        /* Initial Setup on Page Load */
+        window.addEventListener('DOMContentLoaded', () => {
+            switchQuarter(4);
+            switchTopicView(0);
+        });
+    </script>
+</body>
+</html>

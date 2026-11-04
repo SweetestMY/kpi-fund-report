@@ -1,0 +1,3554 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มรายงานผลตัวชี้วัดที่ 4.1 การบริหารความเสี่ยงและการควบคุมภายใน (KPI Presentation Dashboard)</title>
+    <!-- Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #004b87;
+            --primary-dark: #002647;
+            --primary-light: #0077b6;
+            --primary-gradient: linear-gradient(135deg, #001f38 0%, #004b87 50%, #0077b6 100%);
+            --navy: #00172e;
+            --card-border: #9ec5e8;
+            --accent-gold: #ffcc00;
+            --accent-amber: #d97706;
+            --accent-green: #059669;
+            --text-dark: #0f172a;
+            --text-body: #1e293b;
+            --text-muted: #334155;
+            --bg-page: #e8f1f8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            padding: 16px;
+            min-height: 100vh;
+            overflow-x: auto;
+            box-sizing: border-box;
+        }
+
+        /* Responsive Slide Page Wrapper - Preserves 16:9 Presentation Format & Prevents Clipping */
+        .page-wrapper {
+            width: 100%;
+            max-width: 1560px;
+            min-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Toolbar Top Controls (Screen Only) */
+        .toolbar-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toolbar {
+            background: #ffffff;
+            padding: 10px 18px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 45, 90, 0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #c8dced;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar label {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .select-input, .btn {
+            font-family: 'Prompt', sans-serif;
+            font-size: 13.5px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid #b3d1eb;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .select-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 75, 135, 0.15);
+        }
+
+        .btn {
+            cursor: pointer;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary { background: #005691; color: #fff; border-color: #004575; }
+        .btn-primary:hover { background: #003e6b; }
+        .btn-success { background: #15803d; color: #fff; border-color: #166534; }
+        .btn-success:hover { background: #166534; }
+        .btn-outline { background: #ffffff; color: #005691; border-color: #005691; }
+        .btn-outline:hover { background: #eef6fc; }
+        .btn-tool {
+            background: #f1f7fc;
+            color: #003666;
+            border: 1px solid #b8d4ed;
+            padding: 5px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .btn-tool:hover {
+            background: #e1eef8;
+            border-color: #005691;
+        }
+
+        .quarter-active-badge {
+            background: #005691;
+            color: #ffffff;
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* Sub-topic Filter Tab Bar */
+        .filter-tabs-bar {
+            background: #ffffff;
+            border: 1.5px solid #9ec5e8;
+            border-radius: 12px;
+            padding: 9px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 16px rgba(0, 45, 90, 0.08);
+        }
+
+        .filter-tab-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #003366;
+            margin-right: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn {
+            background: #f1f7fc;
+            color: #0f2742;
+            border: 1.5px solid #bcd8f0;
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover {
+            background: #e0effa;
+            border-color: #005691;
+            color: #003366;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #003a66 0%, #001a33 100%);
+            color: #ffffff;
+            border-color: #001529;
+            box-shadow: 0 3px 10px rgba(0, 45, 90, 0.3);
+        }
+
+        .tab-btn .tab-pct {
+            font-size: 11.5px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: rgba(0, 86, 145, 0.15);
+            color: #004575;
+            font-weight: 800;
+        }
+
+        .tab-btn.active .tab-pct {
+            background: #f59e0b;
+            color: #ffffff;
+        }
+
+        /* Format Control Bar */
+        .format-bar {
+            background: #ffffff;
+            border: 1px solid #c8dced;
+            border-radius: 10px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0, 45, 90, 0.04);
+            font-size: 12.5px;
+        }
+
+        .format-title {
+            font-weight: 700;
+            color: #005691;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .format-sep {
+            width: 1px;
+            height: 18px;
+            background: #d4e4f2;
+            margin: 0 2px;
+        }
+
+        .active-target-pill {
+            font-size: 12px;
+            color: #1e3a56;
+            background: #f0f6fa;
+            padding: 3px 10px;
+            border-radius: 6px;
+            border: 1px solid #c8dced;
+            max-width: 280px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 600;
+        }
+
+        /* Font Size Indicator Badge */
+        .font-size-badge {
+            background: #003666;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 12.5px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            min-width: 44px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 30, 60, 0.2);
+            display: inline-block;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* Tool Popups (Highlight & Symbol Picker) */
+        .tool-popup-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: #ffffff;
+            border: 1.5px solid #9ec5e8;
+            border-radius: 10px;
+            padding: 10px 12px;
+            box-shadow: 0 8px 24px rgba(0, 45, 90, 0.18);
+            z-index: 10000;
+            min-width: 240px;
+            animation: fadeInPopup 0.15s ease;
+        }
+
+        @keyframes fadeInPopup {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .popup-menu-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #004b87;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #e2edf7;
+            padding-bottom: 3px;
+        }
+
+        .color-dots-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .color-dot-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1.5px solid #cbd5e1;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .color-dot-btn:hover {
+            transform: scale(1.18);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-dot-btn.clear-dot {
+            background: #ffffff;
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* Symbol Picker Grid */
+        .symbol-category {
+            margin-bottom: 8px;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+        }
+
+        .sym-tile {
+            width: 32px;
+            height: 32px;
+            background: #f4f8fc;
+            border: 1px solid #cfe0ef;
+            border-radius: 6px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            outline: none;
+        }
+
+        .sym-tile:hover {
+            background: #005691;
+            color: #ffffff;
+            border-color: #003e6b;
+            transform: scale(1.15);
+            box-shadow: 0 2px 6px rgba(0, 45, 90, 0.25);
+        }
+
+        /* Contenteditable Focus/Hover */
+        [contenteditable="true"] {
+            outline: none;
+            cursor: text;
+            transition: background 0.15s, box-shadow 0.15s;
+            border-radius: 4px;
+            padding: 1px 4px;
+            min-height: 1.2em;
+        }
+
+        [contenteditable="true"]:hover {
+            background: rgba(0, 119, 182, 0.08);
+            box-shadow: 0 0 0 1px rgba(0, 119, 182, 0.35);
+        }
+
+        [contenteditable="true"]:focus {
+            background: #ffffff !important;
+            box-shadow: 0 0 0 2px #0077b6 !important;
+            color: #002b49 !important;
+        }
+
+        /* Slide Canvas (16:9 Presentation Format) */
+        #report-canvas {
+            width: 100%;
+            min-height: 820px;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 35, 70, 0.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #b3d1eb;
+            position: relative;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3.5px solid var(--accent-gold);
+            position: relative;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .header-icon-box {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .main-heading {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            letter-spacing: -0.2px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .sub-heading {
+            font-size: 13.5px;
+            font-weight: 400;
+            color: #d6e8f7;
+            line-height: 1.35;
+            white-space: normal;
+        }
+
+        .header-slogan {
+            text-align: right;
+            font-size: 13px;
+            color: #ffffff;
+            padding-left: 16px;
+            border-left: 2px solid rgba(255, 204, 0, 0.5);
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.35;
+            flex-shrink: 0;
+            min-width: 180px;
+            white-space: nowrap;
+        }
+
+        /* KPI Metadata Strip */
+        .meta-strip {
+            background: #f4f8fc;
+            border-bottom: 2px solid #d3e2ef;
+            padding: 8px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px 10px;
+        }
+
+        .meta-pills-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #ffffff;
+            padding: 3.5px 7px;
+            border-radius: 8px;
+            border: 1.5px solid #c8dbee;
+            box-shadow: 0 1px 3px rgba(0, 40, 80, 0.04);
+            font-size: 12.5px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .meta-pill .pill-lbl {
+            font-weight: 700;
+            color: #004d80;
+            font-size: 12px;
+        }
+
+        .meta-pill .pill-val {
+            font-weight: 800;
+            color: #001f3f;
+            min-width: 20px;
+            text-align: center;
+            font-size: 13.5px;
+        }
+
+        /* Rubric Levels Group: Option 2 (Executive Ocean & Emerald - Clean & Matching Image 1) */
+        .meta-levels-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 3.5px;
+            background: #ffffff;
+            padding: 3px 6px;
+            border-radius: 8px;
+            border: 1.5px solid #c8dbee;
+            box-shadow: 0 1px 3px rgba(0, 40, 80, 0.04);
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .rubric-lbl {
+            font-size: 13px;
+            font-weight: 800;
+            color: #002244;
+            margin-right: 2px;
+            white-space: nowrap;
+        }
+
+        .level-chip {
+            display: inline-flex;
+            flex-direction: column;
+            min-width: 50px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            border: 1.5px solid #475569;
+            background: #ffffff;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+
+        .level-chip:hover {
+            transform: translateY(-2px);
+        }
+
+        .level-chip .l-head {
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            padding: 2px 3px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+
+        .level-chip .l-val {
+            background: #ffffff;
+            font-size: 14px;
+            font-weight: 800;
+            text-align: center;
+            padding: 2px 3px;
+            color: #001f3f;
+        }
+
+        /* Level 1: เทากรมท่า Slate Navy */
+        .level-chip.chip-l1, .meta-levels-group .level-chip:nth-of-type(1) { border-color: #475569; }
+        .level-chip.chip-l1 .l-head, .meta-levels-group .level-chip:nth-of-type(1) .l-head { background: linear-gradient(180deg, #64748b 0%, #475569 100%); }
+        .level-chip.chip-l1 .l-val, .meta-levels-group .level-chip:nth-of-type(1) .l-val { color: #334155; }
+
+        /* Level 2: น้ำเงินคลาสสิก Classic Navy */
+        .level-chip.chip-l2, .meta-levels-group .level-chip:nth-of-type(2) { border-color: #1e40af; }
+        .level-chip.chip-l2 .l-head, .meta-levels-group .level-chip:nth-of-type(2) .l-head { background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%); }
+        .level-chip.chip-l2 .l-val, .meta-levels-group .level-chip:nth-of-type(2) .l-val { color: #1e3a8a; }
+
+        /* Level 3: ฟ้าครามสดใส Vivid Cyan */
+        .level-chip.chip-l3, .meta-levels-group .level-chip:nth-of-type(3) { border-color: #0284c7; }
+        .level-chip.chip-l3 .l-head, .meta-levels-group .level-chip:nth-of-type(3) .l-head { background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); }
+        .level-chip.chip-l3 .l-val, .meta-levels-group .level-chip:nth-of-type(3) .l-val { color: #0369a1; }
+
+        /* Level 4: เขียวมรกต Teal Emerald */
+        .level-chip.chip-l4, .meta-levels-group .level-chip:nth-of-type(4) { border-color: #0d9488; }
+        .level-chip.chip-l4 .l-head, .meta-levels-group .level-chip:nth-of-type(4) .l-head { background: linear-gradient(180deg, #2dd4bf 0%, #0d9488 100%); }
+        .level-chip.chip-l4 .l-val, .meta-levels-group .level-chip:nth-of-type(4) .l-val { color: #0f766e; }
+
+        /* Level 5: เขียวเข้มป่าไม้ยอดเยี่ยม Deep Forest Green */
+        .level-chip.chip-l5, .meta-levels-group .level-chip:nth-of-type(5) { border-color: #047857; border-width: 1.5px; }
+        .level-chip.chip-l5 .l-head, .meta-levels-group .level-chip:nth-of-type(5) .l-head { 
+            background: linear-gradient(180deg, #10b981 0%, #047857 100%); 
+            font-weight: 800; 
+        }
+        .level-chip.chip-l5 .l-val, .meta-levels-group .level-chip:nth-of-type(5) .l-val { 
+            color: #064e3b; 
+        }
+
+        /* Slide Dynamic View Area (Vertical Expansion) */
+        .slide-content {
+            padding: 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+            background: #ffffff;
+            justify-content: stretch;
+            position: relative;
+        }
+
+        .topic-view {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .topic-view.active-view {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Elements with High Contrast & Larger Fonts */
+        .panel-box {
+            background: #ffffff;
+            border: 2px solid #a3c7e8;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 3px 12px rgba(0, 45, 90, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .panel-title-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #d4e8f7;
+            color: #004575;
+            font-weight: 800;
+            font-size: 16.5px;
+        }
+
+        .panel-title-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 800;
+            border: 1px solid #bae6fd;
+        }
+
+        /* Progressive Rubric Bar (5 Levels) - Expanded & Legible */
+        .rubric-5step-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .rstep-card {
+            background: #f8fbfe;
+            border: 1.5px solid #b8d4ed;
+            border-radius: 9px;
+            padding: 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: all 0.2s;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        .rstep-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1.5px solid #d4e5f4;
+            padding-bottom: 4px;
+        }
+
+        .rstep-num {
+            font-size: 12px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 5px;
+            background: #005691;
+            color: #ffffff;
+        }
+
+        .rstep-desc {
+            font-size: 12.5px;
+            color: #0f2742;
+            line-height: 1.45;
+            font-weight: 500;
+        }
+
+        .rstep-card.active-target {
+            border: 2px solid #b45309;
+            background: #fffbeb;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+        }
+
+        .rstep-card.active-target .rstep-num {
+            background: #b45309;
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .rstep-card.active-target .rstep-desc {
+            font-weight: 700;
+            color: #78350f;
+        }
+
+        /* Milestone & Flow Steps - Generous Padding */
+        .flow-steps-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+
+        .flow-step-item {
+            flex: 1;
+            background: #f8fbfe;
+            border: 1.5px solid #b8d4ed;
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-step-item.step-complete {
+            background: #f0fdf4;
+            border-color: #86efac;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.08);
+        }
+
+        .flow-step-num {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: #005691;
+        }
+
+        .flow-step-item.step-complete .flow-step-num {
+            color: #047857;
+        }
+
+        .flow-step-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #002d54;
+        }
+
+        .flow-step-desc {
+            font-size: 12px;
+            color: #334155;
+            line-height: 1.35;
+            font-weight: 500;
+        }
+
+        .flow-arrow {
+            color: #0077b6;
+            font-size: 18px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        /* Overview Table - Expanded & Rich */
+        .overview-kpi-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13.5px;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1.5px solid #9ec5e8;
+            box-shadow: 0 2px 8px rgba(0, 45, 90, 0.05);
+        }
+
+        .overview-kpi-table th {
+            background: linear-gradient(180deg, #005691 0%, #003660 100%);
+            color: #ffffff;
+            padding: 10px 12px;
+            font-weight: 700;
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.18);
+            font-size: 13.5px;
+        }
+
+        .overview-kpi-table th:last-child { border-right: none; }
+
+        .overview-kpi-table td {
+            border-top: 1px solid #d4e4f2;
+            border-right: 1px solid #e2edf6;
+            padding: 10px 12px;
+            color: #0f172a;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: background 0.15s;
+        }
+
+        .overview-kpi-table td:last-child { border-right: none; }
+
+        .overview-kpi-table tbody tr:nth-child(even) { background: #f8fbfe; }
+        .overview-kpi-table tbody tr:hover { background: #e6f2fa; }
+
+        .overview-kpi-table tr.total-kpi-row {
+            background: #edf6fd !important;
+            font-weight: 800;
+        }
+
+        .overview-kpi-table tr.total-kpi-row td {
+            border-top: 2.5px solid #005691;
+            color: #003057;
+            font-size: 14.5px;
+            font-weight: 800;
+        }
+
+        /* HIGH-CONTRAST EXECUTIVE SCORE BOX (NEVER WASHED OUT) */
+        .big-score-box {
+            background: linear-gradient(135deg, #002d54 0%, #00172e 100%);
+            border: 2.5px solid #ffcc00;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 18px rgba(0, 35, 70, 0.25);
+        }
+
+        .score-lbl {
+            font-size: 13px;
+            font-weight: 700;
+            color: #d6e8f7;
+        }
+
+        .big-score-val {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffcc00;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        .score-pill-stars {
+            font-size: 16px;
+            color: #ffdd44;
+            letter-spacing: 2px;
+        }
+
+        /* High-Contrast Result Callout Strip */
+        .callout-strip {
+            background: #f0f7fd;
+            border-left: 4.5px solid #005691;
+            border-radius: 0 8px 8px 0;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #0f2742;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #dce8f2;
+            border-right: 1px solid #dce8f2;
+            border-bottom: 1px solid #dce8f2;
+        }
+
+        /* Channels Grid for Topic 1 */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .channel-card {
+            background: #f8fbfe;
+            border: 1.5px solid #b8d4ed;
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            box-shadow: 0 2px 6px rgba(0, 45, 90, 0.04);
+        }
+
+        .channel-icon { font-size: 24px; }
+        .channel-title { font-size: 13px; font-weight: 800; color: #003e6b; }
+        .channel-detail { font-size: 11px; color: #334155; font-weight: 600; }
+
+        /* 4-Risk Dimensions Grid for Topic 3 (Expanded & Clear) */
+        .risk-4dim-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .risk-dim-card {
+            background: #ffffff;
+            border: 1.5px solid #a3c7e8;
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 45, 90, 0.04);
+            min-height: 135px;
+            justify-content: flex-start;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        .risk-dim-title {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #003e6b;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border-bottom: 1.5px solid #d4e5f4;
+            padding-bottom: 5px;
+        }
+
+        .risk-dim-item {
+            font-size: 12px;
+            color: #0f172a;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* Split Grids */
+        .grid-split {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 14px;
+        }
+
+        /* Footer Bar */
+        .footer-bar {
+            padding: 10px 24px;
+            background: #f2f7fb;
+            border-top: 1.5px solid #c8dced;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12.5px;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        /* Toast Notification */
+        #toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #00223a;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            font-size: 13.5px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            border: 1px solid #005691;
+        }
+
+        #toast-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Print Specifics */
+        @media print {
+            body { background: #ffffff !important; padding: 0 !important; }
+            .toolbar-container { display: none !important; }
+            .page-wrapper { min-width: 100% !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; }
+            #report-canvas {
+                box-shadow: none !important;
+                border: none !important;
+                max-width: 100% !important;
+                min-width: 100% !important;
+                width: 100% !important;
+                border-radius: 0 !important;
+            }
+            .level-chip:hover { transform: none !important; }
+        }
+    
+
+
+        /* -------------------------------------------------------------
+           STANDARDIZED DUAL-MODE & MODERN RIBBON TOOLBAR
+        ------------------------------------------------------------- */
+        .toolbar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Main Action Ribbon */
+        .toolbar-ribbon {
+            background: #ffffff;
+            border: 1px solid rgba(188, 219, 242, 0.85);
+            border-radius: 12px;
+            padding: 8px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 40, 80, 0.04);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ribbon-left, .ribbon-center, .ribbon-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* DUAL MODE SEGMENTED TOGGLE SWITCH */
+        .mode-segmented-control {
+            display: flex;
+            background: #e2edf6;
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid #bcdbf2;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #486581;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn:hover {
+            color: #003666;
+        }
+
+        .mode-btn.active {
+            background: #ffffff;
+            color: #004b87;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.15);
+        }
+
+        .mode-btn.active.edit-active {
+            color: #b45309;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #002b49;
+        }
+
+        .select-input {
+            appearance: none;
+            background: #f8fbfe url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004b87' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 10px center;
+            background-size: 12px;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 8px;
+            padding: 4px 26px 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .select-input:focus, .select-input:hover {
+            border-color: #0077b6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.12);
+        }
+
+        .quarter-active-badge {
+            background: #eef6fc;
+            border: 1px solid #bce0f8;
+            color: #005691;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5.5px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            border: 1.2px solid #bcdbf2;
+            color: #004b87;
+        }
+
+        .btn-outline:hover {
+            background: #f0f7fd;
+            border-color: #0077b6;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #005691 0%, #003d6b 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 60, 120, 0.18);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0066aa 0%, #004b87 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(4, 120, 87, 0.18);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #b45309, #92400e);
+            transform: translateY(-1px);
+        }
+
+        /* -------------------------------------------------------------
+           FULL EDITING TOOLBAR (VISIBLE IN EDIT MODE ONLY)
+        ------------------------------------------------------------- */
+        .format-bar {
+            background: #ffffff;
+            border: 1.5px solid #fed7aa; /* amber tint for edit mode */
+            border-radius: 10px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 3px 12px rgba(217, 119, 6, 0.08);
+            font-size: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .format-bar.mode-hidden {
+            display: none !important;
+        }
+
+        .format-title {
+            font-weight: 700;
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-tool {
+            background: #f8fbfe;
+            border: 1px solid #bcdbf2;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #003666;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-tool:hover {
+            background: #e6f2fc;
+            border-color: #0077b6;
+        }
+
+        .font-size-badge {
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #003865;
+            background: #eef6fc;
+            border: 1px solid #b5d3ed;
+            border-radius: 5px;
+            padding: 3px 5px;
+        }
+
+        .format-sep {
+            width: 1px;
+            height: 20px;
+            background: #d4e4f2;
+            margin: 0 2px;
+        }
+
+        .popup-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: #ffffff;
+            border: 1.5px solid #bcdbf2;
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 8px 24px rgba(0, 40, 80, 0.16);
+            z-index: 1000;
+        }
+
+        .popup-menu.show { display: block; }
+
+        .color-palette-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .color-chip {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .color-chip:hover { transform: scale(1.15); }
+
+        .btn-clear-hl {
+            font-size: 10.5px;
+            padding: 3px 6px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .popup-menu-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #004b87;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #e1edf7;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 3px;
+        }
+
+        .sym-tile {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            border: 1px solid #d4e4f2;
+            background: #f7fbfe;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .sym-tile:hover {
+            background: #e1eef8;
+            border-color: #005691;
+            transform: scale(1.12);
+        }
+
+        .active-target-pill {
+            font-size: 11px;
+            color: #b45309;
+            font-weight: 600;
+            background: #fffbeb;
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px dashed #fcd34d;
+        }
+
+        .menu-action-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 7px 12px;
+            font-size: 11.5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #003666;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .menu-action-item:hover {
+            background: #f0f7fd;
+        }
+
+        /* -------------------------------------------------------------
+           EDIT MODE VISUAL INDICATORS
+        ------------------------------------------------------------- */
+        body.app-mode-edit [contenteditable="true"] {
+            box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.35);
+        }
+
+        body.app-mode-edit [contenteditable="true"]:hover {
+            box-shadow: 0 0 0 1.5px #f59e0b !important;
+        }
+
+        body.app-mode-preview [contenteditable="true"]:hover {
+            background: rgba(0, 119, 182, 0.05);
+            box-shadow: 0 0 0 1px rgba(0, 119, 182, 0.25);
+        }
+
+        [contenteditable="true"]:focus {
+            background: #ffffff !important;
+            box-shadow: 0 0 0 2px #0077b6 !important;
+            color: #002b49 !important;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #002244;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Print Media Styles */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            html, body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                overflow: hidden !important;
+            }
+            .toolbar-container, #toast-notification, .filter-tabs-bar {
+                display: none !important;
+            }
+            .page-wrapper {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #report-canvas {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                width: 1400px !important;
+                max-width: 1400px !important;
+                zoom: 74% !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+
+</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="app-mode-preview">
+
+    <!-- RESPONSIVE 16:9 SLIDE PAGE WRAPPER (PREVENTS OVERFLOW & CLIPPING) -->
+    <div class="page-wrapper">
+
+            <!-- TOP CONTROL TOOLBARS (WITH DUAL MODE SWITCHER) -->
+        <div class="toolbar-container">
+            <!-- 1. Primary Action Ribbon -->
+            <div class="toolbar-ribbon">
+                <div class="ribbon-left">
+                    <!-- KPI Quick Switcher -->
+                    <div class="control-item">
+                        <span>📑 ตัวชี้วัด:</span>
+                        <select id="select-kpi-page" class="select-input" onchange="navigateToKPI(this.value)" style="font-weight: 600; color: #0a4480; background: #eff6ff;">
+                <option value="1.1">1.1 ร้อยละการรับชำระหนี้</option>
+                <option value="1.2.1">1.2.1 หนี้ไม่เกิน 1 ปี</option>
+                <option value="1.2.2">1.2.2 หนี้เกิน 1 ปี</option>
+                <option value="2.1">2.1 ร้อยละความพึงพอใจฯ</option>
+                <option value="2.2">2.2 ความสำเร็จโครงการเสริมสร้างวินัยฯ</option>
+                <option value="3.1">3.1 ร้อยละเงินอนุมัติให้กู้ยืม</option>
+                <option value="3.2">3.2 ความสำเร็จการแก้ไขปัญหาหนี้สินฯ</option>
+                <option value="3.3">3.3 การจัดเก็บข้อมูลประเมินผลลัพธ์ปี 2570</option>
+                <option value="4.1" selected>4.1 การบริหารความเสี่ยงฯ (ปัจจุบัน)</option>
+                <option value="4.2">4.2 การตรวจสอบภายใน</option>
+                <option value="4.3">4.3 การบริหารจัดการสารสนเทศและดิจิทัล</option>
+                <option value="5.1">5.1 บทบาทคณะกรรมการบริหารทุนหมุนเวียน</option>
+                <option value="5.2">5.2 การบริหารทรัพยากรบุคคล</option>
+                <option value="6.1">6.1 การเบิกจ่ายเงินตามแผนฯ</option>
+            </select>
+                    </div>
+
+                    <!-- Quarter Selector -->
+                    <div class="control-item">
+                        <span>📊 รายงานถึง:</span>
+                        <select id="quarter-focus" class="select-input" onchange="switchQuarter(this.value)">
+                <option value="1">ไตรมาส 1 (ต.ค. - ธ.ค.)</option>
+                <option value="2">ไตรมาส 2 (ต.ค. - มี.ค.)</option>
+                <option value="3">ไตรมาส 3 (ต.ค. - มิ.ย.)</option>
+                <option value="4" selected>ไตรมาส 4 (ครบปี ต.ค. - ก.ย.)</option>
+            </select>
+                    </div>
+
+                    <span id="quarter-badge" class="quarter-active-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        ไตรมาส 4
+                    </span>
+
+                    <!-- Fiscal Year Selector -->
+                    <div class="control-item" style="margin-left: 4px;">
+                        <span>📅 ปี:</span>
+                        <select id="select-year" class="select-input" onchange="changeFiscalYear(this.value)">
+                            <option value="2568">ปี 2568</option>
+                            <option value="2569" selected>ปี 2569</option>
+                            <option value="2570">ปี 2570</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 2. Dual Mode Segmented Switcher (Center of Ribbon) -->
+                <div class="ribbon-center">
+                    <div class="mode-segmented-control">
+                        <button class="mode-btn active" id="btn-mode-preview" onclick="setAppMode('preview')" title="โหมดนำเสนอ สะอาดตา ไร้เครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            โหมดนำเสนอ (Preview)
+                        </button>
+                        <button class="mode-btn" id="btn-mode-edit" onclick="setAppMode('edit')" title="โหมดแก้ไขข้อความ เปิดแถบเครื่องมือจัดฟอร์มแบบจัดเต็ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            โหมดแก้ไขข้อความ (Edit)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ribbon-right">
+                    <!-- Save Current Quarter -->
+                    <button class="btn btn-outline" onclick="saveCurrentQuarter(true)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        บันทึก
+                    </button>
+
+                    <!-- Copy Image to Clipboard -->
+                    <button class="btn btn-outline" onclick="copyImageToClipboard()" title="คัดลอกรูปภาพลงคลิปบอร์ดทันที (นำไปกด Ctrl+V วางใน PowerPoint หรือ LINE ได้เลย)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        คัดลอกภาพ
+                    </button>
+
+                    <!-- Export PNG -->
+                    <button class="btn btn-primary" onclick="exportToImage()" title="ส่งออกเป็นรูปภาพ PNG คุณภาพสูง">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        ส่งออกภาพ (PNG)
+                    </button>
+
+                    <!-- Export Direct PDF (Full Bleed) -->
+                    <button class="btn btn-warning" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; font-weight: 600;" onclick="exportToPDF()" title="ดาวน์โหลดไฟล์ PDF คุณภาพสูง สัดส่วนเต็มแผ่นเหมือนรูปภาพ 100% ไร้ขอบขาว">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        ส่งออก PDF (เต็มแผ่น)
+                    </button>
+
+                    <!-- Print Browser Dialog -->
+                    <button class="btn btn-success" onclick="window.print()" title="เปิดหน้าต่างสั่งพิมพ์ของเบราว์เซอร์ (ปรับพอดีหน้า A4 แนวนอนอัตโนมัติ ไม่ตกขอบ)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        พิมพ์ (Print)
+                    </button>
+
+                    <!-- Fullscreen Presentation Toggle -->
+                    <button class="btn btn-outline" id="btn-fullscreen" onclick="toggleFullscreen()" title="โหมดนำเสนอเต็มหน้าจอ (สำหรับจอโปรเจกเตอร์/ทีวี)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        เต็มจอ
+                    </button>
+                </div>
+            </div>
+            <!-- Sub-topic Interactive Filter Tab Bar -->
+            <div class="filter-tabs-bar" style="background: #ffffff; border: 1px solid rgba(188, 219, 242, 0.85); border-radius: 10px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <div class="filter-tab-title" style="font-size: 12.5px; font-weight: 700; color: #004b87; margin-right: 4px;">
+                    <span>📑 ตัวกรองหัวข้อ (Sub-topics):</span>
+                </div>
+                <button class="tab-btn active" id="tab-btn-0" onclick="switchTopicView(0)">
+                    <span>📊 ภาพรวมสรุป 6 ข้อ</span>
+                    <span class="tab-pct" style="background: #005691; color: white; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">100%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-1" onclick="switchTopicView(1)">
+                    <span>1. สภาพแวดล้อม</span>
+                    <span class="tab-pct" style="background: #e2e8f0; color: #1e293b; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">7%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-2" onclick="switchTopicView(2)">
+                    <span>2. วัตถุประสงค์</span>
+                    <span class="tab-pct" style="background: #e2e8f0; color: #1e293b; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">8%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-3" onclick="switchTopicView(3)">
+                    <span>3. กระบวนการบริหารความเสี่ยง</span>
+                    <span class="tab-pct" style="background: #e2e8f0; color: #1e293b; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">45%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-4" onclick="switchTopicView(4)">
+                    <span>4. กิจกรรมควบคุม</span>
+                    <span class="tab-pct" style="background: #e2e8f0; color: #1e293b; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">5%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-5" onclick="switchTopicView(5)">
+                    <span>5. สารสนเทศ & สื่อสาร</span>
+                    <span class="tab-pct" style="background: #e2e8f0; color: #1e293b; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">30%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-6" onclick="switchTopicView(6)">
+                    <span>6. ติดตาม & ประเมินผล</span>
+                    <span class="tab-pct" style="background: #e2e8f0; color: #1e293b; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">5%</span>
+                </button>
+            </div>
+
+            <!-- 2. Full Formatting Bar (Controlled by Mode Switcher: visible in Edit Mode, hidden in Preview Mode) -->
+            <div class="format-bar mode-hidden" id="full-format-bar">
+                <div class="format-title">
+                    <span>✏️ แถบเครื่องมือจัดข้อความ (Edit Toolbar):</span>
+                </div>
+
+                <!-- History: Undo / Redo -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('undo')" title="ย้อนกลับการแก้ไข (Undo)">↶ ย้อนกลับ</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('redo')" title="ทำซ้ำ (Redo)">↷ ทำซ้ำ</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Font Size with Live Indicator -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(-1)" title="ลดขนาดตัวอักษร (-1px)">🅰️- ย่อ</button>
+                    <span id="font-size-val" class="font-size-badge" title="ขนาดฟอนต์ปัจจุบัน">14px</span>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="adjustFontSize(1)" title="เพิ่มขนาดตัวอักษร (+1px)">🅰️+ ขยาย</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Alignment -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('left')" title="จัดชิดซ้าย">⫷ ชิดซ้าย</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('center')" title="จัดกึ่งกลาง">≡ กึ่งกลาง</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="setTextAlign('right')" title="จัดชิดขวา">⫸ ชิดขวา</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Bold & Color -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBold()" title="ตัวหนา"><strong>𝐁 หนา</strong></button>
+                    <label for="text-color-picker" style="font-size: 11.5px; margin-left: 2px;">🎨 สี:</label>
+                    <input type="color" id="text-color-picker" value="#002b49" style="width: 24px; height: 22px; border: none; cursor: pointer; border-radius: 4px;" onchange="setTextColor(this.value)">
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Text Highlight Palette Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleHighlightMenu()" title="ไฮไลท์ข้อความ">
+                        <span>🖍️ ไฮไลท์</span> ▾
+                    </button>
+                    <div id="highlight-palette-menu" class="popup-menu">
+                        <div class="color-palette-row">
+                            <div class="color-chip" style="background: #fef08a;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fef08a')" title="สีเหลืองพาสเทล"></div>
+                            <div class="color-chip" style="background: #bbf7d0;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bbf7d0')" title="สีเขียวมินต์พาสเทล"></div>
+                            <div class="color-chip" style="background: #bae6fd;" onmousedown="event.preventDefault()" onclick="applyHighlight('#bae6fd')" title="สีฟ้าอ่อนพาสเทล"></div>
+                            <div class="color-chip" style="background: #fed7aa;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fed7aa')" title="สีส้มพาสเทล"></div>
+                            <div class="color-chip" style="background: #fbcfe8;" onmousedown="event.preventDefault()" onclick="applyHighlight('#fbcfe8')" title="สีชมพูพาสเทล"></div>
+                            <button class="btn-clear-hl" onmousedown="event.preventDefault()" onclick="applyHighlight('transparent')">ลบไฮไลท์</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insert Symbol Popup Dropdown -->
+                <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleSymbolMenu()" title="แทรกสัญลักษณ์/ไอคอน">
+                        <span>🎯 สัญลักษณ์</span> ▾
+                    </button>
+                    <div id="symbol-palette-menu" class="popup-menu" style="min-width: 240px;">
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">📋 เอกสาร & เป้าหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📋')">📋</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📊')">📊</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📈')">📈</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🎯')">🎯</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⚖️')">⚖️</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📏')">📏</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🏆')">🏆</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🥇')">🥇</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('⭐')">⭐</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🌟')">🌟</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('💡')">💡</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('📌')">📌</button>
+                            </div>
+                        </div>
+                        <div class="symbol-category">
+                            <div class="popup-menu-title">➔ ลูกศร & เครื่องหมาย</div>
+                            <div class="symbol-grid">
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➔')">➔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('➜')">➜</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('•')">•</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('✔')">✔</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🔴')">🔴</button>
+                                <button class="sym-tile" onmousedown="event.preventDefault()" onclick="insertSymbol('🟢')">🟢</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Clear Format & Insert Date -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="document.execCommand('removeFormat')" title="ล้างการจัดรูปแบบกลับเป็นมาตรฐาน">🧹 ล้างฟอร์แมต</button>
+                    <button class="btn-tool" onmousedown="event.preventDefault()" onclick="insertDateStamp()" title="แทรกวันที่ปัจจุบัน ณ ตำแหน่งเคอร์เซอร์">📅 ลงวันที่</button>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Reset & Backup Data Utilities -->
+                <div class="ribbon-left">
+                    <button class="btn-tool" style="color: #b91c1c; border-color: #fca5a5;" onmousedown="event.preventDefault()" onclick="resetQuarterDefaults()" title="คืนค่าตัวเลขเริ่มต้นของไตรมาสนี้">🔄 คืนค่าเริ่มต้น</button>
+                    
+                    <div class="dropdown-wrapper" style="position: relative; display: inline-block;">
+                        <button class="btn-tool" onmousedown="event.preventDefault()" onclick="toggleBackupMenu()" title="สำรองหรือกู้คืนข้อมูล JSON">
+                            <span>📦 สำรอง/กู้คืน</span> ▾
+                        </button>
+                        <div id="backup-menu" class="popup-menu" style="min-width: 190px;">
+                            <button class="menu-action-item" onclick="exportDataBackup()">📤 ดาวน์โหลดไฟล์สำรอง (.json)</button>
+                            <button class="menu-action-item" onclick="document.getElementById('backup-file-input').click()">📥 นำเข้าไฟล์สำรอง (.json)</button>
+                            <input type="file" id="backup-file-input" style="display:none;" accept=".json" onchange="importDataBackup(event)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="format-sep"></div>
+
+                <!-- Target Indicator -->
+                <div class="ribbon-left">
+                    <span style="color: #92400e; font-size: 11px;">กำลังเลือก:</span>
+                    <span id="active-target-name" class="active-target-pill">คลิกข้อความใดก็ได้เพื่อปรับแต่ง</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="report-canvas">
+
+        <!-- HEADER BANNER -->
+        <div class="header-banner">
+            <div class="header-left">
+                <div class="header-icon-box">🛡️</div>
+                <div class="header-titles">
+                    <div contenteditable="true" id="hdr-main-title" class="main-heading">ด้านที่ 4 การบริหารจัดการทุนหมุนเวียน | ตัวชี้วัดที่ 4.1 การบริหารความเสี่ยงและการควบคุมภายใน</div>
+                    <div contenteditable="true" id="hdr-sub-title" class="sub-heading">พิจารณาจากผลการดำเนินงาน 6 องค์ประกอบหลักตามกรอบมาตรฐานการควบคุมภายในและการบริหารความเสี่ยง</div>
+                </div>
+            </div>
+            <div contenteditable="true" id="hdr-slogan" class="header-slogan">
+                บริหารอย่างมีประสิทธิภาพ<br>โปร่งใส เพื่อการพัฒนาที่ยั่งยืน
+            </div>
+        </div>
+
+        <!-- KPI METADATA STRIP -->
+        <div class="meta-strip">
+            <div class="meta-pills-left">
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-code" class="pill-lbl">📋 ตัวชี้วัด:</span>
+                    <span contenteditable="true" id="meta-code" class="pill-val">4.1 ความเสี่ยง & ควบคุมภายใน</span>
+                </div>
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-unit" class="pill-lbl">🎯 หน่วยวัด:</span>
+                    <span contenteditable="true" id="meta-unit" class="pill-val">ระดับคะแนน (1 - 5)</span>
+                </div>
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-weight" class="pill-lbl">⚖️ ค่าน้ำหนัก:</span>
+                    <span contenteditable="true" id="meta-weight" class="pill-val">12%</span>
+                </div>
+                <div class="meta-pill">
+                    <span contenteditable="true" id="lbl-meta-criteria" class="pill-lbl">📏 ค่าเกณฑ์วัด:</span>
+                    <span contenteditable="true" id="meta-criteria" class="pill-val">เกณฑ์ 5 ระดับ</span>
+                </div>
+            </div>
+
+            <!-- Rubric Levels: 1, 2, 3, 4, 5 -->
+            <div class="meta-levels-group">
+                <span contenteditable="true" id="lbl-meta-rubric" class="rubric-lbl">เกณฑ์:</span>
+                <div class="level-chip chip-l1">
+                    <div contenteditable="true" id="lhead-1" class="l-head">ระดับ 1</div>
+                    <div contenteditable="true" id="lvl-1" class="l-val">1.00</div>
+                </div>
+                <div class="level-chip chip-l2">
+                    <div contenteditable="true" id="lhead-2" class="l-head">ระดับ 2</div>
+                    <div contenteditable="true" id="lvl-2" class="l-val">2.00</div>
+                </div>
+                <div class="level-chip chip-l3">
+                    <div contenteditable="true" id="lhead-3" class="l-head">ระดับ 3</div>
+                    <div contenteditable="true" id="lvl-3" class="l-val">3.00</div>
+                </div>
+                <div class="level-chip chip-l4">
+                    <div contenteditable="true" id="lhead-4" class="l-head">ระดับ 4</div>
+                    <div contenteditable="true" id="lvl-4" class="l-val">4.00</div>
+                </div>
+                <div class="level-chip chip-l5">
+                    <div contenteditable="true" id="lhead-5" class="l-head">ระดับ 5</div>
+                    <div contenteditable="true" id="lvl-5" class="l-val">5.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE CONTENT CONTAINER -->
+        <div class="slide-content">
+
+            <!-- ========================================== -->
+            <!-- VIEW 0: EXECUTIVE SUMMARY / OVERVIEW (ภาพรวม 6 ข้อ) -->
+            <!-- ========================================== -->
+            <div class="topic-view active-view" id="view-topic-0">
+                <div class="grid-split" style="grid-template-columns: 1.35fr 1fr; gap: 18px; flex: 1;">
+                    
+                    <!-- Left: Summary Table of 6 Components -->
+                    <div class="panel-box" style="padding: 22px 24px; justify-content: space-between; gap: 16px;">
+                        <div class="panel-title-line" style="margin-bottom: 2px;">
+                            <span contenteditable="true" id="ov-t1" style="font-size: 17px; font-weight: 800; color: #003666;">📊 ผลการดำเนินงานรวม 6 องค์ประกอบ (ตัวชี้วัดที่ 4.1)</span>
+                            <span contenteditable="true" id="ov-t1-sub" class="panel-title-badge" style="font-size: 13.5px; padding: 5px 12px;">น้ำหนักรวม 100%</span>
+                        </div>
+
+                        <div style="overflow-x: auto; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <table class="overview-kpi-table" style="font-size: 15.5px; height: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th contenteditable="true" id="ov-th-1" style="width: 55px; font-size: 15.5px; padding: 14px 8px;">ข้อ</th>
+                                        <th contenteditable="true" id="ov-th-2" style="font-size: 15.5px; padding: 14px 14px; text-align: left;">องค์ประกอบการประเมิน</th>
+                                        <th contenteditable="true" id="ov-th-3" style="width: 95px; font-size: 15.5px; padding: 14px 8px;">น้ำหนัก (%)</th>
+                                        <th contenteditable="true" id="ov-th-4" style="width: 105px; font-size: 15.5px; padding: 14px 8px;">ระดับคะแนน</th>
+                                        <th contenteditable="true" id="ov-th-5" style="width: 125px; font-size: 15.5px; padding: 14px 12px;">คะแนนถ่วงน้ำหนัก</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr onclick="switchTopicView(1)" style="cursor: pointer;">
+                                        <td contenteditable="true" id="ov-r1-no" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">1</td>
+                                        <td contenteditable="true" id="ov-r1-name" style="font-size: 15.5px; font-weight: 600; padding: 14px 14px;">สภาพแวดล้อมการควบคุมภายใน</td>
+                                        <td contenteditable="true" id="ov-r1-w" style="text-align: center; font-weight: 700; font-size: 15.5px; padding: 14px 8px;">7%</td>
+                                        <td contenteditable="true" id="ov-r1-score" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">5.0000</td>
+                                        <td contenteditable="true" id="ov-r1-weighted" style="text-align: right; font-weight: 700; font-size: 16px; padding: 14px 16px;">0.3500</td>
+                                    </tr>
+                                    <tr onclick="switchTopicView(2)" style="cursor: pointer;">
+                                        <td contenteditable="true" id="ov-r2-no" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">2</td>
+                                        <td contenteditable="true" id="ov-r2-name" style="font-size: 15.5px; font-weight: 600; padding: 14px 14px;">การกำหนดวัตถุประสงค์การบริหารความเสี่ยง</td>
+                                        <td contenteditable="true" id="ov-r2-w" style="text-align: center; font-weight: 700; font-size: 15.5px; padding: 14px 8px;">8%</td>
+                                        <td contenteditable="true" id="ov-r2-score" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">5.0000</td>
+                                        <td contenteditable="true" id="ov-r2-weighted" style="text-align: right; font-weight: 700; font-size: 16px; padding: 14px 16px;">0.4000</td>
+                                    </tr>
+                                    <tr onclick="switchTopicView(3)" style="cursor: pointer;">
+                                        <td contenteditable="true" id="ov-r3-no" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">3</td>
+                                        <td contenteditable="true" id="ov-r3-name" style="font-size: 15.5px; font-weight: 700; color: #004b87; padding: 14px 14px;">กระบวนการบริหารความเสี่ยง (สำคัญที่สุด)</td>
+                                        <td contenteditable="true" id="ov-r3-w" style="text-align: center; font-weight: 800; font-size: 15.5px; color: #b45309; padding: 14px 8px;">45%</td>
+                                        <td contenteditable="true" id="ov-r3-score" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">5.0000</td>
+                                        <td contenteditable="true" id="ov-r3-weighted" style="text-align: right; font-weight: 800; font-size: 16px; color: #b45309; padding: 14px 16px;">2.2500</td>
+                                    </tr>
+                                    <tr onclick="switchTopicView(4)" style="cursor: pointer;">
+                                        <td contenteditable="true" id="ov-r4-no" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">4</td>
+                                        <td contenteditable="true" id="ov-r4-name" style="font-size: 15.5px; font-weight: 600; padding: 14px 14px;">กิจกรรมการควบคุมภายใน</td>
+                                        <td contenteditable="true" id="ov-r4-w" style="text-align: center; font-weight: 700; font-size: 15.5px; padding: 14px 8px;">5%</td>
+                                        <td contenteditable="true" id="ov-r4-score" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">5.0000</td>
+                                        <td contenteditable="true" id="ov-r4-weighted" style="text-align: right; font-weight: 700; font-size: 16px; padding: 14px 16px;">0.2500</td>
+                                    </tr>
+                                    <tr onclick="switchTopicView(5)" style="cursor: pointer;">
+                                        <td contenteditable="true" id="ov-r5-no" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">5</td>
+                                        <td contenteditable="true" id="ov-r5-name" style="font-size: 15.5px; font-weight: 700; color: #004b87; padding: 14px 14px;">สารสนเทศและการสื่อสาร</td>
+                                        <td contenteditable="true" id="ov-r5-w" style="text-align: center; font-weight: 800; font-size: 15.5px; color: #0369a1; padding: 14px 8px;">30%</td>
+                                        <td contenteditable="true" id="ov-r5-score" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">5.0000</td>
+                                        <td contenteditable="true" id="ov-r5-weighted" style="text-align: right; font-weight: 800; font-size: 16px; color: #0369a1; padding: 14px 16px;">1.5000</td>
+                                    </tr>
+                                    <tr onclick="switchTopicView(6)" style="cursor: pointer;">
+                                        <td contenteditable="true" id="ov-r6-no" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">6</td>
+                                        <td contenteditable="true" id="ov-r6-name" style="font-size: 15.5px; font-weight: 600; padding: 14px 14px;">การติดตามผลและการประเมินผล</td>
+                                        <td contenteditable="true" id="ov-r6-w" style="text-align: center; font-weight: 700; font-size: 15.5px; padding: 14px 8px;">5%</td>
+                                        <td contenteditable="true" id="ov-r6-score" style="text-align: center; font-weight: 800; font-size: 16px; color: #005691; padding: 14px 8px;">5.0000</td>
+                                        <td contenteditable="true" id="ov-r6-weighted" style="text-align: right; font-weight: 700; font-size: 16px; padding: 14px 16px;">0.2500</td>
+                                    </tr>
+                                    <tr class="total-kpi-row">
+                                        <td colspan="2" contenteditable="true" id="ov-tot-lbl" style="text-align: center; font-weight: 800; font-size: 16.5px; color: #002d54; padding: 16px 14px;">รวมผลการประเมินถ่วงน้ำหนักทั้งหมด</td>
+                                        <td contenteditable="true" id="ov-tot-w" style="text-align: center; font-weight: 800; font-size: 16.5px; color: #002d54; padding: 16px 8px;">100%</td>
+                                        <td contenteditable="true" id="ov-tot-sc" style="text-align: center; font-weight: 800; font-size: 17px; color: #047857; padding: 16px 8px;">ระดับ 5</td>
+                                        <td contenteditable="true" id="ov-tot-weighted" style="text-align: right; font-weight: 800; font-size: 18.5px; color: #047857; padding: 16px 16px;">5.0000 คะแนน</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right: Executive Scorecard & Highlights -->
+                    <div class="panel-box" style="padding: 22px 24px; justify-content: space-between; gap: 16px;">
+                        <div class="panel-title-line">
+                            <span contenteditable="true" id="ov-t2" style="font-size: 17px; font-weight: 800; color: #003666;">🏆 สรุปคะแนนผลการประเมินภาพรวม</span>
+                        </div>
+
+                        <!-- High-Contrast Executive Navy Scorecard -->
+                        <div class="big-score-box" style="padding: 24px 26px;">
+                            <div>
+                                <div contenteditable="true" id="ov-sc-lbl" class="score-lbl" style="font-size: 15.5px; margin-bottom: 4px;">ผลการดำเนินงานเทียบเท่า</div>
+                                <div contenteditable="true" id="ov-sc-val" class="big-score-val" style="font-size: 34px; font-weight: 900; color: #ffdd00;">ระดับ 5.0000 คะแนน</div>
+                            </div>
+                            <div contenteditable="true" id="ov-sc-stars" class="score-pill-stars" style="font-size: 26px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+
+                        <!-- Spacious Key Summary Card -->
+                        <div style="background: #f8fbfe; border: 1.5px solid #b8d4ed; border-radius: 12px; padding: 22px 22px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <strong contenteditable="true" id="ov-sum-h" style="color: #004b87; font-size: 16.5px; margin-bottom: 10px; display: block;">🎯 สรุปผลการดำเนินงานสำคัญ:</strong>
+                            <div contenteditable="true" id="ov-sum-p" style="color: #0f172a; font-size: 15px; line-height: 1.7;">
+                                เงินทุนหมุนเวียนฯ ดำเนินงานครบถ้วนตามมาตรฐานการควบคุมภายในและการบริหารความเสี่ยงทั้ง 6 องค์ประกอบ มีคู่มือที่มีองค์ประกอบครบถ้วน, จัดทำ Risk Profile 4 ด้าน 8 ปัจจัยเสี่ยง, ติดตามสารสนเทศ 13 กิจกรรม และรายงานผลทันภายในกรอบเวลา
+                            </div>
+                        </div>
+
+                        <!-- Two Bottom Achievement Status Badges -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                            <div style="background: #ecfdf5; border: 1.5px solid #86efac; border-radius: 10px; padding: 14px 16px; text-align: center;">
+                                <div contenteditable="true" id="ov-st1-lbl" style="font-size: 13.5px; color: #065f46; font-weight: 700;">ความสำเร็จ</div>
+                                <div contenteditable="true" id="ov-st1-val" style="font-size: 24px; font-weight: 800; color: #047857; margin-top: 4px;">ครบ 6 ข้อ</div>
+                            </div>
+                            <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 14px 16px; text-align: center;">
+                                <div contenteditable="true" id="ov-st2-lbl" style="font-size: 13.5px; color: #1e40af; font-weight: 700;">สถานะประเมิน</div>
+                                <div contenteditable="true" id="ov-st2-val" style="font-size: 24px; font-weight: 800; color: #1d4ed8; margin-top: 4px;">ระดับ 5 (เต็ม)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- VIEW 1: TOPIC 1 สภาพแวดล้อมการควบคุมภายใน (7%) -->
+            <!-- ========================================== -->
+            <div class="topic-view" id="view-topic-1">
+                <div class="panel-box">
+                    <div class="panel-title-line">
+                        <span contenteditable="true" id="t1-title">🛡️ 1. สภาพแวดล้อมการควบคุมภายใน (น้ำหนัก 7%) - การจัดให้มีระบบข้อร้องเรียน</span>
+                        <span contenteditable="true" id="t1-badge" class="panel-title-badge">ผลงานระดับ 5</span>
+                    </div>
+
+                    <!-- Progressive Rubric 1-5 -->
+                    <div class="rubric-5step-grid">
+                        <div class="rstep-card">
+                            <div class="rstep-head"><span class="rstep-num">ระดับ 1</span></div>
+                            <div contenteditable="true" id="t1-r1" class="rstep-desc">ระบุช่องทางรับข้อร้องเรียน และจัดทำรายงานสรุปนำเสนอเป็นรายปี</div>
+                        </div>
+                        <div class="rstep-card">
+                            <div class="rstep-head"><span class="rstep-num">ระดับ 2</span></div>
+                            <div contenteditable="true" id="t1-r2" class="rstep-desc">ระบุช่องทาง พร้อมเสนอแนวทางแก้ไข และจัดทำรายงานสรุปนำเสนอเป็นรายปี</div>
+                        </div>
+                        <div class="rstep-card">
+                            <div class="rstep-head"><span class="rstep-num">ระดับ 3</span></div>
+                            <div contenteditable="true" id="t1-r3" class="rstep-desc">ระบุช่องทางรับข้อร้องเรียน และจัดทำรายงานสรุปนำเสนอเป็นรายไตรมาส</div>
+                        </div>
+                        <div class="rstep-card">
+                            <div class="rstep-head"><span class="rstep-num">ระดับ 4</span></div>
+                            <div contenteditable="true" id="t1-r4" class="rstep-desc">ระบุช่องทาง พร้อมเสนอแนวทางแก้ไข และจัดทำรายงานสรุปเป็นรายไตรมาส</div>
+                        </div>
+                        <div class="rstep-card active-target">
+                            <div class="rstep-head"><span class="rstep-num">ระดับ 5 ⭐</span></div>
+                            <div contenteditable="true" id="t1-r5" class="rstep-desc">ระบุช่องทาง เสนอแนวทางแก้ไข และจัดทำรายงานสรุปนำเสนอเป็นรายเดือน</div>
+                        </div>
+                    </div>
+
+                    <!-- 5 Complaint Channels -->
+                    <div style="background: #f8fbfe; border: 1.5px solid #a3c7e8; border-radius: 10px; padding: 14px 16px;">
+                        <div contenteditable="true" id="t1-ch-h" style="font-size: 14px; font-weight: 800; color: #004b87; margin-bottom: 10px;">
+                            📢 ช่องทางการรับข้อร้องเรียน 5 ช่องทาง (ตามหนังสือแจ้งส่วนราชการ/สพฐ./สช./สพป./สพม.)
+                        </div>
+                        <div class="channels-grid">
+                            <div class="channel-card">
+                                <span class="channel-icon">📮</span>
+                                <span contenteditable="true" id="ch-1-t" class="channel-title">1. จดหมาย/หนังสือ</span>
+                                <span contenteditable="true" id="ch-1-d" class="channel-detail">ส่งถึงสำนักงาน ก.ค.ศ. สป.ศธ.</span>
+                            </div>
+                            <div class="channel-card">
+                                <span class="channel-icon">📧</span>
+                                <span contenteditable="true" id="ch-2-t" class="channel-title">2. อีเมล (E-mail)</span>
+                                <span contenteditable="true" id="ch-2-d" class="channel-detail">otepc07@hotmail.com</span>
+                            </div>
+                            <div class="channel-card">
+                                <span class="channel-icon">📞</span>
+                                <span contenteditable="true" id="ch-3-t" class="channel-title">3. โทรศัพท์</span>
+                                <span contenteditable="true" id="ch-3-d" class="channel-detail">0 2280 7972-4</span>
+                            </div>
+                            <div class="channel-card">
+                                <span class="channel-icon">📠</span>
+                                <span contenteditable="true" id="ch-4-t" class="channel-title">4. โทรสาร (Fax)</span>
+                                <span contenteditable="true" id="ch-4-d" class="channel-detail">0 2280 7970, 0 2280 2844</span>
+                            </div>
+                            <div class="channel-card">
+                                <span class="channel-icon">💬</span>
+                                <span contenteditable="true" id="ch-5-t" class="channel-title">5. LINE Official</span>
+                                <span contenteditable="true" id="ch-5-d" class="channel-detail">ID: @251nhjrz (สแกน QR)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Execution Details & Scorecard -->
+                    <div class="grid-split" style="gap: 14px;">
+                        <div style="background: #ffffff; border: 1.5px solid #a3c7e8; border-radius: 10px; padding: 12px 16px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; justify-content: center;">
+                            <div contenteditable="true" id="t1-rep-h" style="font-weight: 800; color: #004b87; font-size: 14px;">📋 การจัดทำรายงานสรุปผลการรับข้อร้องเรียน:</div>
+                            <div contenteditable="true" id="t1-rep-1" style="color: #0f172a;">✔️ จัดทำรายงานสรุปผลการรับข้อร้องเรียนเสนอผู้บริหารองค์กร (เลขาธิการ ก.ค.ศ.)</div>
+                            <div contenteditable="true" id="t1-rep-2" style="color: #0f172a;">✔️ ดำเนินการเป็นประจำทุกเดือน ครบถ้วนทั้ง 12 เดือน</div>
+                            <div contenteditable="true" id="t1-rep-3" style="color: #0f172a;">✔️ แต่ละเดือนไม่พบข้อร้องเรียน มีเพียงข้อสงสัย/ข้อซักถามในการดำเนินงาน</div>
+                        </div>
+                        <div class="big-score-box">
+                            <div>
+                                <div contenteditable="true" id="t1-sc-lbl" class="score-lbl">ผลการดำเนินงานข้อที่ 1</div>
+                                <div contenteditable="true" id="t1-sc-val" class="big-score-val">ระดับ 5.0000 คะแนน</div>
+                            </div>
+                            <div contenteditable="true" id="t1-sc-stars" class="score-pill-stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- VIEW 2: TOPIC 2 การกำหนดวัตถุประสงค์ (8%) -->
+            <!-- ========================================== -->
+            <div class="topic-view" id="view-topic-2">
+                <div class="panel-box" style="padding: 18px 22px; justify-content: space-between; gap: 14px;">
+                    <div class="panel-title-line">
+                        <span contenteditable="true" id="t2-title" style="font-size: 16px; font-weight: 800; color: #003666;">🎯 2. การกำหนดวัตถุประสงค์การบริหารความเสี่ยง (น้ำหนัก 8%) - การจัดทำ/ทบทวนคู่มือ</span>
+                        <span contenteditable="true" id="t2-badge" class="panel-title-badge">น้ำหนัก 8% | ผลงานระดับ 5</span>
+                    </div>
+
+                    <!-- Progressive Rubric 1-5 -->
+                    <div class="rubric-5step-grid">
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 1</span></div><div contenteditable="true" id="t2-r1" class="rstep-desc">กำหนดผู้รับผิดชอบ/คณะทำงานในการจัดทำ/ทบทวนคู่มือ</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 2</span></div><div contenteditable="true" id="t2-r2" class="rstep-desc">จัดทำคู่มือแล้วเสร็จ แต่องค์ประกอบยังไม่ครบถ้วน</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 3</span></div><div contenteditable="true" id="t2-r3" class="rstep-desc">จัดทำคู่มือแล้วเสร็จ โดยมีองค์ประกอบของคู่มือที่ดีครบถ้วน</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 4</span></div><div contenteditable="true" id="t2-r4" class="rstep-desc">ครบตามระดับ 3 และผ่านความเห็นชอบคณะกรรมการฯ ในไตรมาส 1</div></div>
+                        <div class="rstep-card active-target"><div class="rstep-head"><span class="rstep-num">ระดับ 5 ⭐</span></div><div contenteditable="true" id="t2-r5" class="rstep-desc">ครบตามระดับ 4 และเผยแพร่คู่มือให้ผู้บริหารและพนักงานในองค์กร</div></div>
+                    </div>
+
+                    <!-- Process Steps Flow (5 Operational Steps from Official Document) -->
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 4px 0;">
+                        <div style="font-size: 14.5px; font-weight: 800; color: #004b87; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                            <span>📋</span>
+                            <span>ผลการดำเนินงาน 5 ขั้นตอนสำคัญ (ตามเอกสารทางการ ก.ค.ศ.):</span>
+                        </div>
+                        
+                        <div class="flow-steps-row" style="padding: 18px 14px; background: #f8fbfe; border: 1.5px solid #b8d4ed; border-radius: 12px; gap: 8px;">
+                            <div class="flow-step-item step-complete" style="padding: 14px 10px;">
+                                <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 1</span>
+                                <span contenteditable="true" id="t2-s1-t" class="flow-step-title" style="font-size: 13.5px; font-weight: 800; color: #003666; margin: 4px 0;">ทบทวนคู่มือเดิม</span>
+                                <span contenteditable="true" id="t2-s1-d" class="flow-step-desc" style="font-size: 12px; color: #334155; line-height: 1.45;">ดำเนินการทบทวนคู่มือการบริหารความเสี่ยงเดิม</span>
+                            </div>
+                            <span class="flow-arrow" style="font-size: 16px;">➔</span>
+                            <div class="flow-step-item step-complete" style="padding: 14px 10px;">
+                                <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 2</span>
+                                <span contenteditable="true" id="t2-s2-t" class="flow-step-title" style="font-size: 13.5px; font-weight: 800; color: #003666; margin: 4px 0;">แต่งตั้งคณะทำงาน</span>
+                                <span contenteditable="true" id="t2-s2-d" class="flow-step-desc" style="font-size: 12px; color: #334155; line-height: 1.45;">ตั้งคณะทำงานบริหารความเสี่ยงฯ (คำสั่งที่ 3/2568 ลว. 15 ต.ค. 68)</span>
+                            </div>
+                            <span class="flow-arrow" style="font-size: 16px;">➔</span>
+                            <div class="flow-step-item step-complete" style="padding: 14px 10px;">
+                                <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 3</span>
+                                <span contenteditable="true" id="t2-s3-t" class="flow-step-title" style="font-size: 13.5px; font-weight: 800; color: #003666; margin: 4px 0;">จัดประชุมสัมมนา</span>
+                                <span contenteditable="true" id="t2-s3-d" class="flow-step-desc" style="font-size: 12px; color: #334155; line-height: 1.45;">12-14 พ.ย. 68 ณ ชลบุรี มีองค์ประกอบคู่มือที่ดีครบถ้วน</span>
+                            </div>
+                            <span class="flow-arrow" style="font-size: 16px;">➔</span>
+                            <div class="flow-step-item step-complete" style="padding: 14px 10px;">
+                                <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 4</span>
+                                <span contenteditable="true" id="t2-s4-t" class="flow-step-title" style="font-size: 13.5px; font-weight: 800; color: #003666; margin: 4px 0;">คณะกรรมการฯ เห็นชอบ</span>
+                                <span contenteditable="true" id="t2-s4-d" class="flow-step-desc" style="font-size: 12px; color: #334155; line-height: 1.45;">ผ่านความเห็นชอบ กก.บริหารฯ มติ 8/2568 (16 ธ.ค. 68 ไตรมาส 1)</span>
+                            </div>
+                            <span class="flow-arrow" style="font-size: 16px;">➔</span>
+                            <div class="flow-step-item step-complete" style="padding: 14px 10px;">
+                                <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 5</span>
+                                <span contenteditable="true" id="t2-s5-t" class="flow-step-title" style="font-size: 13.5px; font-weight: 800; color: #003666; margin: 4px 0;">แจ้งเวียนเผยแพร่</span>
+                                <span contenteditable="true" id="t2-s5-d" class="flow-step-desc" style="font-size: 12px; color: #334155; line-height: 1.45;">แจ้งเวียนผู้บริหารและบุคลากรทราบ (ศธ 0206.8/1142 ลว. 25 ธ.ค. 68)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary & Score -->
+                    <div class="grid-split" style="gap: 14px;">
+                        <div class="callout-strip" style="padding: 14px 18px; display: flex; align-items: center;">
+                            <div contenteditable="true" id="t2-callout" style="font-size: 13.5px; line-height: 1.6;">
+                                <strong style="color: #004b87;">สรุปผลการประเมิน:</strong> เงินทุนหมุนเวียนฯ ดำเนินการครบถ้วนทั้ง 5 ขั้นตอน มีคู่มือการบริหารความเสี่ยงที่มีองค์ประกอบที่ดีครบถ้วน ผ่านความเห็นชอบจากคณะกรรมการบริหารฯ ภายในไตรมาสที่ 1 และแจ้งเวียนเผยแพร่ทั่วทั้งองค์กร ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน
+                            </div>
+                        </div>
+                        <div class="big-score-box" style="padding: 14px 22px;">
+                            <div>
+                                <div contenteditable="true" id="t2-sc-lbl" class="score-lbl" style="font-size: 13.5px;">ผลการดำเนินงานข้อที่ 2 (น้ำหนัก 8%)</div>
+                                <div contenteditable="true" id="t2-sc-val" class="big-score-val" style="font-size: 26px;">ระดับ 5.0000 คะแนน</div>
+                            </div>
+                            <div contenteditable="true" id="t2-sc-stars" class="score-pill-stars" style="font-size: 22px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- VIEW 3: TOPIC 3 กระบวนการบริหารความเสี่ยง (45%) -->
+            <!-- ========================================== -->
+            <div class="topic-view" id="view-topic-3">
+                <div class="panel-box" style="padding: 18px 22px; justify-content: space-between; gap: 14px;">
+                    <div class="panel-title-line">
+                        <span contenteditable="true" id="t3-title" style="font-size: 16px; font-weight: 800; color: #003666;">⚙️ 3. กระบวนการบริหารความเสี่ยง (น้ำหนัก 45% - สำคัญที่สุด)</span>
+                        <span contenteditable="true" id="t3-badge" class="panel-title-badge" style="background: #fef3c7; color: #92400e; border-color: #fde68a;">น้ำหนัก 45% | ผลงานระดับ 5</span>
+                    </div>
+
+                    <!-- Progressive Rubric 1-5 -->
+                    <div class="rubric-5step-grid">
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 1</span></div><div contenteditable="true" id="t3-r1" class="rstep-desc">ระบุปัจจัยเสี่ยงระดับองค์กร เชื่อมโยงเป้าหมายประจำปี</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 2</span></div><div contenteditable="true" id="t3-r2" class="rstep-desc">ประเมินระดับความรุนแรงทั้งโอกาสและผลกระทบครบทุกความเสี่ยง</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 3</span></div><div contenteditable="true" id="t3-r3" class="rstep-desc">ผ่านระดับ 2 และจัดทำแผนภาพความเสี่ยงองค์กร (Risk Profile)</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 4</span></div><div contenteditable="true" id="t3-r4" class="rstep-desc">มีแผนบริหารความเสี่ยงสอดคล้องกับการควบคุมภายในอย่างชัดเจน</div></div>
+                        <div class="rstep-card active-target"><div class="rstep-head"><span class="rstep-num">ระดับ 5 ⭐</span></div><div contenteditable="true" id="t3-r5" class="rstep-desc">ผ่านระดับ 4 + วิเคราะห์ Cost-Benefit + กก.บริหารฯ เห็นชอบในไตรมาส 2</div></div>
+                    </div>
+
+                    <!-- 3 Real Operational Milestones (Large, Concise Cards) -->
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 6px 0;">
+                        <div style="font-size: 15px; font-weight: 800; color: #004b87; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <span>📋</span>
+                            <span>ผลการดำเนินงาน 3 ขั้นตอนสำคัญ (ตามเอกสารทางการ ก.ค.ศ.):</span>
+                        </div>
+                        
+                        <div class="flow-steps-row" style="padding: 20px 16px; background: #f8fbfe; border: 1.5px solid #b8d4ed; border-radius: 12px; gap: 14px;">
+                            <!-- Milestone 1 -->
+                            <div class="flow-step-item step-complete" style="padding: 16px 14px; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 1</span>
+                                    <span style="font-size: 18px;">🔍</span>
+                                </div>
+                                <span contenteditable="true" id="t3-s1-t" class="flow-step-title" style="font-size: 15px; font-weight: 800; color: #003666; margin: 6px 0;">1. ระบุความเสี่ยง 4 ด้าน 8 ปัจจัย</span>
+                                <span contenteditable="true" id="t3-s1-d" class="flow-step-desc" style="font-size: 13px; color: #334155; line-height: 1.55;">ระบุปัจจัยเสี่ยงระดับองค์กร 4 ด้าน (กลยุทธ์ 3, ปฏิบัติงาน 3, การเงิน 1, กฎ/ระเบียบ 1) รวม 8 ปัจจัยเสี่ยง เชื่อมโยงกับเป้าหมายประจำปี 2569 และปัจจัยเสี่ยงตกค้างปี 2568</span>
+                            </div>
+
+                            <span class="flow-arrow" style="font-size: 22px;">➔</span>
+
+                            <!-- Milestone 2 -->
+                            <div class="flow-step-item step-complete" style="padding: 16px 14px; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 2</span>
+                                    <span style="font-size: 18px;">📊</span>
+                                </div>
+                                <span contenteditable="true" id="t3-s2-t" class="flow-step-title" style="font-size: 15px; font-weight: 800; color: #003666; margin: 6px 0;">2. ประเมินความรุนแรง & Risk Profile</span>
+                                <span contenteditable="true" id="t3-s2-d" class="flow-step-desc" style="font-size: 13px; color: #334155; line-height: 1.55;">ประเมินระดับความรุนแรงทั้งโอกาส (Likelihood) และผลกระทบ (Impact) ครบทุก 8 ปัจจัยเสี่ยงจากฐานข้อมูลจริง จัดทำ Risk Profile และกำหนด 4 แผนบริหารความเสี่ยง</span>
+                            </div>
+
+                            <span class="flow-arrow" style="font-size: 22px;">➔</span>
+
+                            <!-- Milestone 3 -->
+                            <div class="flow-step-item step-complete" style="padding: 16px 14px; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">ขั้นตอนที่ 3</span>
+                                    <span style="font-size: 18px;">⚖️</span>
+                                </div>
+                                <span contenteditable="true" id="t3-s3-t" class="flow-step-title" style="font-size: 15px; font-weight: 800; color: #003666; margin: 6px 0;">3. Cost-Benefit & กก. เห็นชอบ</span>
+                                <span contenteditable="true" id="t3-s3-d" class="flow-step-desc" style="font-size: 13px; color: #334155; line-height: 1.55;">วิเคราะห์ความคุ้มค่า Cost-Benefit ในทุกทางเลือก คัดเลือกทางเลือกที่ดีที่สุด และผ่านความเห็นชอบจากคณะกรรมการบริหารเงินทุนหมุนเวียนฯ ในไตรมาสที่ 2 (16 ธ.ค. 68)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary & Score -->
+                    <div class="grid-split" style="gap: 14px;">
+                        <div class="callout-strip" style="padding: 14px 18px; display: flex; align-items: center;">
+                            <div contenteditable="true" id="t3-callout" style="font-size: 13.5px; line-height: 1.6;">
+                                <strong style="color: #004b87;">สรุปผลการประเมิน:</strong> ดำเนินการบริหารความเสี่ยงครบถ้วนทุกขั้นตอน มีการระบุความเสี่ยง 4 ด้าน 8 ปัจจัย ประเมินความรุนแรง จัดทำ Risk Profile 4 แผนงาน วิเคราะห์ Cost-Benefit และผ่านความเห็นชอบคณะกรรมการบริหารฯ ภายในไตรมาส 2 ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน
+                            </div>
+                        </div>
+                        <div class="big-score-box" style="padding: 14px 22px;">
+                            <div>
+                                <div contenteditable="true" id="t3-sc-lbl" class="score-lbl" style="font-size: 13.5px;">ผลการดำเนินงานข้อที่ 3 (น้ำหนัก 45%)</div>
+                                <div contenteditable="true" id="t3-sc-val" class="big-score-val" style="font-size: 26px;">ระดับ 5.0000 คะแนน</div>
+                            </div>
+                            <div contenteditable="true" id="t3-sc-stars" class="score-pill-stars" style="font-size: 22px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- VIEW 4: TOPIC 4 กิจกรรมการควบคุมภายใน (5%) -->
+            <!-- ========================================== -->
+            <div class="topic-view" id="view-topic-4">
+                <div class="panel-box" style="padding: 18px 22px; justify-content: space-between; gap: 14px;">
+                    <div class="panel-title-line">
+                        <span contenteditable="true" id="t4-title" style="font-size: 16px; font-weight: 800; color: #003666;">⚙️ 4. กิจกรรมการควบคุมภายใน (น้ำหนัก 5%) - กำหนด Control Activity ครอบคลุมทุกกระบวนงาน</span>
+                        <span contenteditable="true" id="t4-badge" class="panel-title-badge">น้ำหนัก 5% | ผลงานระดับ 5</span>
+                    </div>
+
+                    <!-- Progressive Rubric 1-5 -->
+                    <div class="rubric-5step-grid">
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 1</span></div><div contenteditable="true" id="t4-r1" class="rstep-desc">กำหนดกระบวนการทำงานที่สำคัญและกระบวนการย่อย</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 2</span></div><div contenteditable="true" id="t4-r2" class="rstep-desc">กำหนด Control Activity แต่ยังไม่ครบทุกกระบวนการที่สำคัญ</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 3</span></div><div contenteditable="true" id="t4-r3" class="rstep-desc">กำหนด Control Activity ครบทุกกระบวนการที่สำคัญ</div></div>
+                        <div class="rstep-card"><div class="rstep-head"><span class="rstep-num">ระดับ 4</span></div><div contenteditable="true" id="t4-r4" class="rstep-desc">กำหนด Control Activity ครบทุกกระบวนการหลัก แต่ไม่ครบทุกกระบวนการย่อย</div></div>
+                        <div class="rstep-card active-target"><div class="rstep-head"><span class="rstep-num">ระดับ 5 ⭐</span></div><div contenteditable="true" id="t4-r5" class="rstep-desc">กำหนด Control Activity ครบทุกกระบวนการหลักและย่อย พร้อมทบทวนตาม Workflow</div></div>
+                    </div>
+
+                    <!-- 3 Real Control Activity Pillars (Large, Concise Cards) -->
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 6px 0;">
+                        <div style="font-size: 15px; font-weight: 800; color: #004b87; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <span>📋</span>
+                            <span>กิจกรรมการควบคุมภายใน 3 เสาหลักสำคัญ (ตามเอกสารทางการ ก.ค.ศ.):</span>
+                        </div>
+                        
+                        <div class="flow-steps-row" style="padding: 20px 16px; background: #f8fbfe; border: 1.5px solid #b8d4ed; border-radius: 12px; gap: 14px;">
+                            <!-- Pillar 1 -->
+                            <div class="flow-step-item step-complete" style="padding: 16px 14px; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">เสาหลักที่ 1 (ปค.5)</span>
+                                    <span style="font-size: 18px;">🛡️</span>
+                                </div>
+                                <span contenteditable="true" id="t4-s1-t" class="flow-step-title" style="font-size: 15px; font-weight: 800; color: #003666; margin: 6px 0;">1. กิจกรรมควบคุม 3 กระบวนงานหลัก</span>
+                                <span contenteditable="true" id="t4-s1-d" class="flow-step-desc" style="font-size: 13px; color: #334155; line-height: 1.55;">กำหนดกิจกรรมควบคุม (Control Activity) ของกระบวนงานสำคัญครบถ้วน 3 กระบวนงานตามแบบ ปค.5 ได้แก่ 1) การจัดสรรเงินให้กู้ยืม 2) การกำกับติดตามหนี้ค้างชำระ และ 3) การบังคับคดีกับลูกหนี้ตามคำพิพากษา (เอกสารหมายเลข 4)</span>
+                            </div>
+
+                            <span class="flow-arrow" style="font-size: 22px;">➔</span>
+
+                            <!-- Pillar 2 -->
+                            <div id="t4-p2-item" class="flow-step-item step-complete" style="padding: 16px 14px; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">เสาหลักที่ 2 (ผังระบบ)</span>
+                                    <span style="font-size: 18px;">🔄</span>
+                                </div>
+                                <span contenteditable="true" id="t4-s2-t" class="flow-step-title" style="font-size: 15px; font-weight: 800; color: #003666; margin: 6px 0;">2. จัดทำผัง 12 Workflows</span>
+                                <span contenteditable="true" id="t4-s2-d" class="flow-step-desc" style="font-size: 13px; color: #334155; line-height: 1.55;">กำหนดขั้นตอนการทำงานอย่างเป็นระบบผ่าน Work Flow รวม 12 กระบวนงาน ครอบคลุม 3 กระบวนงานหลักสำคัญ, 2 กระบวนงานสนับสนุน (ด้านการบริหาร และด้านการเงินและบัญชี), และ 7 กระบวนงานย่อย (เอกสารหมายเลข 6)</span>
+                            </div>
+
+                            <span class="flow-arrow" style="font-size: 22px;">➔</span>
+
+                            <!-- Pillar 3 -->
+                            <div id="t4-p3-item" class="flow-step-item step-complete" style="padding: 16px 14px; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span class="flow-step-num" style="font-size: 13px; font-weight: 800;">เสาหลักที่ 3 (แผนปี 69)</span>
+                                    <span style="font-size: 18px;">📈</span>
+                                </div>
+                                <span contenteditable="true" id="t4-s3-t" class="flow-step-title" style="font-size: 15px; font-weight: 800; color: #003666; margin: 6px 0;">3. ทบทวนสอดคล้องตามแผนปี 2569</span>
+                                <span contenteditable="true" id="t4-s3-d" class="flow-step-desc" style="font-size: 13px; color: #334155; line-height: 1.55;">ทบทวนกิจกรรมควบคุมให้สอดคล้องตาม Workflow และแผนปฏิบัติการเงินทุนหมุนเวียน ประจำปีบัญชี 2569 ที่กำหนดวงเงินจัดสรรให้กู้ยืม 250 ล้านบาท และการติดตามหนี้ค้างชำระอย่างเคร่งครัด (เอกสารหมายเลข 8)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary & Score -->
+                    <div class="grid-split" style="gap: 14px;">
+                        <div class="callout-strip" style="padding: 14px 18px; display: flex; align-items: center;">
+                            <div contenteditable="true" id="t4-callout" style="font-size: 13.5px; line-height: 1.6;">
+                                <strong style="color: #004b87;">สรุปผลการประเมิน:</strong> เงินทุนหมุนเวียนฯ มีการกำหนดกิจกรรมการควบคุมการปฏิบัติงาน (Control Activity) ครอบคลุม 3 กระบวนงานหลักและกระบวนงานย่อยทั้งหมด พร้อมปรับปรุงทบทวนให้สอดคล้องกับแผนปฏิบัติการปี 2569 และผัง Workflow ครบถ้วน ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน
+                            </div>
+                        </div>
+                        <div class="big-score-box" style="padding: 14px 22px;">
+                            <div>
+                                <div contenteditable="true" id="t4-sc-lbl" class="score-lbl" style="font-size: 13.5px;">ผลการดำเนินงานข้อที่ 4 (น้ำหนัก 5%)</div>
+                                <div contenteditable="true" id="t4-sc-val" class="big-score-val" style="font-size: 26px;">ระดับ 5.0000 คะแนน</div>
+                            </div>
+                            <div contenteditable="true" id="t4-sc-stars" class="score-pill-stars" style="font-size: 22px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- VIEW 5: TOPIC 5 สารสนเทศและการสื่อสาร (30%) -->
+            <!-- ========================================== -->
+            <div class="topic-view" id="view-topic-5">
+                <div class="panel-box" style="padding: 18px 22px; justify-content: space-between; gap: 14px;">
+                    <div class="panel-title-line">
+                        <span contenteditable="true" id="t5-title" style="font-size: 16px; font-weight: 800; color: #003666;">📡 5. สารสนเทศและการสื่อสาร (น้ำหนัก 30% - รวม 2 ประเด็นพิจารณา)</span>
+                        <span contenteditable="true" id="t5-badge" class="panel-title-badge" style="background: #e0f2fe; color: #0284c7; border-color: #bae6fd;">น้ำหนัก 30% | ผลงานระดับ 5.0000 เต็ม</span>
+                    </div>
+
+                    <!-- 2 Sub-criteria Scorecard Banner -->
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px;">
+                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 13.5px; font-weight: 800; color: #166534;">ประเด็นที่ 1: การใช้สารสนเทศติดตาม 4 ด้าน 13 กิจกรรม (น้ำหนัก 20%)</span>
+                                <div style="font-size: 12px; color: #15803d; margin-top: 2px;">ติดตามผ่านระบบสารสนเทศ ความรุนแรงลดลงตามเป้าหมาย</div>
+                            </div>
+                            <span id="t5-p1-badge" style="background: #16a34a; color: #ffffff; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 6px;">ระดับ 5 (1.0000)</span>
+                        </div>
+                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 13.5px; font-weight: 800; color: #166534;">ประเด็นที่ 2: การทบทวนแผนระหว่างปี 2 ครั้ง (น้ำหนัก 10%)</span>
+                                <div style="font-size: 12px; color: #15803d; margin-top: 2px;">ทบทวนไตรมาส 2 (อนุกรรมการฯ) และไตรมาส 3 (กก.บริหารฯ)</div>
+                            </div>
+                            <span id="t5-p2-badge" style="background: #16a34a; color: #ffffff; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 6px;">ระดับ 5 (0.5000)</span>
+                        </div>
+                    </div>
+
+                    <!-- 2 Executive Showcase Cards Filling the Canvas -->
+                    <div style="flex: 1; display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; margin: 4px 0;">
+                        <!-- Left Card: Sub-criterion 1 (20%) -->
+                        <div style="background: #f8fbfe; border: 1.5px solid #a3c7e8; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #d4e5f4; padding-bottom: 8px;">
+                                <div style="font-size: 14.5px; font-weight: 800; color: #003666; display: flex; align-items: center; gap: 6px;">
+                                    <span>💻</span>
+                                    <span>ประเด็นที่ 1: การใช้สารสนเทศติดตามความเสี่ยง (4 ด้าน 13 กิจกรรม)</span>
+                                </div>
+                                <span style="font-size: 12px; font-weight: 800; color: #0369a1; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">น้ำหนัก 20%</span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1;">
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-radius: 8px; padding: 8px 12px;">
+                                    <div style="font-size: 13px; font-weight: 800; color: #004b87; margin-bottom: 4px;">🎯 1. ด้านกลยุทธ์ (3 กิจกรรม)</div>
+                                    <div style="font-size: 12px; color: #334155; line-height: 1.45;">หนังสือจัดสรรวงเงินกู้ยืม, กำกับปฏิทินปฏิบัติงาน, และขับเคลื่อน No Gift Policy</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-radius: 8px; padding: 8px 12px;">
+                                    <div style="font-size: 13px; font-weight: 800; color: #004b87; margin-bottom: 4px;">⚙️ 2. ด้านการปฏิบัติงาน (4 กิจกรรม)</div>
+                                    <div style="font-size: 12px; color: #334155; line-height: 1.45;">ตรวจฐานข้อมูลหนี้, ติดตามยอดหนี้คงเหลือ, กำกับหนี้โอนย้าย, และประชุมติดตาม</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-radius: 8px; padding: 8px 12px;">
+                                    <div style="font-size: 13px; font-weight: 800; color: #004b87; margin-bottom: 4px;">💰 3. ด้านการเงิน (4 กิจกรรม)</div>
+                                    <div style="font-size: 12px; color: #334155; line-height: 1.45;">เร่งรัดรายงานการเงิน, ปรับปรุงระบบบัญชี, ควบคุมงบการเงิน, และพัฒนาบุคลากร</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-radius: 8px; padding: 8px 12px;">
+                                    <div style="font-size: 13px; font-weight: 800; color: #004b87; margin-bottom: 4px;">⚖️ 4. ด้านกฎ/ระเบียบ (2 กิจกรรม)</div>
+                                    <div style="font-size: 12px; color: #334155; line-height: 1.45;">แจ้งหลักเกณฑ์การหักเงินส่งชำระหนี้ และกำกับติดตาม สพท./ธ.ก.ส.</div>
+                                </div>
+                            </div>
+
+                            <div style="background: #eefbf3; border: 1px solid #86efac; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #166534; font-weight: 700;">
+                                <span id="t5-p1-achieve">✅ ผลสัมฤทธิ์: ระดับความรุนแรงของปัจจัยเสี่ยงลดลงตามเป้าหมายครบถ้วนทุกด้าน (เอกสารหมายเลข 3)</span>
+                            </div>
+                        </div>
+
+                        <!-- Right Card: Sub-criterion 2 (10%) -->
+                        <div style="background: #f8fbfe; border: 1.5px solid #a3c7e8; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #d4e5f4; padding-bottom: 8px;">
+                                <div style="font-size: 14.5px; font-weight: 800; color: #003666; display: flex; align-items: center; gap: 6px;">
+                                    <span>🔄</span>
+                                    <span>ประเด็นที่ 2: การทบทวนแผนระหว่างปี (2 ครั้ง)</span>
+                                </div>
+                                <span style="font-size: 12px; font-weight: 800; color: #0369a1; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">น้ำหนัก 10%</span>
+                            </div>
+
+                            <div id="t5-p2-container" style="display: flex; flex-direction: column; gap: 10px; flex: 1; justify-content: center;">
+                                <div id="t5-p2-m1" style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0284c7; border-radius: 8px; padding: 10px 14px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-size: 13.5px; font-weight: 800; color: #003666;">🏛️ ครั้งที่ 1 (ไตรมาสที่ 2)</span>
+                                        <span style="font-size: 11.5px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 1px 6px; border-radius: 4px;">27 มี.ค. 2569</span>
+                                    </div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">คณะอนุกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติรับทราบผลการทบทวนแผนบริหารความเสี่ยง ในคราวประชุมครั้งที่ 3/2569 ความรุนแรงลดลง จึงคงมาตรการเดิม</div>
+                                </div>
+
+                                <div id="t5-p2-m2" style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #16a34a; border-radius: 8px; padding: 10px 14px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-size: 13.5px; font-weight: 800; color: #003666;">🏛️ ครั้งที่ 2 (ไตรมาสที่ 3)</span>
+                                        <span style="font-size: 11.5px; font-weight: 700; color: #16a34a; background: #dcfce7; padding: 1px 6px; border-radius: 4px;">26 มิ.ย. 2569</span>
+                                    </div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">คณะกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติรับทราบผลการทบทวนแผนบริหารความเสี่ยง ในคราวประชุมครั้งที่ 3/2569 ความรุนแรงลดลงต่อเนื่อง (เอกสารหมายเลข 3.5)</div>
+                                </div>
+                            </div>
+
+                            <div style="background: #eefbf3; border: 1px solid #86efac; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #166534; font-weight: 700;">
+                                <span id="t5-p2-achieve">✅ ผลสัมฤทธิ์: ดำเนินการทบทวนแผนระหว่างปีครบถ้วน 2 ครั้งตามเกณฑ์มาตรฐาน</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary & Score -->
+                    <div class="grid-split" style="gap: 14px;">
+                        <div class="callout-strip" style="padding: 14px 18px; display: flex; align-items: center;">
+                            <div contenteditable="true" id="t5-callout" style="font-size: 13.5px; line-height: 1.6;">
+                                <strong style="color: #004b87;">สรุปผลการประเมิน:</strong> เงินทุนหมุนเวียนฯ ใช้ระบบสารสนเทศสนับสนุนการติดตามการดำเนินกิจกรรมครบ 4 ด้าน 13 กิจกรรม ระดับความรุนแรงของปัจจัยเสี่ยงลดลงตามเป้าหมาย และผ่านการทบทวนความเหมาะสมของแผนระหว่างปีครบ 2 ครั้ง ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน
+                            </div>
+                        </div>
+                        <div class="big-score-box" style="padding: 14px 22px;">
+                            <div>
+                                <div contenteditable="true" id="t5-sc-lbl" class="score-lbl" style="font-size: 13.5px;">ผลการดำเนินงานข้อที่ 5 (น้ำหนัก 30%)</div>
+                                <div contenteditable="true" id="t5-sc-val" class="big-score-val" style="font-size: 26px;">ระดับ 5.0000 คะแนน</div>
+                            </div>
+                            <div contenteditable="true" id="t5-sc-stars" class="score-pill-stars" style="font-size: 22px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- VIEW 6: TOPIC 6 ติดตามและประเมินผล (5%) -->
+            <!-- ========================================== -->
+            <div class="topic-view" id="view-topic-6">
+                <div class="panel-box" style="padding: 18px 22px; justify-content: space-between; gap: 14px;">
+                    <div class="panel-title-line">
+                        <span contenteditable="true" id="t6-title" style="font-size: 16px; font-weight: 800; color: #003666;">📊 6. การติดตามผลและการประเมินผล (น้ำหนัก 5% - รวม 2 ประเด็นพิจารณา)</span>
+                        <span contenteditable="true" id="t6-badge" class="panel-title-badge">น้ำหนัก 5% | ผลงานระดับ 5.0000 เต็ม</span>
+                    </div>
+
+                    <!-- 2 Sub-criteria Scorecard Banner -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 13.5px; font-weight: 800; color: #166534;">ประเด็นที่ 1: การประเมินผลการควบคุมภายใน (น้ำหนัก 2%)</span>
+                                <div style="font-size: 12px; color: #15803d; margin-top: 2px;">ครอบคลุม 3 ภารกิจหลัก และประชุมติดตามผลครบ 3 ครั้ง</div>
+                            </div>
+                            <span id="t6-p1-badge" style="background: #16a34a; color: #ffffff; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 6px;">ระดับ 5 (0.1000)</span>
+                        </div>
+                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 13.5px; font-weight: 800; color: #166534;">ประเด็นที่ 2: การส่งรายงานให้ต้นสังกัดใน 90 วัน (น้ำหนัก 3%)</span>
+                                <div style="font-size: 12px; color: #15803d; margin-top: 2px;">จัดส่งให้สำนักงาน ก.ค.ศ. วันที่ 9 ต.ค. 2569 ทันตามกำหนด</div>
+                            </div>
+                            <span id="t6-p2-badge" style="background: #16a34a; color: #ffffff; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 6px;">ระดับ 5 (0.1500)</span>
+                        </div>
+                    </div>
+
+                    <!-- 2 Executive Showcase Cards Filling the Canvas -->
+                    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 4px 0;">
+                        <!-- Left Card: Sub-criterion 1 (2%) -->
+                        <div style="background: #f8fbfe; border: 1.5px solid #a3c7e8; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #d4e5f4; padding-bottom: 8px;">
+                                <div style="font-size: 14.5px; font-weight: 800; color: #003666; display: flex; align-items: center; gap: 6px;">
+                                    <span>📝</span>
+                                    <span>ประเด็นที่ 1: การประเมินผลการควบคุมภายใน (2%)</span>
+                                </div>
+                                <span style="font-size: 12px; font-weight: 800; color: #0369a1; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">น้ำหนัก 2%</span>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; justify-content: center;">
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #005691; border-radius: 8px; padding: 9px 12px;">
+                                    <div style="font-size: 13px; font-weight: 800; color: #003666; margin-bottom: 2px;">1. แต่งตั้งคณะทำงานจัดทำรายงาน</div>
+                                    <div style="font-size: 12px; color: #334155; line-height: 1.45;">แต่งตั้งคณะทำงานจัดทำรายงานผลการควบคุมภายในของสำนักงาน ก.ค.ศ. ประจำปีงบประมาณ พ.ศ. 2569 (เอกสารหมายเลข 9)</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0077b6; border-radius: 8px; padding: 9px 12px;">
+                                    <div style="font-size: 13px; font-weight: 800; color: #003666; margin-bottom: 2px;">2. ประเมินครอบคลุม 3 ภารกิจหลัก</div>
+                                    <div style="font-size: 12px; color: #334155; line-height: 1.45;">ครอบคลุมภารกิจหลักและกระบวนงานสำคัญ: 1) การจัดสรรเงินให้กู้ยืม 2) การกำกับติดตามหนี้ค้างชำระ และ 3) การบังคับคดีลูกหนี้ (เอกสารหมายเลข 10)</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0096c7; border-radius: 8px; padding: 9px 12px;">
+                                    <div style="font-size: 13px; font-weight: 800; color: #003666; margin-bottom: 2px;">3. ประชุมติดตามผลครบ 3 ครั้ง</div>
+                                    <div style="font-size: 12px; color: #334155; line-height: 1.45;">ประชุมติดตามผล 3 ครั้ง: ครั้งที่ 1 (21 ม.ค. 69), ครั้งที่ 2 (25 พ.ค. 69), ครั้งที่ 3 (21 ส.ค. 69) (เอกสารหมายเลข 11)</div>
+                                </div>
+                            </div>
+
+                            <div style="background: #eefbf3; border: 1px solid #86efac; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #166534; font-weight: 700;">
+                                <span id="t6-p1-achieve">✅ ผลสัมฤทธิ์: ประเมินครบ 3 ภารกิจหลัก และประชุมติดตามผลครบ 3 ครั้งตามเกณฑ์</span>
+                            </div>
+                        </div>
+
+                        <!-- Right Card: Sub-criterion 2 (3%) -->
+                        <div style="background: #f8fbfe; border: 1.5px solid #a3c7e8; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #d4e5f4; padding-bottom: 8px;">
+                                <div style="font-size: 14.5px; font-weight: 800; color: #003666; display: flex; align-items: center; gap: 6px;">
+                                    <span>📬</span>
+                                    <span>ประเด็นที่ 2: การจัดส่งรายงานให้ต้นสังกัดทันเวลา (3%)</span>
+                                </div>
+                                <span style="font-size: 12px; font-weight: 800; color: #0369a1; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">น้ำหนัก 3%</span>
+                            </div>
+
+                            <div id="t6-p2-container" style="display: flex; flex-direction: column; gap: 10px; flex: 1; justify-content: center;">
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #16a34a; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #166534; margin-bottom: 4px;">📅 จัดส่งรายงานสำเร็จ: วันที่ 9 ตุลาคม 2569</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">เงินทุนหมุนเวียนฯ จัดส่งรายงานประเมินผลการควบคุมภายในให้สำนักงาน ก.ค.ศ. ภายในระยะเวลาที่กำหนด โดยจัดส่งในวันที่ 9 ตุลาคม 2569 (เอกสารหมายเลข 12)</div>
+                                </div>
+
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0284c7; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #003666; margin-bottom: 4px;">⏱️ ทันตามกรอบเวลา 90 วันที่กำหนด</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">ดำเนินการแล้วเสร็จทันตามหลักเกณฑ์กระทรวงการคลังฯ (ภายใน 90 วัน นับแต่วันสิ้นปีบัญชี) เพื่อสำนักงาน ก.ค.ศ. รวบรวมส่ง สป.ศธ. และกระทรวงการคลังตามลำดับ</div>
+                                </div>
+                            </div>
+
+                            <div style="background: #eefbf3; border: 1px solid #86efac; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; color: #166534; font-weight: 700;">
+                                <span id="t6-p2-achieve">✅ ผลสัมฤทธิ์: จัดส่งรายงานวันที่ 9 ต.ค. 2569 ทันตามกรอบ 90 วันอย่างสมบูรณ์</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary & Score -->
+                    <div class="grid-split" style="gap: 14px;">
+                        <div class="callout-strip" style="padding: 14px 18px; display: flex; align-items: center;">
+                            <div contenteditable="true" id="t6-callout" style="font-size: 13.5px; line-height: 1.6;">
+                                <strong style="color: #004b87;">สรุปผลการประเมิน:</strong> เงินทุนหมุนเวียนฯ มีการประเมินผลการควบคุมภายในครอบคลุม 3 ภารกิจหลัก มีการประชุมติดตามผล 3 ครั้ง และจัดส่งรายงานการประเมินผลให้หน่วยงานต้นสังกัดได้ทันภายในกรอบ 90 วัน ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน
+                            </div>
+                        </div>
+                        <div class="big-score-box" style="padding: 14px 22px;">
+                            <div>
+                                <div contenteditable="true" id="t6-sc-lbl" class="score-lbl" style="font-size: 13.5px;">ผลการดำเนินงานข้อที่ 6 (น้ำหนัก 5%)</div>
+                                <div contenteditable="true" id="t6-sc-val" class="big-score-val" style="font-size: 26px;">ระดับ 5.0000 คะแนน</div>
+                            </div>
+                            <div contenteditable="true" id="t6-sc-stars" class="score-pill-stars" style="font-size: 22px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+
+        <!-- FOOTER BAR -->
+        <div class="footer-bar">
+            <div contenteditable="true" id="ftr-left">
+                สำนักงานคณะกรรมการข้าราชการครูและบุคลากรทางการศึกษา (ก.ค.ศ.)
+            </div>
+            <div contenteditable="true" id="ftr-right">
+                คุณภาพการบริหาร เพื่อครู เพื่ออนาคตการศึกษาไทย
+            </div>
+        </div>
+
+    </div>
+
+    </div> <!-- End .page-wrapper -->
+    <div id="toast-notification">ข้อความแจ้งเตือน</div>
+
+    <script>
+        // Auto purge old v1 cached state
+        try {
+            ['kpi_official_41_Q1', 'kpi_official_41_Q2', 'kpi_official_41_Q3', 'kpi_official_41_Q4'].forEach(k => {
+                localStorage.removeItem(k);
+            });
+        } catch(e) {}
+
+        let lastFocusedElement = null;
+        let activeQuarter = 4;
+        let activeTopic = 0; // 0=Overview, 1..6=Topics 1..6
+
+        const topicNames = {
+            0: "ภาพรวมสรุป_6_ข้อ",
+            1: "ข้อ_1_สภาพแวดล้อม",
+            2: "ข้อ_2_วัตถุประสงค์",
+            3: "ข้อ_3_กระบวนการบริหารความเสี่ยง",
+            4: "ข้อ_4_กิจกรรมควบคุม",
+            5: "ข้อ_5_สารสนเทศและการสื่อสาร",
+            6: "ข้อ_6_ติดตามและประเมินผล"
+        };
+
+                const STORAGE_KEY_PREFIX = 'kpi_official_41_v6_Q';
+
+        function getStorageKey(q) {
+            return `${STORAGE_KEY_PREFIX}${q}`;
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            if (!toast) return;
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        /* Quarter Defaults based strictly on Official Documents (Q1, Q2, Q3, Q4) */
+        const quarterDefaults41 = {
+            1: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 1 (ต.ค. - ธ.ค. 2568)",
+                // View 0 (Overview Table)
+                ovR1Score: "5.0000", ovR1Weighted: "0.3500",
+                ovR2Score: "5.0000", ovR2Weighted: "0.4000",
+                ovR3Score: "5.0000", ovR3Weighted: "2.2500",
+                ovR4Score: "3.0000", ovR4Weighted: "0.1500",
+                ovR5Score: "1.0000", ovR5Weighted: "0.3000",
+                ovR6Score: "N/A*", ovR6Weighted: "0.0200",
+                ovTotSc: "ระดับ 3.5 (เบื้องต้น)",
+                ovTotWeighted: "3.4700",
+                ovScVal: "ระดับ 3.4700 คะแนน",
+                ovScStars: "⭐⭐⭐",
+                ovSumP: "ไตรมาสที่ 1 (ต.ค. - ธ.ค. 2568): ดำเนินงานบรรลุเป้าหมายระยะเริ่มต้น ผ่านความเห็นชอบคู่มือและแผนบริหารความเสี่ยงครบถ้วนในไตรมาสที่ 1 (16 ธ.ค. 68), มีระบบรับข้อร้องเรียน 5 ช่องทาง, กำหนดกิจกรรมควบคุม 3 กระบวนงานหลัก อยู่ระหว่างขับเคลื่อนแผนงานและเตรียมการประชุมติดตามผล",
+                ovSt1Val: "เริ่มต้น 4 ข้อ",
+                ovSt2Val: "ระดับ 3.47 (เบื้องต้น)",
+
+                // View 4 (กิจกรรมการควบคุมภายใน 5%)
+                t4Badge: "น้ำหนัก 5% | ผลงานระดับ 3",
+                t4ActiveLevel: 3,
+                t4S1D: "กำหนดกิจกรรมควบคุม (Control Activity) ของกระบวนงานสำคัญครบถ้วน 3 กระบวนงานตามแบบ ปค.5 ได้แก่ 1) การจัดสรรเงินให้กู้ยืม 2) การกำกับติดตามหนี้ค้างชำระ และ 3) การบังคับคดีกับลูกหนี้ตามคำพิพากษา (เอกสารหมายเลข 4)",
+                t4S2D: "⏳ อยู่ระหว่างดำเนินการ: รวบรวมและจัดทำผัง Work Flow 12 กระบวนงาน (3 สำคัญ, 2 สนับสนุน, 7 ย่อย)",
+                t4S3D: "⏳ อยู่ระหว่างดำเนินการ: ทบทวนกิจกรรมควบคุมให้สอดคล้องตามแผนปฏิบัติการประจำปีบัญชี 2569",
+                t4Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 1):</strong> เงินทุนหมุนเวียนฯ มีการกำหนดกิจกรรมการควบคุม 3 กระบวนงานหลักตามแบบ ปค.5 ครบถ้วน อยู่ระหว่างการรวบรวมจัดทำผัง Work Flow 12 กระบวนงาน ผลการดำเนินงานไตรมาสที่ 1 เทียบเท่าระดับ 3.0000 คะแนน",
+                t4ScVal: "ระดับ 3.0000 คะแนน",
+                t4ScStars: "⭐⭐⭐",
+
+                // View 5 (สารสนเทศและการสื่อสาร 30%)
+                t5Badge: "น้ำหนัก 30% | ผลงานระดับ 1.0000",
+                t5P1Badge: "ระดับ 1 (0.2000)",
+                t5P2Badge: "ระดับ 1 (0.1000)",
+                t5P1Achieve: "⏳ ผลสัมฤทธิ์ (ไตรมาส 1): อยู่ระหว่างเริ่มต้นดำเนินกิจกรรมตามแผนบริหารความเสี่ยง (< 50% ของแผน)",
+                t5P2M1: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">⏳ ครั้งที่ 1 (กำหนดไตรมาสที่ 2)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 1px 6px; border-radius: 4px;">มีนาคม 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">กำหนดเสนอคณะอนุกรรมการบริหารเงินทุนหมุนเวียนฯ เพื่อทบทวนความเหมาะสมของแผนบริหารความเสี่ยงในไตรมาสที่ 2</div>`,
+                t5P2M2: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">⏳ ครั้งที่ 2 (กำหนดไตรมาสที่ 3)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 1px 6px; border-radius: 4px;">มิถุนายน 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">กำหนดเสนอคณะกรรมการบริหารเงินทุนหมุนเวียนฯ เพื่อทบทวนความเหมาะสมของแผนบริหารความเสี่ยงในไตรมาสที่ 3</div>`,
+                t5P2Achieve: "⏳ ผลสัมฤทธิ์ (ไตรมาส 1): ยังไม่ถึงรอบการทบทวนแผนบริหารความเสี่ยงระหว่างปี",
+                t5Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 1):</strong> เงินทุนหมุนเวียนฯ อยู่ระหว่างเริ่มต้นดำเนินกิจกรรมตามแผนบริหารความเสี่ยง (< 50%) และยังไม่ถึงรอบการทบทวนแผนระหว่างปี ผลการดำเนินงานเทียบเท่าระดับ 1.0000 คะแนน",
+                t5ScVal: "ระดับ 1.0000 คะแนน",
+                t5ScStars: "⭐",
+
+                // View 6 (การติดตามผลและการประเมินผล 5%)
+                t6Badge: "น้ำหนัก 5% | ผลงานระดับ 1.0000",
+                t6P1Badge: "ระดับ 1 (0.0200)",
+                t6P2Badge: "N/A (รอผลสิ้นปี)",
+                t6P1Achieve: "⏳ ผลสัมฤทธิ์ (ไตรมาส 1): แต่งตั้งคณะทำงานจัดทำรายงานแล้ว อยู่ระหว่างรอรอบประชุมติดตามผล (ระดับ 1)",
+                t6P2Container: `<div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #64748b; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #475569; margin-bottom: 4px;">⏳ อยู่ระหว่างรอบัญชีสิ้นปีงบประมาณ</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">การจัดส่งรายงานการประเมินผลการควบคุมภายใน กำหนดส่งให้หน่วยงานต้นสังกัดภายใน 90 วัน นับแต่วันสิ้นปีบัญชี (สิ้นสุด 30 ก.ย. 69)</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0284c7; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #003666; margin-bottom: 4px;">📅 กำหนดส่งตามเกณฑ์: ต.ค. - ธ.ค. 2569</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">สำนักงาน ก.ค.ศ. จะรวบรวมเพื่อจัดส่งให้ สป.ศธ. และกระทรวงการคลังตามลำดับต่อไป (ผลการประเมินในไตรมาส 1 เป็น N/A)</div>
+                                </div>`,
+                t6P2Achieve: "⏳ สถานะ (ไตรมาส 1): รอการจัดส่งรายงานเมื่อสิ้นสุดปีงบประมาณภายใน 90 วัน (N/A)",
+                t6Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 1):</strong> มีการแต่งตั้งคณะทำงานจัดทำรายงานผลการควบคุมภายใน (คำสั่งที่ 3/2568) อยู่ระหว่างรอการประชุมติดตามผลครั้งที่ 1 ในไตรมาส 2 และรอผลสิ้นปีงบประมาณสำหรับข้อ 6.2",
+                t6ScVal: "ระดับ 1.0000 คะแนน",
+                t6ScStars: "⭐"
+            },
+            2: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 2 (ต.ค. - มี.ค. 2569)",
+                // View 0 (Overview Table)
+                ovR1Score: "5.0000", ovR1Weighted: "0.3500",
+                ovR2Score: "5.0000", ovR2Weighted: "0.4000",
+                ovR3Score: "5.0000", ovR3Weighted: "2.2500",
+                ovR4Score: "3.0000", ovR4Weighted: "0.1500",
+                ovR5Score: "2.3333", ovR5Weighted: "0.7000",
+                ovR6Score: "N/A (5.0)*", ovR6Weighted: "0.1000",
+                ovTotSc: "ระดับ 4 (3.95)",
+                ovTotWeighted: "3.9500",
+                ovScVal: "ระดับ 3.9500 คะแนน",
+                ovScStars: "⭐⭐⭐⭐",
+                ovSumP: "ไตรมาสที่ 2 (ตามเอกสารทางการ): บรรลุระดับ 5.0000 ในข้อ 1, 2, 3 และ 6.1; ข้อ 4 อยู่ที่ระดับ 3 (ควบคุม 3 กระบวนงานหลัก); ข้อ 5 ติดตามสารสนเทศได้ 50-79% (ระดับ 2) และทบทวนแผนครั้งที่ 1 (27 มี.ค. 69, ระดับ 3); ข้อ 6.2 รอผลสิ้นปีงบประมาณ (N/A)",
+                ovSt1Val: "ก้าวหน้า 5 ข้อ",
+                ovSt2Val: "ระดับ 4 (3.9500)",
+
+                // View 4 (กิจกรรมการควบคุมภายใน 5%)
+                t4Badge: "น้ำหนัก 5% | ผลงานระดับ 3",
+                t4ActiveLevel: 3,
+                t4S1D: "กำหนดกิจกรรมควบคุม (Control Activity) ของกระบวนงานสำคัญครบถ้วน 3 กระบวนงานตามแบบ ปค.5 ได้แก่ 1) การจัดสรรเงินให้กู้ยืม 2) การกำกับติดตามหนี้ค้างชำระ และ 3) การบังคับคดีกับลูกหนี้ตามคำพิพากษา (เอกสารหมายเลข 4)",
+                t4S2D: "⏳ อยู่ระหว่างดำเนินการ: กำลังจัดทำผัง Work Flow 12 กระบวนงาน (3 สำคัญ, 2 สนับสนุน, 7 ย่อย) ให้ครอบคลุมทุกระบบ",
+                t4S3D: "⏳ อยู่ระหว่างดำเนินการ: ทบทวนกิจกรรมควบคุมให้สอดคล้องตามแผนปฏิบัติการปี 2569",
+                t4Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 2):</strong> เงินทุนหมุนเวียนฯ มีการกำหนดกิจกรรมการควบคุมของกระบวนงานสำคัญครบ 3 กระบวนงานตามแบบ ปค.5 ครบถ้วน แต่ยังอยู่ระหว่างทบทวนผัง Workflow 12 กระบวนงานให้ครบทั้งระบบ ผลการดำเนินงานไตรมาสที่ 2 เทียบเท่าระดับ 3.0000 คะแนน",
+                t4ScVal: "ระดับ 3.0000 คะแนน",
+                t4ScStars: "⭐⭐⭐",
+
+                // View 5 (สารสนเทศและการสื่อสาร 30%)
+                t5Badge: "น้ำหนัก 30% | ผลงานระดับ 2.3333",
+                t5P1Badge: "ระดับ 2 (0.4000)",
+                t5P2Badge: "ระดับ 3 (0.3000)",
+                t5P1Achieve: "⚠️ ผลสัมฤทธิ์ (ไตรมาส 2): ดำเนินกิจกรรมตามแผนได้ร้อยละ 50 - 79 ของแผน (ระดับ 2)",
+                t5P2M1: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">🏛️ ครั้งที่ 1 (ไตรมาสที่ 2)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 1px 6px; border-radius: 4px;">27 มี.ค. 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">คณะอนุกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติรับทราบผลการทบทวนแผนบริหารความเสี่ยง ในคราวประชุมครั้งที่ 3/2569 ครอบคลุม 4 ด้าน พบความเสี่ยงลดลง จึงคงมาตรการเดิม</div>`,
+                t5P2M2: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">⏳ ครั้งที่ 2 (กำหนดไตรมาสที่ 3)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 1px 6px; border-radius: 4px;">มิถุนายน 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">อยู่ระหว่างรอการเสนอคณะกรรมการบริหารเงินทุนหมุนเวียนฯ ทบทวนแผนความเสี่ยงต่อเนื่องในไตรมาสที่ 3</div>`,
+                t5P2Achieve: "⚠️ ผลสัมฤทธิ์ (ไตรมาส 2): ทบทวนแผนระหว่างปีแล้ว 1 ครั้ง ในไตรมาสที่ 2 มติอนุกรรมการฯ 27 มี.ค. 69 (ระดับ 3)",
+                t5Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 2):</strong> เงินทุนหมุนเวียนฯ ดำเนินกิจกรรมตามแผนได้ร้อยละ 50 - 79 (ระดับ 2) และได้ดำเนินการทบทวนแผนบริหารความเสี่ยงระหว่างปี ครั้งที่ 1 โดยคณะอนุกรรมการฯ มีมติรับทราบ เมื่อ 27 มี.ค. 69 (ระดับ 3) ผลการดำเนินงานเทียบเท่าระดับ 2.3333 คะแนน",
+                t5ScVal: "ระดับ 2.3333 คะแนน",
+                t5ScStars: "⭐⭐",
+
+                // View 6 (การติดตามผลและการประเมินผล 5%)
+                t6Badge: "น้ำหนัก 5% | ผลงานระดับ 5 (ข้อ 6.1)",
+                t6P1Badge: "ระดับ 5 (0.1000)",
+                t6P2Badge: "N/A (รอผลสิ้นปี)",
+                t6P1Achieve: "✅ ผลสัมฤทธิ์ (ไตรมาส 2): ประเมินครอบคลุม 3 ภารกิจหลัก และประชุมติดตามผลต่อเนื่อง (ระดับ 5)",
+                t6P2Container: `<div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #64748b; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #475569; margin-bottom: 4px;">⏳ อยู่ระหว่างรอบัญชีสิ้นปีงบประมาณ</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">การจัดส่งรายงานการประเมินผลการควบคุมภายใน กำหนดส่งให้หน่วยงานต้นสังกัดภายใน 90 วัน นับแต่วันสิ้นปีบัญชี (สิ้นสุด 30 ก.ย. 69)</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0284c7; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #003666; margin-bottom: 4px;">📅 กำหนดส่งตามเกณฑ์: ต.ค. - ธ.ค. 2569</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">สำนักงาน ก.ค.ศ. จะรวบรวมส่งให้ สป.ศธ. และกระทรวงการคลังตามลำดับต่อไป (ผลการประเมินในไตรมาส 2 จึงเป็น N/A รอผลสิ้นปี)</div>
+                                </div>`,
+                t6P2Achieve: "⏳ สถานะ (ไตรมาส 2): รอส่งรายงานการประเมินผลการควบคุมภายในให้หน่วยงานต้นสังกัดภายใน 90 วันหลังสิ้นปีบัญชี (N/A)",
+                t6Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 2):</strong> จัดทำรายงานการประเมินผลการควบคุมภายในครอบคลุมภารกิจหลักครบถ้วน (ข้อ 6.1 ระดับ 5) สำหรับข้อ 6.2 รอส่งรายงานสิ้นปีงบประมาณภายใน 90 วันตามเกณฑ์กระทรวงการคลัง (N/A)",
+                t6ScVal: "ระดับ 5.0000 (เฉพาะ 6.1)",
+                t6ScStars: "⭐⭐⭐⭐⭐"
+            },
+            3: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 3 (ต.ค. - มิ.ย. 2569)",
+                // View 0 (Overview Table)
+                ovR1Score: "5.0000", ovR1Weighted: "0.3500",
+                ovR2Score: "5.0000", ovR2Weighted: "0.4000",
+                ovR3Score: "5.0000", ovR3Weighted: "2.2500",
+                ovR4Score: "5.0000", ovR4Weighted: "0.2500",
+                ovR5Score: "3.6667", ovR5Weighted: "1.1000",
+                ovR6Score: "N/A (5.0)*", ovR6Weighted: "0.1000",
+                ovTotSc: "ระดับ 4 (4.45)",
+                ovTotWeighted: "4.4500",
+                ovScVal: "ระดับ 4.4500 คะแนน",
+                ovScStars: "⭐⭐⭐⭐",
+                ovSumP: "ไตรมาสที่ 3 (ตามเอกสารทางการ): ดำเนินงานก้าวหน้าขึ้นอย่างมีนัยสำคัญ ข้อ 4 บรรลุระดับ 5.0000 (จัดทำผัง 12 Workflows ครบถ้วน); ข้อ 5 ทบทวนแผนครบ 2 ครั้ง (ประเด็น 2 ระดับ 5) และติดตามสารสนเทศได้ 80-89% (ประเด็น 1 ระดับ 3); ข้อ 6.2 อยู่ระหว่างรอส่งรายงานสิ้นปีงบประมาณ (N/A)",
+                ovSt1Val: "ก้าวหน้า 5 ข้อ",
+                ovSt2Val: "ระดับ 4 (4.4500)",
+
+                // View 4 (กิจกรรมการควบคุมภายใน 5%)
+                t4Badge: "น้ำหนัก 5% | ผลงานระดับ 5",
+                t4ActiveLevel: 5,
+                t4S1D: "กำหนดกิจกรรมควบคุม (Control Activity) ของกระบวนงานสำคัญครบถ้วน 3 กระบวนงานตามแบบ ปค.5 ได้แก่ 1) การจัดสรรเงินให้กู้ยืม 2) การกำกับติดตามหนี้ค้างชำระ และ 3) การบังคับคดีกับลูกหนี้ตามคำพิพากษา (เอกสารหมายเลข 4)",
+                t4S2D: "กำหนดขั้นตอนการทำงานอย่างเป็นระบบผ่าน Work Flow รวม 12 กระบวนงาน ครอบคลุม 3 กระบวนงานหลักสำคัญ, 2 กระบวนงานสนับสนุน (ด้านการบริหาร และด้านการเงินและบัญชี), และ 7 กระบวนงานย่อย (เอกสารหมายเลข 6)",
+                t4S3D: "ทบทวนกิจกรรมควบคุมให้สอดคล้องตาม Workflow และแผนปฏิบัติการเงินทุนหมุนเวียน ประจำปีบัญชี 2569 ที่กำหนดวงเงินจัดสรรให้กู้ยืม 250 ล้านบาท และการติดตามหนี้ค้างชำระอย่างเคร่งครัด (เอกสารหมายเลข 8)",
+                t4Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 3):</strong> เงินทุนหมุนเวียนฯ จัดทำผัง Work Flow รวม 12 กระบวนงาน ครอบคลุม 3 กระบวนงานหลัก, 2 สนับสนุน, และ 7 กระบวนงานย่อย พร้อมทบทวนสอดคล้องตามแผนปี 2569 ครบถ้วน ผลการดำเนินงานเลื่อนระดับขึ้นเป็น 5.0000 คะแนน",
+                t4ScVal: "ระดับ 5.0000 คะแนน",
+                t4ScStars: "⭐⭐⭐⭐⭐",
+
+                // View 5 (สารสนเทศและการสื่อสาร 30%)
+                t5Badge: "น้ำหนัก 30% | ผลงานระดับ 3.6667",
+                t5P1Badge: "ระดับ 3 (0.6000)",
+                t5P2Badge: "ระดับ 5 (0.5000)",
+                t5P1Achieve: "📈 ผลสัมฤทธิ์ (ไตรมาส 3): ดำเนินกิจกรรมตามแผนได้ร้อยละ 80 - 89 ของแผน (ประเด็น 1 ระดับ 3)",
+                t5P2M1: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">🏛️ ครั้งที่ 1 (ไตรมาสที่ 2)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 1px 6px; border-radius: 4px;">27 มี.ค. 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">คณะอนุกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติรับทราบผลการทบทวนแผนบริหารความเสี่ยง ในคราวประชุมครั้งที่ 3/2569 ความรุนแรงลดลง จึงคงมาตรการเดิม</div>`,
+                t5P2M2: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">🏛️ ครั้งที่ 2 (ไตรมาสที่ 3)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #16a34a; background: #dcfce7; padding: 1px 6px; border-radius: 4px;">26 มิ.ย. 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">คณะกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติรับทราบผลการทบทวนแผนบริหารความเสี่ยง ในคราวประชุมครั้งที่ 3/2569 ความรุนแรงลดลงต่อเนื่อง (เอกสารหมายเลข 3.5)</div>`,
+                t5P2Achieve: "✅ ผลสัมฤทธิ์ (ไตรมาส 3): ทบทวนแผนระหว่างปีครบถ้วน 2 ครั้งแล้ว (อนุกรรมการฯ 27 มี.ค. 69 และ กก.บริหารฯ 26 มิ.ย. 69 - ระดับ 5)",
+                t5Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 3):</strong> ดำเนินกิจกรรมตามแผนได้ร้อยละ 80 - 89 (ประเด็น 1 ระดับ 3) และทบทวนแผนระหว่างปีครบ 2 ครั้งแล้ว (ไตรมาส 2 วันที่ 27 มี.ค. 69 และไตรมาส 3 วันที่ 26 มิ.ย. 69 โดยคณะกรรมการบริหารฯ ประเด็น 2 ระดับ 5) ผลการดำเนินงานเทียบเท่าระดับ 3.6667 คะแนน",
+                t5ScVal: "ระดับ 3.6667 คะแนน",
+                t5ScStars: "⭐⭐⭐⭐",
+
+                // View 6 (การติดตามผลและการประเมินผล 5%)
+                t6Badge: "น้ำหนัก 5% | ผลงานระดับ 5 (ข้อ 6.1)",
+                t6P1Badge: "ระดับ 5 (0.1000)",
+                t6P2Badge: "N/A (รอผลสิ้นปี)",
+                t6P1Achieve: "✅ ผลสัมฤทธิ์ (ไตรมาส 3): ประเมินครบ 3 ภารกิจหลัก และประชุมติดตามผลต่อเนื่อง (ระดับ 5)",
+                t6P2Container: `<div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #64748b; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #475569; margin-bottom: 4px;">⏳ อยู่ระหว่างรอบัญชีสิ้นปีงบประมาณ</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">การจัดส่งรายงานการประเมินผลการควบคุมภายใน กำหนดส่งให้หน่วยงานต้นสังกัดภายใน 90 วัน นับแต่วันสิ้นปีบัญชี (สิ้นสุด 30 ก.ย. 69)</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0284c7; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #003666; margin-bottom: 4px;">📅 กำหนดส่งตามเกณฑ์: ต.ค. - ธ.ค. 2569</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">เตรียมรวบรวมและจัดส่งรายงานให้ต้นสังกัดในไตรมาสที่ 4 ภายใน 90 วัน (ผลการประเมินในไตรมาส 3 จึงเป็น N/A รอผลสิ้นปี)</div>
+                                </div>`,
+                t6P2Achieve: "⏳ สถานะ (ไตรมาส 3): เตรียมรวบรวมและจัดส่งรายงานให้ต้นสังกัดในไตรมาสที่ 4 (N/A)",
+                t6Callout: "<strong>สรุปผลการประเมิน (ไตรมาส 3):</strong> จัดทำรายงานประเมินผลการควบคุมภายในครอบคลุมภารกิจหลัก มีการประชุมติดตามผล (ข้อ 6.1 ระดับ 5) และเตรียมจัดส่งรายงานให้ต้นสังกัดในไตรมาส 4 (ข้อ 6.2 รอผลสิ้นปี N/A)",
+                t6ScVal: "ระดับ 5.0000 (เฉพาะ 6.1)",
+                t6ScStars: "⭐⭐⭐⭐⭐"
+            },
+            4: {
+                badgeText: "📂 ข้อมูลแยกเฉพาะ: ไตรมาส 4 (ครบปี ต.ค. - ก.ย. 2569)",
+                // View 0 (Overview Table)
+                ovR1Score: "5.0000", ovR1Weighted: "0.3500",
+                ovR2Score: "5.0000", ovR2Weighted: "0.4000",
+                ovR3Score: "5.0000", ovR3Weighted: "2.2500",
+                ovR4Score: "5.0000", ovR4Weighted: "0.2500",
+                ovR5Score: "5.0000", ovR5Weighted: "1.5000",
+                ovR6Score: "5.0000", ovR6Weighted: "0.2500",
+                ovTotSc: "ระดับ 5",
+                ovTotWeighted: "5.0000",
+                ovScVal: "ระดับ 5.0000 คะแนน",
+                ovScStars: "⭐⭐⭐⭐⭐",
+                ovSumP: "งวดสิ้นปีบัญชี 2569: ดำเนินงานบรรลุระดับ 5.0000 ครบถ้วนทั้ง 6 องค์ประกอบ มีคู่มือ แผน Risk Profile ติดตามสารสนเทศ 13 กิจกรรม ทบทวนแผนครบ 2 ครั้ง และส่งรายงานประเมินผลภายในกรอบเวลา 90 วัน",
+                ovSt1Val: "ครบ 6 ข้อ",
+                ovSt2Val: "ระดับ 5 (เต็ม)",
+
+                // View 4 (กิจกรรมการควบคุมภายใน 5%)
+                t4Badge: "น้ำหนัก 5% | ผลงานระดับ 5",
+                t4ActiveLevel: 5,
+                t4S1D: "กำหนดกิจกรรมควบคุม (Control Activity) ของกระบวนงานสำคัญครบถ้วน 3 กระบวนงานตามแบบ ปค.5 ได้แก่ 1) การจัดสรรเงินให้กู้ยืม 2) การกำกับติดตามหนี้ค้างชำระ และ 3) การบังคับคดีกับลูกหนี้ตามคำพิพากษา (เอกสารหมายเลข 4)",
+                t4S2D: "กำหนดขั้นตอนการทำงานอย่างเป็นระบบผ่าน Work Flow รวม 12 กระบวนงาน ครอบคลุม 3 กระบวนงานหลักสำคัญ, 2 กระบวนงานสนับสนุน (ด้านการบริหาร และด้านการเงินและบัญชี), และ 7 กระบวนงานย่อย (เอกสารหมายเลข 6)",
+                t4S3D: "ทบทวนกิจกรรมควบคุมให้สอดคล้องตาม Workflow และแผนปฏิบัติการเงินทุนหมุนเวียน ประจำปีบัญชี 2569 ที่กำหนดวงเงินจัดสรรให้กู้ยืม 250 ล้านบาท และการติดตามหนี้ค้างชำระอย่างเคร่งครัด (เอกสารหมายเลข 8)",
+                t4Callout: "<strong>สรุปผลการประเมิน:</strong> เงินทุนหมุนเวียนฯ มีการกำหนดกิจกรรมการควบคุมการปฏิบัติงาน (Control Activity) ครอบคลุม 3 กระบวนงานหลักและกระบวนงานย่อยทั้งหมด พร้อมปรับปรุงทบทวนให้สอดคล้องกับแผนปฏิบัติการปี 2569 และผัง Workflow ครบถ้วน ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน",
+                t4ScVal: "ระดับ 5.0000 คะแนน",
+                t4ScStars: "⭐⭐⭐⭐⭐",
+
+                // View 5 (สารสนเทศและการสื่อสาร 30%)
+                t5Badge: "น้ำหนัก 30% | ผลงานระดับ 5.0000 เต็ม",
+                t5P1Badge: "ระดับ 5 (1.0000)",
+                t5P2Badge: "ระดับ 5 (0.5000)",
+                t5P1Achieve: "✅ ผลสัมฤทธิ์: ระดับความรุนแรงของปัจจัยเสี่ยงลดลงตามเป้าหมายครบถ้วนทุกด้าน (เอกสารหมายเลข 3)",
+                t5P2M1: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">🏛️ ครั้งที่ 1 (ไตรมาสที่ 2)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 1px 6px; border-radius: 4px;">27 มี.ค. 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">คณะอนุกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติรับทราบผลการทบทวนแผนบริหารความเสี่ยง ในคราวประชุมครั้งที่ 3/2569 ความรุนแรงลดลง จึงคงมาตรการเดิม</div>`,
+                t5P2M2: `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 13.5px; font-weight: 800; color: #003666;">🏛️ ครั้งที่ 2 (ไตรมาสที่ 3)</span>
+                            <span style="font-size: 11.5px; font-weight: 700; color: #16a34a; background: #dcfce7; padding: 1px 6px; border-radius: 4px;">26 มิ.ย. 2569</span>
+                        </div>
+                        <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">คณะกรรมการบริหารเงินทุนหมุนเวียนฯ มีมติรับทราบผลการทบทวนแผนบริหารความเสี่ยง ในคราวประชุมครั้งที่ 3/2569 ความรุนแรงลดลงต่อเนื่อง (เอกสารหมายเลข 3.5)</div>`,
+                t5P2Achieve: "✅ ผลสัมฤทธิ์: ดำเนินการทบทวนแผนระหว่างปีครบถ้วน 2 ครั้งตามเกณฑ์มาตรฐาน",
+                t5Callout: "<strong>สรุปผลการประเมิน:</strong> เงินทุนหมุนเวียนฯ ใช้ระบบสารสนเทศสนับสนุนการติดตามการดำเนินกิจกรรมครบ 4 ด้าน 13 กิจกรรม ระดับความรุนแรงของปัจจัยเสี่ยงลดลงตามเป้าหมาย และผ่านการทบทวนความเหมาะสมของแผนระหว่างปีครบ 2 ครั้ง ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน",
+                t5ScVal: "ระดับ 5.0000 คะแนน",
+                t5ScStars: "⭐⭐⭐⭐⭐",
+
+                // View 6 (การติดตามผลและการประเมินผล 5%)
+                t6Badge: "น้ำหนัก 5% | ผลงานระดับ 5.0000 เต็ม",
+                t6P1Badge: "ระดับ 5 (0.1000)",
+                t6P2Badge: "ระดับ 5 (0.1500)",
+                t6P1Achieve: "✅ ผลสัมฤทธิ์: ประเมินครบ 3 ภารกิจหลัก และประชุมติดตามผลครบ 3 ครั้งตามเกณฑ์",
+                t6P2Container: `<div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #16a34a; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #166534; margin-bottom: 4px;">📅 จัดส่งรายงานสำเร็จ: วันที่ 9 ตุลาคม 2569</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">เงินทุนหมุนเวียนฯ จัดส่งรายงานประเมินผลการควบคุมภายในให้สำนักงาน ก.ค.ศ. ภายในระยะเวลาที่กำหนด โดยจัดส่งในวันที่ 9 ตุลาคม 2569 (เอกสารหมายเลข 12)</div>
+                                </div>
+                                <div style="background: #ffffff; border: 1px solid #c7ddf2; border-left: 4px solid #0284c7; border-radius: 8px; padding: 12px 14px;">
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #003666; margin-bottom: 4px;">⏱️ ทันตามกรอบเวลา 90 วันที่กำหนด</div>
+                                    <div style="font-size: 12.5px; color: #334155; line-height: 1.5;">ดำเนินการแล้วเสร็จทันตามหลักเกณฑ์กระทรวงการคลังฯ (ภายใน 90 วัน นับแต่วันสิ้นปีบัญชี) เพื่อสำนักงาน ก.ค.ศ. รวบรวมส่ง สป.ศธ. และกระทรวงการคลังตามลำดับ</div>
+                                </div>`,
+                t6P2Achieve: "✅ ผลสัมฤทธิ์: จัดส่งรายงานวันที่ 9 ต.ค. 2569 ทันตามกรอบ 90 วันอย่างสมบูรณ์",
+                t6Callout: "<strong>สรุปผลการประเมิน:</strong> เงินทุนหมุนเวียนฯ มีการประเมินผลการควบคุมภายในครอบคลุม 3 ภารกิจหลัก มีการประชุมติดตามผล 3 ครั้ง และจัดส่งรายงานการประเมินผลให้หน่วยงานต้นสังกัดได้ทันภายในกรอบ 90 วัน ผลการดำเนินงานเทียบเท่าระดับ 5.0000 คะแนน",
+                t6ScVal: "ระดับ 5.0000 คะแนน",
+                t6ScStars: "⭐⭐⭐⭐⭐"
+            }
+        };
+
+        function applyQuarterDefault(q) {
+            const def = quarterDefaults41[q] || quarterDefaults41[4];
+
+            // 1. Update View 0 Overview Table
+            const map = {
+                'ov-r1-score': def.ovR1Score, 'ov-r1-weighted': def.ovR1Weighted,
+                'ov-r2-score': def.ovR2Score, 'ov-r2-weighted': def.ovR2Weighted,
+                'ov-r3-score': def.ovR3Score, 'ov-r3-weighted': def.ovR3Weighted,
+                'ov-r4-score': def.ovR4Score, 'ov-r4-weighted': def.ovR4Weighted,
+                'ov-r5-score': def.ovR5Score, 'ov-r5-weighted': def.ovR5Weighted,
+                'ov-r6-score': def.ovR6Score, 'ov-r6-weighted': def.ovR6Weighted,
+                'ov-tot-sc': def.ovTotSc, 'ov-tot-weighted': def.ovTotWeighted,
+                'ov-sc-val': def.ovScVal, 'ov-sc-stars': def.ovScStars,
+                'ov-sum-p': def.ovSumP,
+                'ov-st1-val': def.ovSt1Val, 'ov-st2-val': def.ovSt2Val,
+
+                // View 4 (กิจกรรมการควบคุมภายใน)
+                't4-badge': def.t4Badge,
+                't4-s1-d': def.t4S1D,
+                't4-s2-d': def.t4S2D,
+                't4-s3-d': def.t4S3D,
+                't4-sc-val': def.t4ScVal,
+                't4-sc-stars': def.t4ScStars,
+                't4-callout': def.t4Callout,
+
+                // View 5 (สารสนเทศและการสื่อสาร)
+                't5-badge': def.t5Badge,
+                't5-p1-badge': def.t5P1Badge,
+                't5-p2-badge': def.t5P2Badge,
+                't5-p1-achieve': def.t5P1Achieve,
+                't5-p2-m1': def.t5P2M1,
+                't5-p2-m2': def.t5P2M2,
+                't5-p2-achieve': def.t5P2Achieve,
+                't5-callout': def.t5Callout,
+                't5-sc-val': def.t5ScVal,
+                't5-sc-stars': def.t5ScStars,
+
+                // View 6 (การติดตามผลและการประเมินผล)
+                't6-badge': def.t6Badge,
+                't6-p1-badge': def.t6P1Badge,
+                't6-p2-badge': def.t6P2Badge,
+                't6-p1-achieve': def.t6P1Achieve,
+                't6-p2-container': def.t6P2Container,
+                't6-p2-achieve': def.t6P2Achieve,
+                't6-callout': def.t6Callout,
+                't6-sc-val': def.t6ScVal,
+                't6-sc-stars': def.t6ScStars
+            };
+
+            for (let id in map) {
+                const el = document.getElementById(id);
+                if (el && map[id] !== undefined) {
+                    el.innerHTML = map[id];
+                }
+            }
+
+            // Update active rubric card in View 4
+            if (def.t4ActiveLevel) {
+                for (let l = 1; l <= 5; l++) {
+                    const card = document.getElementById(`t4-r${l}`)?.closest('.rstep-card');
+                    if (card) {
+                        if (l === def.t4ActiveLevel) {
+                            card.classList.add('active-target');
+                        } else {
+                            card.classList.remove('active-target');
+                        }
+                    }
+                }
+            }
+
+            // Update Pillar item status class in View 4
+            const p2Item = document.getElementById('t4-p2-item');
+            const p3Item = document.getElementById('t4-p3-item');
+            if (p2Item && p3Item) {
+                if (q < 3) {
+                    p2Item.classList.remove('step-complete');
+                    p3Item.classList.remove('step-complete');
+                } else {
+                    p2Item.classList.add('step-complete');
+                    p3Item.classList.add('step-complete');
+                }
+            }
+        }
+
+        /* Switch Sub-Topic View */
+        function switchTopicView(topicIndex) {
+            activeTopic = topicIndex;
+
+            // 1. Update Tabs styling
+            for (let i = 0; i <= 6; i++) {
+                const btn = document.getElementById(`tab-btn-${i}`);
+                if (btn) {
+                    if (i === topicIndex) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                }
+            }
+
+            // 2. Toggle View Visibility
+            for (let i = 0; i <= 6; i++) {
+                const view = document.getElementById(`view-topic-${i}`);
+                if (view) {
+                    if (i === topicIndex) view.classList.add('active-view');
+                    else view.classList.remove('active-view');
+                }
+            }
+
+            // 3. Dynamic Sub-heading adjustment
+            const subHdr = document.getElementById('hdr-sub-title');
+            if (subHdr) {
+                if (topicIndex === 0) {
+                    subHdr.innerText = "พิจารณาจากผลการดำเนินงาน 6 องค์ประกอบหลักตามกรอบมาตรฐานการควบคุมภายในและการบริหารความเสี่ยง";
+                } else if (topicIndex === 1) {
+                    subHdr.innerText = "ข้อ 1. สภาพแวดล้อมการควบคุมภายใน (น้ำหนัก 7%) - การจัดให้มีระบบและช่องทางการรับข้อร้องเรียน 5 ช่องทาง";
+                } else if (topicIndex === 2) {
+                    subHdr.innerText = "ข้อ 2. การกำหนดวัตถุประสงค์การบริหารความเสี่ยง (น้ำหนัก 8%) - การจัดทำ/ทบทวนคู่มือการบริหารความเสี่ยงที่มีองค์ประกอบที่ดีครบถ้วน";
+                } else if (topicIndex === 3) {
+                    subHdr.innerText = "ข้อ 3. กระบวนการบริหารความเสี่ยง (น้ำหนัก 45%) - การระบุความเสี่ยง 4 ด้าน 8 ปัจจัย และจัดทำ Risk Profile 4 แผนงาน";
+                } else if (topicIndex === 4) {
+                    subHdr.innerText = "ข้อ 4. กิจกรรมการควบคุมภายใน (น้ำหนัก 5%) - การกำหนด Control Activity ครอบคลุมทุกกระบวนงานสำคัญและกระบวนงานย่อย";
+                } else if (topicIndex === 5) {
+                    subHdr.innerText = "ข้อ 5. สารสนเทศและการสื่อสาร (น้ำหนัก 30%) - การใช้สารสนเทศติดตาม 13 กิจกรรม และการทบทวนแผนระหว่างปี 2 ครั้ง";
+                } else if (topicIndex === 6) {
+                    subHdr.innerText = "ข้อ 6. การติดตามผลและการประเมินผล (น้ำหนัก 5%) - การประเมินผลการควบคุมภายใน และส่งรายงานให้ต้นสังกัดใน 90 วัน";
+                }
+            }
+
+            showToast(`📑 สลับมุมมอง: ${topicNames[topicIndex].replace(/_/g, ' ')}`);
+        }
+
+        /* Quick Fiscal Year Updater */
+        function quickUpdateFiscalYear(yearVal) {
+            saveCurrentQuarter(false);
+            showToast(`📅 ปรับปีเป็น ${yearVal} เรียบร้อยแล้ว`);
+        }
+
+        /* Per-Quarter State Management */
+        function captureCurrentState() {
+            const editables = {};
+            document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                const key = el.id || ('ed_' + idx);
+                editables[key] = {
+                    html: el.innerHTML,
+                    style: el.getAttribute('style') || ''
+                };
+            });
+
+            return {
+                fiscalYear: (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value,
+                activeTopic: activeTopic,
+                editables: editables
+            };
+        }
+
+        function applyCapturedState(state) {
+            if (!state) return;
+
+            if (state.editables) {
+                document.querySelectorAll('#report-canvas [contenteditable="true"]').forEach((el, idx) => {
+                    const key = el.id || ('ed_' + idx);
+                    if (state.editables[key]) {
+                        el.innerHTML = state.editables[key].html;
+                        el.setAttribute('style', state.editables[key].style || '');
+                    }
+                });
+            }
+
+            const rubricLbl = document.getElementById('lbl-meta-rubric');
+            if (rubricLbl) {
+                const plain = rubricLbl.innerText.replace(/[🎯\s]/g, '');
+                if (plain === 'ระดับเกณฑ์:' || plain === 'เกณฑ์:' || plain === 'ระดับเกณฑ์' || plain === 'เกณฑ์') {
+                    rubricLbl.innerText = 'เกณฑ์:';
+                }
+            }
+
+            const lhead5 = document.getElementById('lhead-5');
+            if (lhead5 && lhead5.innerText.includes('⭐')) {
+                lhead5.innerText = 'ระดับ 5';
+            }
+
+            const mainTitle = document.getElementById('hdr-main-title');
+            if (mainTitle && mainTitle.style.whiteSpace === 'nowrap') {
+                mainTitle.style.whiteSpace = 'normal';
+            }
+
+            if (state.fiscalYear) (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value = state.fiscalYear;
+            if (typeof state.activeTopic !== 'undefined') switchTopicView(state.activeTopic);
+        }
+
+        function saveCurrentQuarter(showMsg = true) {
+            const state = captureCurrentState();
+            localStorage.setItem(getStorageKey(activeQuarter), JSON.stringify(state));
+            if (showMsg) {
+                showToast(`💾 บันทึกข้อมูล "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+            }
+        }
+
+        function switchQuarter(newQ) {
+            newQ = parseInt(newQ);
+            if (newQ === activeQuarter) return;
+
+            // Only auto-save if user was actively in Edit Mode
+            if (currentAppMode === 'edit') {
+                saveCurrentQuarter(false);
+            }
+
+            activeQuarter = newQ;
+            document.getElementById('quarter-focus').value = newQ;
+
+            // In preview mode or if no customized saved state exists, always apply authentic defaults
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved && currentAppMode === 'edit') {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                    applyQuarterDefault(activeQuarter);
+                }
+            } else {
+                applyQuarterDefault(activeQuarter);
+            }
+
+            const badge = document.getElementById('quarter-badge');
+            if (badge) {
+                badge.innerText = `📂 ข้อมูลแยกเฉพาะ: ไตรมาส ${activeQuarter}`;
+            }
+            showToast(`📂 สลับมาที่ "ไตรมาส ${activeQuarter}" เรียบร้อยแล้ว`);
+        }
+
+        function resetCurrentQuarter() {
+            if (confirm(`ต้องการคืนค่าเริ่มต้นเฉพาะ "ไตรมาส ${activeQuarter}" ใช่หรือไม่?`)) {
+                localStorage.removeItem(getStorageKey(activeQuarter));
+                location.reload();
+            }
+        }
+
+        document.getElementById('report-canvas').addEventListener('input', function() {
+            saveCurrentQuarter(false);
+        });
+
+        /* Text Formatting Bar */
+        function updateActiveTarget(el) {
+            if (!el) return;
+            const editable = el.closest('[contenteditable="true"]');
+            if (editable) {
+                lastFocusedElement = editable;
+                const previewText = editable.innerText || '';
+                const shortPreview = previewText.length > 20 ? previewText.substring(0, 20) + '...' : previewText;
+                const targetNameEl = document.getElementById('active-target-name');
+                if (targetNameEl) {
+                    targetNameEl.innerText = shortPreview ? `"${shortPreview.trim()}"` : `[${editable.id}]`;
+                    targetNameEl.style.color = '#005691';
+                    targetNameEl.style.fontWeight = '700';
+                }
+
+                // Update live font size badge
+                const currentSize = Math.round(parseFloat(window.getComputedStyle(editable).fontSize)) || 14;
+                const fsBadge = document.getElementById('font-size-val');
+                if (fsBadge) fsBadge.innerText = currentSize + 'px';
+            }
+        }
+
+        document.addEventListener('focusin', e => updateActiveTarget(e.target));
+        document.addEventListener('click', e => updateActiveTarget(e.target));
+
+        function adjustFontSize(delta) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการปรับขนาดก่อนครับ');
+                return;
+            }
+            const currentSize = parseFloat(window.getComputedStyle(lastFocusedElement).fontSize) || 14;
+            const newSize = Math.max(8, Math.min(68, Math.round(currentSize + delta)));
+            lastFocusedElement.style.fontSize = newSize + 'px';
+            
+            // Update live font size badge
+            const fsBadge = document.getElementById('font-size-val');
+            if (fsBadge) fsBadge.innerText = newSize + 'px';
+            
+            saveCurrentQuarter(false);
+        }
+
+        function setTextAlign(align) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการจัดตำแหน่งก่อนครับ');
+                return;
+            }
+            lastFocusedElement.style.textAlign = align;
+            saveCurrentQuarter(false);
+        }
+
+        function toggleBold() {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการปรับตัวหนาก่อนครับ');
+                return;
+            }
+            const currentWeight = window.getComputedStyle(lastFocusedElement).fontWeight;
+            if (currentWeight === 'bold' || parseInt(currentWeight) >= 700) {
+                lastFocusedElement.style.fontWeight = 'normal';
+            } else {
+                lastFocusedElement.style.fontWeight = 'bold';
+            }
+            saveCurrentQuarter(false);
+        }
+
+        function setTextColor(color) {
+            if (!lastFocusedElement) return;
+            lastFocusedElement.style.color = color;
+            saveCurrentQuarter(false);
+        }
+
+        /* Text Highlight (🖍️) */
+        function toggleHighlightMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const menu = document.getElementById('highlight-palette');
+            const isShown = menu.style.display === 'block';
+            closeAllToolPopups();
+            if (!isShown) menu.style.display = 'block';
+        }
+
+        function applyHighlight(color) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการไฮไลท์ก่อนครับ');
+                return;
+            }
+            const selection = window.getSelection();
+            if (selection && selection.rangeCount > 0 && !selection.isCollapsed) {
+                if (color === 'transparent') {
+                    document.execCommand('removeFormat', false, null);
+                } else {
+                    document.execCommand('hiliteColor', false, color);
+                    document.execCommand('backColor', false, color);
+                }
+            } else {
+                if (color === 'transparent') {
+                    lastFocusedElement.style.backgroundColor = '';
+                } else {
+                    lastFocusedElement.style.backgroundColor = color;
+                }
+            }
+            closeAllToolPopups();
+            saveCurrentQuarter(false);
+            showToast(color === 'transparent' ? 'ล้างสีไฮไลท์แล้ว' : 'ใส่สีไฮไลท์เรียบร้อยแล้ว');
+        }
+
+        /* Symbol / Emoji Insertion (🎯) */
+        function toggleSymbolMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const menu = document.getElementById('symbol-palette');
+            const isShown = menu.style.display === 'block';
+            closeAllToolPopups();
+            if (!isShown) menu.style.display = 'block';
+        }
+
+        function insertSymbol(sym) {
+            if (!lastFocusedElement) {
+                alert('กรุณาคลิกเลือกข้อความหรือช่องที่ต้องการแทรกสัญลักษณ์ก่อนครับ');
+                return;
+            }
+            lastFocusedElement.focus();
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0) {
+                const range = sel.getRangeAt(0);
+                range.deleteContents();
+                const node = document.createTextNode(sym + ' ');
+                range.insertNode(node);
+                range.setStartAfter(node);
+                range.setEndAfter(node);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } else {
+                lastFocusedElement.innerText += ' ' + sym;
+            }
+            closeAllToolPopups();
+            saveCurrentQuarter(false);
+            showToast(`แทรกสัญลักษณ์ "${sym}" เรียบร้อยแล้ว`);
+        }
+
+        function closeAllToolPopups() {
+            const hl = document.getElementById('highlight-palette');
+            if (hl) hl.style.display = 'none';
+            const sym = document.getElementById('symbol-palette');
+            if (sym) sym.style.display = 'none';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-wrapper')) {
+                closeAllToolPopups();
+            }
+        });
+
+        /* Export PNG with Crisp Quality & High Contrast */
+        function exportPNG() {
+            const canvasEl = document.getElementById('report-canvas');
+            const originalShadow = canvasEl.style.boxShadow;
+            canvasEl.style.boxShadow = 'none';
+
+            html2canvas(canvasEl, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false
+            }).then(canvas => {
+                canvasEl.style.boxShadow = originalShadow;
+                const link = document.createElement('a');
+                const year = (document.getElementById('select-year') || document.getElementById('fiscal-year-quick')).value;
+                const curTopicName = topicNames[activeTopic] || `ข้อ_${activeTopic}`;
+                link.download = `รายงานตัวชี้วัด_4.1_${curTopicName}_ปี_${year}_ไตรมาส_${activeQuarter}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Window Onload
+        window.onload = function() {
+            // Auto-purge any stale legacy cache from previous versions
+            try {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k && k.startsWith('kpi_official_41_') && !k.startsWith('kpi_official_41_v6_')) {
+                        localStorage.removeItem(k);
+                    }
+                }
+            } catch(e) { console.warn(e); }
+
+            activeQuarter = parseInt(document.getElementById('quarter-focus').value) || 4;
+            const saved = localStorage.getItem(getStorageKey(activeQuarter));
+            if (saved && currentAppMode === 'edit') {
+                try {
+                    applyCapturedState(JSON.parse(saved));
+                } catch(e) {
+                    console.error(e);
+                    applyQuarterDefault(activeQuarter);
+                }
+            } else {
+                applyQuarterDefault(activeQuarter);
+            }
+
+            document.getElementById('quarter-badge').innerText = `📂 ข้อมูลแยกเฉพาะ: ไตรมาส ${activeQuarter}`;
+        };
+    
+        // Compatibility Aliases & Safe Callbacks for KPI 4.1
+        if (typeof changeFiscalYear === 'undefined') {
+            function changeFiscalYear(yr) {
+                if (typeof quickUpdateFiscalYear === 'function') {
+                    quickUpdateFiscalYear(yr);
+                }
+                const sel = document.getElementById('select-year');
+                if (sel) sel.value = yr;
+                showToast(`📅 ปรับปีบัญชีเป็น ${yr} เรียบร้อยแล้ว`);
+            }
+        }
+
+        if (typeof resetQuarterDefaults === 'undefined') {
+            function resetQuarterDefaults() {
+                if (typeof resetToDefault === 'function') {
+                    resetToDefault();
+                } else if (typeof resetCurrentQuarter === 'function') {
+                    resetCurrentQuarter();
+                }
+            }
+        }
+    
+
+        // ============================================================
+        // MODERN TOOLBAR, DUAL-MODE, EXPORT & DATA PERSISTENCE SUITE
+        // ============================================================
+        let currentAppMode = 'preview'; // 'preview' or 'edit'
+        const KPI_KEY = '4.1';
+        // const STORAGE_KEY_PREFIX = 'kpi_official_41_v4_Q';
+
+
+        function navigateToKPI(targetKey) {
+                                                            const routes = {
+                '1.1': 'ตัวชี้วัดที่ 1.1.html',
+                '1.2.1': 'ตัวชี้วัดที่ 1.2.1.html',
+                '1.2.2': 'ตัวชี้วัดที่ 1.2.2.html',
+                '2.1': 'ตัวชี้วัดที่ 2.1.html',
+                '2.2': 'ตัวชี้วัดที่ 2.2.html',
+                '3.1': 'ตัวชี้วัดที่ 3.1.html',
+                '3.2': 'ตัวชี้วัดที่ 3.2.html',
+                '3.3': 'ตัวชี้วัดที่ 3.3.html',
+                '4.1': 'ตัวชี้วัดที่ 4.1.html',
+                '4.2': 'ตัวชี้วัดที่ 4.2.html',
+                '4.3': 'ตัวชี้วัดที่ 4.3.html',
+                '5.1': 'ตัวชี้วัดที่ 5.1.html',
+                '5.2': 'ตัวชี้วัดที่ 5.2.html',
+                '6.1': 'ตัวชี้วัดที่ 6.1.html'
+            };
+            if (routes[targetKey] && !window.location.pathname.endsWith(encodeURI(routes[targetKey])) && !window.location.pathname.endsWith(routes[targetKey])) {
+                showToast(`⏳ กำลังเปิด ${routes[targetKey]}...`);
+                setTimeout(() => {
+                    window.location.href = routes[targetKey];
+                }, 300);
+            }
+        }
+
+        function setAppMode(mode) {
+            currentAppMode = mode;
+            const btnPreview = document.getElementById('btn-mode-preview');
+            const btnEdit = document.getElementById('btn-mode-edit');
+            const formatBar = document.getElementById('full-format-bar');
+
+            if (mode === 'preview') {
+                document.body.classList.remove('app-mode-edit');
+                document.body.classList.add('app-mode-preview');
+                if (btnPreview) btnPreview.classList.add('active');
+                if (btnEdit) btnEdit.classList.remove('active', 'edit-active');
+                if (formatBar) formatBar.classList.add('mode-hidden');
+                showToast('👁️ สลับสู่โหมดนำเสนอ (Preview) - แสดงภาพสไลด์ Infographic สะอาดตา');
+            } else {
+                document.body.classList.remove('app-mode-preview');
+                document.body.classList.add('app-mode-edit');
+                if (btnPreview) btnPreview.classList.remove('active');
+                if (btnEdit) btnEdit.classList.add('active', 'edit-active');
+                if (formatBar) formatBar.classList.remove('mode-hidden');
+                showToast('✏️ สลับสู่โหมดแก้ไข (Edit) - เปิดแถบเครื่องมือปรับแต่งข้อความและเกณฑ์');
+            }
+        }
+
+        function copyImageToClipboard() {
+            showToast('⏳ กำลังเรนเดอร์และคัดลอกภาพลงคลิปบอร์ด...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    canvas.toBlob(blob => {
+                        if (!navigator.clipboard || !navigator.clipboard.write) {
+                            showToast('⚠️ เบราว์เซอร์ไม่รองรับ Direct Clipboard (ใช้ปุ่มส่งออกภาพ PNG แทนได้ครับ)');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                            return;
+                        }
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        navigator.clipboard.write([item]).then(() => {
+                            showToast('📋 คัดลอกภาพสไลด์แล้ว! สามารถกด Ctrl+V วางใน PowerPoint หรือ LINE ได้ทันที');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        }).catch(err => {
+                            console.error(err);
+                            showToast('⚠️ ไม่สามารถเขียนลงคลิปบอร์ดได้ กรุณาใช้ปุ่มส่งออกภาพ PNG');
+                            if (prevMode !== 'preview') setAppMode(prevMode);
+                        });
+                    }, 'image/png');
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้างภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToImage() {
+            showToast('⏳ กำลังเรนเดอร์ภาพความละเอียดสูง (โหมดสไลด์นำเสนอ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvas = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvas, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(renderedCanvas => {
+                    const link = document.createElement('a');
+                    link.download = `รายงานตัวชี้วัด_4.1_ไตรมาส${activeQuarter}_Infographic.png`;
+                    link.href = renderedCanvas.toDataURL('image/png');
+                    link.click();
+                    showToast('✅ ส่งออกภาพสำเร็จแล้ว!');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการบันทึกภาพ');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function exportToPDF() {
+            showToast('⏳ กำลังสร้างไฟล์ PDF เต็มแผ่น (คมชัดระดับเดียวกับรูปภาพ)...');
+            const prevMode = currentAppMode;
+            if (prevMode !== 'preview') setAppMode('preview');
+
+            const canvasEl = document.getElementById('report-canvas');
+
+            setTimeout(() => {
+                html2canvas(canvasEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    const { jsPDF } = window.jspdf;
+                    const imgWidthPt = (canvas.width / 2) * 0.75;
+                    const imgHeightPt = (canvas.height / 2) * 0.75;
+                    const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+
+                    const pdf = new jsPDF({
+                        orientation: orientation,
+                        unit: 'pt',
+                        format: [imgWidthPt, imgHeightPt]
+                    });
+
+                    const imgData = canvas.toDataURL('image/png');
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidthPt, imgHeightPt, undefined, 'FAST');
+                    pdf.save(`รายงานตัวชี้วัด_4.1_ไตรมาส${activeQuarter}_Infographic.pdf`);
+                    showToast('✅ ส่งออกไฟล์ PDF สำเร็จ (เต็มแผ่นไร้ขอบขาว เหมือนรูปภาพ 100%)!');
+
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                }).catch(err => {
+                    console.error(err);
+                    showToast('❌ เกิดข้อผิดพลาดในการสร้าง PDF');
+                    if (prevMode !== 'preview') setAppMode(prevMode);
+                });
+            }, 150);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    showToast('⛶ เข้าสู่โหมดเต็มหน้าจอแล้ว (กด Esc เพื่อออกจากเต็มจอ)');
+                }).catch(err => {
+                    console.error(err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    showToast('ออกจากโหมดเต็มหน้าจอแล้ว');
+                }
+            }
+        }
+
+        function insertDateStamp() {
+            const today = new Date();
+            const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const dateStr = `ข้อมูล ณ วันที่ ${today.getDate()} ${thaiMonths[today.getMonth()]} ${today.getFullYear() + 543}`;
+            document.execCommand('insertText', false, dateStr);
+            showToast(`📅 แทรกวันที่: "${dateStr}" สำเร็จ`);
+        }
+
+        function toggleBackupMenu() {
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.toggle('show');
+        }
+
+        function exportDataBackup() {
+            const backupData = {
+                app: 'KPI_Report_System',
+                kpi: '4.1',
+                fiscalYear: typeof currentFiscalYear !== 'undefined' ? currentFiscalYear : '2569',
+                exportedAt: new Date().toISOString(),
+                storage: {}
+            };
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k.startsWith('kpi_official_41_v2_Q')) {
+                    backupData.storage[k] = localStorage.getItem(k);
+                }
+            }
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `backup_kpi_4.1_${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            showToast('📤 ส่งออกไฟล์สำรองข้อมูลสำเร็จ!');
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function importDataBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data && data.storage) {
+                        for (let k in data.storage) {
+                            localStorage.setItem(k, data.storage[k]);
+                        }
+                        showToast('📥 กู้คืนข้อมูลสำเร็จ! กำลังรีโหลดหน้าจอ...');
+                        setTimeout(() => location.reload(), 600);
+                    } else {
+                        showToast('❌ รูปแบบไฟล์สำรองไม่ถูกต้อง');
+                    }
+                } catch(err) {
+                    showToast('❌ เกิดข้อผิดพลาดในการอ่านไฟล์สำรอง');
+                }
+            };
+            reader.readAsText(file);
+            const menu = document.getElementById('backup-menu');
+            if (menu) menu.classList.remove('show');
+        }
+
+        function adjustFontSize(delta) {
+            if (!lastFocusedElement) return;
+            const curSize = parseInt(window.getComputedStyle(lastFocusedElement).fontSize) || 14;
+            const newSize = Math.max(9, Math.min(36, curSize + delta));
+            lastFocusedElement.style.fontSize = newSize + 'px';
+            const badge = document.getElementById('font-size-val');
+            if (badge) badge.innerText = newSize + 'px';
+        }
+
+        function setTextAlign(align) {
+            if (!lastFocusedElement) return;
+            lastFocusedElement.style.textAlign = align;
+        }
+
+        function toggleBold() {
+            document.execCommand('bold', false, null);
+        }
+
+        function setTextColor(color) {
+            document.execCommand('foreColor', false, color);
+        }
+
+        function toggleHighlightMenu() {
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function applyHighlight(color) {
+            document.execCommand('hiliteColor', false, color);
+            const m = document.getElementById('highlight-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        function toggleSymbolMenu() {
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.toggle('show');
+        }
+
+        function insertSymbol(sym) {
+            document.execCommand('insertText', false, sym);
+            const m = document.getElementById('symbol-palette-menu');
+            if (m) m.classList.remove('show');
+        }
+
+        /* duplicate showToast */
+
+        function bindEditableEvents() {
+            const editables = document.querySelectorAll('[contenteditable="true"]');
+            editables.forEach(el => {
+                el.addEventListener('focus', () => {
+                    lastFocusedElement = el;
+                    const pill = document.getElementById('active-target-name');
+                    if (pill) {
+                        const text = (el.innerText || el.textContent || '').trim();
+                        pill.innerText = text.length > 25 ? text.slice(0, 22) + '...' : text || el.id || 'กำลังเลือก';
+                    }
+                    const sz = parseInt(window.getComputedStyle(el).fontSize) || 14;
+                    const badge = document.getElementById('font-size-val');
+                    if (badge) badge.innerText = sz + 'px';
+                });
+            });
+        }
+    
+    </script>
+</body>
+</html>
