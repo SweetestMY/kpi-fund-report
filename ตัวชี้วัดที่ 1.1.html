@@ -1409,6 +1409,9 @@
         }
 
 
+.graph-canvas-container.expanded-graph {
+            height: 245px !important;
+        }
         #btn-toggle-chart.active {
             background: #e0f2fe !important;
             color: #0284c7 !important;
@@ -2115,19 +2118,31 @@
 
         
         // -------------------------------------------------------------
-        // TOGGLE MONTHLY CHART (ซ่อน / แสดง ส่วนกราฟแนวโน้มรายเดือน)
+        // TOGGLE MONTHLY CHART EDIT STRIP (ซ่อน / แสดง แถบกรอกข้อมูลรายเดือน)
         // -------------------------------------------------------------
         let isChartHidden = false;
 
         function syncChartVisibility() {
-            const chartCard = document.querySelector('.graph-card') || document.querySelector('.chart-card');
-            if (!chartCard) return;
+            const strip = document.getElementById('month-strip') || document.getElementById('month-input-strip') || document.querySelector('.month-input-strip');
+            const chartBox = document.querySelector('.graph-canvas-container') || document.querySelector('.chart-container-box');
+            if (!strip) return;
 
             if (isChartHidden) {
-                chartCard.style.display = 'none';
+                strip.style.display = 'none';
+                if (chartBox) {
+                    chartBox.classList.add(chartBox.classList.contains('graph-canvas-container') ? 'expanded-graph' : 'expanded-chart');
+                }
             } else {
-                chartCard.style.display = '';
+                strip.style.display = '';
+                if (chartBox) {
+                    chartBox.classList.remove('expanded-graph', 'expanded-chart');
+                }
             }
+
+            if (typeof monthlyChartInstance !== 'undefined' && monthlyChartInstance && typeof monthlyChartInstance.resize === 'function') {
+                monthlyChartInstance.resize();
+            }
+
             updateChartButtonUI();
         }
 
@@ -2138,7 +2153,7 @@
 
             if (isChartHidden) {
                 txt.innerText = 'แสดงกราฟ';
-                btn.title = 'แสดงส่วนกราฟแนวโน้มรายเดือน';
+                btn.title = 'แสดงแถบแก้ไขข้อมูลรายเดือน';
                 btn.classList.add('active');
                 const svg = btn.querySelector('svg');
                 if (svg) {
@@ -2146,7 +2161,7 @@
                 }
             } else {
                 txt.innerText = 'ซ่อนกราฟ';
-                btn.title = 'ซ่อนหรือแสดงส่วนกราฟแนวโน้มรายเดือน';
+                btn.title = 'ซ่อนแถบแก้ไขข้อมูลและขยายกราฟให้สมดุล';
                 btn.classList.remove('active');
                 const svg = btn.querySelector('svg');
                 if (svg) {
@@ -2156,19 +2171,13 @@
         }
 
         function toggleMonthlyChart() {
-            const chartCard = document.querySelector('.graph-card') || document.querySelector('.chart-card');
-            if (!chartCard) return;
-
             isChartHidden = !isChartHidden;
             syncChartVisibility();
 
-            if (!isChartHidden) {
-                if (typeof monthlyChartInstance !== 'undefined' && monthlyChartInstance && typeof monthlyChartInstance.resize === 'function') {
-                    monthlyChartInstance.resize();
-                }
-                showToast('📈 แสดงส่วนกราฟเรียบร้อยแล้ว');
+            if (isChartHidden) {
+                showToast('👁️ ซ่อนแถบแก้ไขและขยายกราฟให้สมดุลเรียบร้อยแล้ว');
             } else {
-                showToast('👁️ ซ่อนส่วนกราฟเรียบร้อยแล้ว');
+                showToast('📈 แสดงแถบแก้ไขข้อมูลรายเดือนเรียบร้อยแล้ว');
             }
         }
 
