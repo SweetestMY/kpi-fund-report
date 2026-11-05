@@ -36,207 +36,221 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         body {
             background-color: var(--bg-canvas);
             color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 16px;
+            min-height: 100vh;
+            overflow-x: auto;
+            box-sizing: border-box;
         }
 
-        /* Top Action Bar / Controls */
-        .dashboard-control-bar {
-            width: 100%;
-            max-width: 1440px;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 12px 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-subtle);
-            border: 1px solid var(--border-color);
+        .page-wrapper {
+            max-width: 1560px;
+            margin: 0 auto;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             gap: 12px;
         }
 
-        .control-group-left, .control-group-right {
+        .toolbar-container {
             display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+        }
+
+        .toolbar-ribbon {
+            background: #ffffff;
+            border: 1px solid rgba(188, 219, 242, 0.85);
+            border-radius: 12px;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            box-shadow: 0 4px 14px rgba(0, 40, 85, 0.08);
+            gap: 12px;
             flex-wrap: wrap;
         }
 
-        .control-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
+        .ribbon-left, .ribbon-center, .ribbon-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .control-item {
             display: flex;
             align-items: center;
             gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #004b87;
         }
 
         .select-input {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: #ffffff;
-            color: var(--text-dark);
-            font-size: 13.5px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #9ec5e8;
+            background: #ffffff;
+            font-size: 13px;
             font-weight: 500;
+            color: #0f172a;
             cursor: pointer;
             outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .select-input:hover, .select-input:focus {
-            border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 3px rgba(0, 75, 135, 0.1);
-        }
-
-        .btn-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 7px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            user-select: none;
-        }
-
-        .btn-action:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-
-        .btn-action:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary { background: #004b87; color: #ffffff; }
-        .btn-primary:hover { background: #003865; }
-        .btn-secondary { background: #ffffff; color: var(--text-muted); border-color: var(--border-color); }
-        .btn-secondary:hover { background: #f8fafc; color: var(--text-dark); }
-        .btn-accent { background: #0284c7; color: #ffffff; }
-        .btn-accent:hover { background: #0369a1; }
-        .btn-success { background: #16a34a; color: #ffffff; }
-        .btn-success:hover { background: #15803d; }
-        .btn-warning { background: #d97706; color: #ffffff; }
-        .btn-warning:hover { background: #b45309; }
-
-        /* Mode Switcher Pills */
-        .mode-toggle-group {
-            display: inline-flex;
-            background: #f1f5f9;
-            padding: 3px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-mode {
-            padding: 5px 12px;
-            font-size: 12.5px;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .btn-mode.active {
-            background: #004b87;
-            color: #ffffff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        /* Format Toolbar (Visible in Edit Mode) */
-        .format-toolbar {
-            display: none;
-            width: 100%;
-            max-width: 1440px;
-            background: #fffbeb;
-            border: 1px dashed #f59e0b;
-            border-radius: 8px;
-            padding: 8px 16px;
-            margin-bottom: 12px;
-            align-items: center;
-            gap: 12px;
-            font-size: 13px;
-        }
-
-        .format-toolbar.show {
-            display: flex;
-        }
-
-        /* Subtopics Navigation Tabs */
-        .subtopic-nav-container {
-            width: 100%;
-            max-width: 1440px;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 10px 16px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-subtle);
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            overflow-x: auto;
-        }
-
-        .subtopic-nav-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-dark);
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-right: 6px;
-        }
-
-        .subtopic-tab {
-            padding: 7px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .subtopic-tab:hover {
-            color: var(--secondary-blue);
-            background: #eff6ff;
-            border-color: #bfdbfe;
-        }
-
-        .subtopic-tab.active {
-            color: #ffffff;
-            background: #004b87;
+        .select-input:hover, .select-input:focus {
             border-color: #004b87;
-            box-shadow: 0 2px 4px rgba(0, 75, 135, 0.2);
+            box-shadow: 0 0 0 2px rgba(0, 75, 135, 0.15);
         }
 
-        /* Master Presentation Canvas (16:9 Responsive) */
+        .quarter-active-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid #bae6fd;
+        }
+
+        .mode-segmented-control {
+            display: flex;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            gap: 2px;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: #004b87;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 75, 135, 0.25);
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            color: #004b87;
+            border: 1px solid #9ec5e8;
+        }
+        .btn-outline:hover {
+            background: #f0f7ff;
+            border-color: #004b87;
+        }
+
+        .btn-primary {
+            background: #004b87;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background: #003661;
+        }
+
+        .btn-success {
+            background: #059669;
+            color: #ffffff;
+        }
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn-warning {
+            background: #d97706;
+            color: #ffffff;
+        }
+        .btn-warning:hover {
+            background: #b45309;
+        }
+
+        .btn-fmt {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+        }
+        .btn-fmt:hover {
+            background: #e2e8f0;
+        }
+
+        .tab-btn {
+            border: 1px solid #9ec5e8;
+            background: #f8fbfe;
+            padding: 6px 13px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #004b87;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: #e0f2fe;
+            border-color: #0284c7;
+        }
+
+        .tab-btn.active {
+            background: #004b87;
+            color: #ffffff;
+            border-color: #003661;
+            box-shadow: 0 3px 8px rgba(0, 75, 135, 0.25);
+        }
+
+        .tab-btn.active .tab-pct {
+            background: rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+        }
+
         .presentation-canvas {
             width: 100%;
             max-width: 1440px;
@@ -704,106 +718,143 @@
             .presentation-canvas { box-shadow: none; border: none; max-width: 100%; width: 100%; }
             .content-view { display: block !important; page-break-after: always; }
         }
+        @media print {
+            .toolbar-container { display: none !important; }
+        }
     </style>
 </head>
-<body>
+<body class="app-mode-preview">
 
-    <!-- Top Action / Control Bar -->
-    <div class="dashboard-control-bar">
-        <div class="control-group-left">
-            <span class="control-label">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                ตัวชี้วัด:
-            </span>
-            <select id="select-kpi-page" class="select-input" onchange="navigateToKPI(this.value)" style="font-weight: 600; color: #004b87; background: #eff6ff;">
-                <option value="1.1">1.1 ร้อยละการรับชำระหนี้</option>
-                <option value="1.2.1">1.2.1 หนี้ไม่เกิน 1 ปี</option>
-                <option value="1.2.2">1.2.2 หนี้เกิน 1 ปี</option>
-                <option value="2.1">2.1 ร้อยละความพึงพอใจฯ</option>
-                <option value="2.2">2.2 ความสำเร็จโครงการเสริมสร้างวินัยฯ</option>
-                <option value="3.1">3.1 ร้อยละเงินอนุมัติให้กู้ยืม</option>
-                <option value="3.2">3.2 ความสำเร็จการแก้ไขปัญหาหนี้สินฯ</option>
-                <option value="3.3">3.3 การจัดเก็บข้อมูลประเมินผลลัพธ์ปี 2570</option>
-                <option value="4.1">4.1 การบริหารความเสี่ยงฯ</option>
-                <option value="4.2">4.2 การตรวจสอบภายใน</option>
-                <option value="4.3">4.3 การบริหารจัดการสารสนเทศและดิจิทัล</option>
-                <option value="5.1">5.1 บทบาทคณะกรรมการบริหารทุนหมุนเวียน</option>
-                <option value="5.2">5.2 การบริหารทรัพยากรบุคคล</option>
-                <option value="6.1" selected>6.1 การเบิกจ่ายเงินตามแผนฯ (ปัจจุบัน)</option>
-            </select>
+    <div class="page-wrapper">
 
-            <span class="control-label" style="margin-left: 8px;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                รายงานถึง:
-            </span>
-            <select id="quarter-focus" class="select-input" onchange="switchQuarter(this.value)">
-                <option value="1">ไตรมาส 1 (ต.ค. - ธ.ค.)</option>
-                <option value="2">ไตรมาส 2 (ต.ค. - มี.ค.)</option>
-                <option value="3">ไตรมาส 3 (ต.ค. - มิ.ย.)</option>
-                <option value="4" selected>ไตรมาส 4 (ครบปี ต.ค. - ก.ย.)</option>
-            </select>
+        <!-- TOOLBAR RIBBON -->
+        <div class="toolbar-container">
+            <div class="toolbar-ribbon">
+                <div class="ribbon-left">
+                    <!-- KPI Selector: strictly 1.1 through 6.1 -->
+                    <div class="control-item">
+                        <span>📑 ตัวชี้วัด:</span>
+                        <select id="select-kpi-page" class="select-input" onchange="navigateToKPI(this.value)" style="font-weight: 600; color: #0a4480; background: #eff6ff;">
+                            <option value="1.1">1.1 ร้อยละการรับชำระหนี้</option>
+                            <option value="1.2.1">1.2.1 หนี้ไม่เกิน 1 ปี</option>
+                            <option value="1.2.2">1.2.2 หนี้เกิน 1 ปี</option>
+                            <option value="2.1">2.1 ร้อยละความพึงพอใจฯ</option>
+                            <option value="2.2">2.2 ความสำเร็จโครงการเสริมสร้างวินัยฯ</option>
+                            <option value="3.1">3.1 ร้อยละเงินอนุมัติให้กู้ยืม</option>
+                            <option value="3.2">3.2 ความสำเร็จการแก้ไขปัญหาหนี้สินฯ</option>
+                            <option value="3.3">3.3 การจัดเก็บข้อมูลประเมินผลลัพธ์ปี 2570</option>
+                            <option value="4.1">4.1 การบริหารความเสี่ยงฯ</option>
+                            <option value="4.2">4.2 การตรวจสอบภายใน</option>
+                            <option value="4.3">4.3 การบริหารจัดการสารสนเทศและดิจิทัล</option>
+                            <option value="5.1">5.1 บทบาทคณะกรรมการบริหารทุนหมุนเวียน</option>
+                            <option value="5.2">5.2 การบริหารทรัพยากรบุคคล</option>
+                            <option value="6.1" selected>6.1 การเบิกจ่ายเงินตามแผนฯ (ปัจจุบัน)</option>
+                        </select>
+                    </div>
 
-            <span class="pill-badge highlight" id="quarter-badge" style="font-size: 12px; margin-left: 4px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-                ไตรมาส 4
-            </span>
+                    <!-- Quarter Selector -->
+                    <div class="control-item">
+                        <span>📊 รายงานถึง:</span>
+                        <select id="quarter-focus" class="select-input" onchange="switchQuarter(this.value)">
+                            <option value="1">ไตรมาส 1 (ต.ค. - ธ.ค.)</option>
+                            <option value="2">ไตรมาส 2 (ต.ค. - มี.ค.)</option>
+                            <option value="3">ไตรมาส 3 (ต.ค. - มิ.ย.)</option>
+                            <option value="4" selected>ไตรมาส 4 (ครบปี ต.ค. - ก.ย.)</option>
+                        </select>
+                    </div>
 
-            <span class="control-label" style="margin-left: 8px;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                ปี:
-            </span>
-            <select id="select-year" class="select-input" onchange="changeFiscalYear(this.value)">
-                <option value="2568">ปี 2568</option>
-                <option value="2569" selected>ปี 2569</option>
-                <option value="2570">ปี 2570</option>
-            </select>
-        </div>
+                    <span id="quarter-badge" class="quarter-active-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        ไตรมาส 4
+                    </span>
 
-        <div class="control-group-right">
-            <!-- Mode Toggle -->
-            <div class="mode-toggle-group">
-                <button class="btn-mode active" id="btn-mode-preview" onclick="setAppMode('preview')">👁️ โหมดนำเสนอ (Preview)</button>
-                <button class="btn-mode" id="btn-mode-edit" onclick="setAppMode('edit')">✏️ โหมดแก้ไขข้อความ (Edit)</button>
+                    <!-- Year Selector -->
+                    <div class="control-item" style="margin-left: 4px;">
+                        <span>📅 ปี:</span>
+                        <select id="select-year" class="select-input" onchange="changeFiscalYear(this.value)">
+                            <option value="2568">ปี 2568</option>
+                            <option value="2569" selected>ปี 2569</option>
+                            <option value="2570">ปี 2570</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dual Mode Segmented Control -->
+                <div class="ribbon-center">
+                    <div class="mode-segmented-control">
+                        <button class="mode-btn active" id="btn-mode-preview" onclick="setAppMode('preview')" title="โหมดนำเสนอ สะอาดตา ไร้เครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            โหมดนำเสนอ (Preview)
+                        </button>
+                        <button class="mode-btn" id="btn-mode-edit" onclick="setAppMode('edit')" title="โหมดแก้ไขข้อความ เปิดแถบเครื่องมือจัดฟอร์ม">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                            โหมดแก้ไขข้อความ (Edit)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ribbon-right">
+                    <button class="btn btn-outline" onclick="saveDashboardChanges(true)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        บันทึก
+                    </button>
+                    <button class="btn btn-outline" onclick="copyDashboardImage()" title="คัดลอกรูปภาพลงคลิปบอร์ดทันที">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        คัดลอกภาพ
+                    </button>
+                    <button class="btn btn-primary" onclick="exportDashboardPNG()" title="ส่งออกเป็นรูปภาพ PNG">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        ส่งออกภาพ (PNG)
+                    </button>
+                    <button class="btn btn-warning" onclick="exportDashboardPDF()" title="ดาวน์โหลดไฟล์ PDF เต็มแผ่น">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        ส่งออก PDF (เต็มแผ่น)
+                    </button>
+                    <button class="btn btn-success" onclick="window.print()" title="พิมพ์">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        พิมพ์ (Print)
+                    </button>
+                    <button class="btn btn-outline" id="btn-fullscreen" onclick="toggleFullscreen()" title="เต็มจอ">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        เต็มจอ
+                    </button>
+                </div>
             </div>
 
-            <!-- Export Buttons -->
-            <button class="btn-action btn-secondary" onclick="saveCustomData()">💾 บันทึก</button>
-            <button class="btn-action btn-secondary" onclick="copyDashboardToClipboard()">📋 คัดลอกภาพ</button>
-            <button class="btn-action btn-primary" onclick="exportDashboardPNG()">🖼️ ส่งออกภาพ (PNG)</button>
-            <button class="btn-action btn-warning" onclick="exportDashboardPDF()">📄 ส่งออก PDF (เต็มแผ่น)</button>
-            <button class="btn-action btn-success" onclick="window.print()">🖨️ พิมพ์ (Print)</button>
-            <button class="btn-action btn-secondary" onclick="toggleFullscreen()">🔲 เต็มจอ</button>
+            <!-- Formatting Toolbar for Edit Mode -->
+            <div class="format-toolbar" id="format-toolbar" style="display: none; background: #ffffff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 6px 14px; gap: 8px; align-items: center; box-shadow: 0 2px 6px rgba(0, 40, 85, 0.05);">
+                <span style="font-size: 12px; font-weight: 700; color: #1e3a8a; margin-right: 4px;">🛠️ จัดรูปแบบ:</span>
+                <button class="btn-fmt" onclick="formatDoc('bold')" title="ตัวหนา"><b>B</b></button>
+                <button class="btn-fmt" onclick="formatDoc('italic')" title="ตัวเอียง"><i>I</i></button>
+                <button class="btn-fmt" onclick="formatDoc('underline')" title="ขีดเส้นใต้"><u>U</u></button>
+                <div style="width: 1px; height: 16px; background: #cbd5e1; margin: 0 4px;"></div>
+                <button class="btn-fmt" onclick="changeFontSize(1)" title="ขยายตัวหนังสือ">A+</button>
+                <button class="btn-fmt" onclick="changeFontSize(-1)" title="ลดขนาดตัวหนังสือ">A-</button>
+                <div style="width: 1px; height: 16px; background: #cbd5e1; margin: 0 4px;"></div>
+                <input type="color" onchange="formatDoc('foreColor', this.value)" title="เปลี่ยนสีข้อความ" style="width: 24px; height: 24px; border: none; cursor: pointer; border-radius: 4px;">
+                <span style="font-size: 11.5px; color: #64748b; margin-left: 8px;">คลิกข้อความใดก็ได้บนการ์ดเพื่อพิมพ์แก้ไข</span>
+            </div>
+
+            <!-- Sub-topic Interactive Filter Tab Bar -->
+            <div class="filter-tabs-bar" style="background: #ffffff; border: 1px solid rgba(188, 219, 242, 0.85); border-radius: 10px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <div class="filter-tab-title" style="font-size: 12.5px; font-weight: 700; color: #004b87; margin-right: 4px;">
+                    <span>📑 ตัวกรองหัวข้อ (Sub-topics):</span>
+                </div>
+                <button class="tab-btn active" id="tab-btn-0" onclick="switchTopicView(0)">
+                    <span>📊 ภาพรวม 2 ประเด็น</span>
+                    <span class="tab-pct" style="background: #005691; color: white; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">100%</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-1" onclick="switchTopicView(1)">
+                    <span>1. การเบิกจ่ายงบลงทุน</span>
+                    <span class="tab-pct" style="background: #e0f2fe; color: #004b87; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">50% (2.5%)</span>
+                </button>
+                <button class="tab-btn" id="tab-btn-2" onclick="switchTopicView(2)">
+                    <span>2. การเบิกจ่ายภาพรวม</span>
+                    <span class="tab-pct" style="background: #e0f2fe; color: #004b87; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px;">50% (2.5%)</span>
+                </button>
+            </div>
         </div>
-    </div>
-
-    <!-- Format Toolbar for Text Editing -->
-    <div class="format-toolbar" id="format-toolbar">
-        <span style="font-weight: 700; color: #b45309;">เครื่องมือจัดรูปแบบข้อความ:</span>
-        <button class="btn-action btn-secondary" style="padding: 4px 10px;" onclick="document.execCommand('bold', false, null)">หนา</button>
-        <button class="btn-action btn-secondary" style="padding: 4px 10px;" onclick="document.execCommand('italic', false, null)">เอียง</button>
-        <button class="btn-action btn-secondary" style="padding: 4px 10px;" onclick="document.execCommand('underline', false, null)">ขีดเส้นใต้</button>
-        <span style="color: #64748b; font-size: 12px;">| คลิกที่ข้อความในกล่องด้านล่างเพื่อแก้ไขได้ทันที</span>
-    </div>
-
-    <!-- Subtopics Navigation Filter (Horizontal Tabs) -->
-    <div class="subtopic-nav-container">
-        <span class="subtopic-nav-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-            ตัวกรองหัวข้อ (Sub-topics):
-        </span>
-        <button class="subtopic-tab active" id="tab-v0" onclick="switchTopicView(0)">
-            📊 ภาพรวม 2 ประเด็น <span class="pill-badge" style="background: rgba(0,0,0,0.15); font-size: 11px;">100%</span>
-        </button>
-        <button class="subtopic-tab" id="tab-v1" onclick="switchTopicView(1)">
-            1. การเบิกจ่ายงบลงทุน <span class="pill-badge" style="background: rgba(0,0,0,0.08); font-size: 11px;">50% (2.5%)</span>
-        </button>
-        <button class="subtopic-tab" id="tab-v2" onclick="switchTopicView(2)">
-            2. การเบิกจ่ายภาพรวม <span class="pill-badge" style="background: rgba(0,0,0,0.08); font-size: 11px;">50% (2.5%)</span>
-        </button>
-    </div>
-
-    <!-- Master Executive Infographic Presentation (16:9 Aspect Ratio) -->
-    <div class="presentation-canvas" id="presentation-canvas">
+<div class="presentation-canvas" id="presentation-canvas">
 
         <!-- Top Header Banner -->
         <div class="header-banner">
@@ -1129,6 +1180,8 @@
 
     </div>
 
+    </div> <!-- /page-wrapper -->
+
     <!-- Toast Notification Element -->
     <div id="toast">บันทึกข้อมูลเรียบร้อยแล้ว</div>
 
@@ -1167,7 +1220,7 @@
         function switchTopicView(topicIndex) {
             activeTopic = topicIndex;
             for (let i = 0; i <= 2; i++) {
-                const tab = document.getElementById(`tab-v${i}`);
+                const tab = document.getElementById(`tab-btn-${i}`) || document.getElementById(`tab-v${i}`);
                 const view = document.getElementById(`view-topic-${i}`);
                 if (tab) tab.classList.toggle('active', i === topicIndex);
                 if (view) view.classList.toggle('active', i === topicIndex);
@@ -1608,6 +1661,21 @@
         }
 
         /* Dual Mode Toggle (Preview vs Edit) */
+                /* Formatting Toolbar Functions */
+        function formatDoc(cmd, value = null) {
+            document.execCommand(cmd, false, value);
+        }
+
+        function changeFontSize(delta) {
+            const sel = window.getSelection();
+            if (!sel.rangeCount) return;
+            const parent = sel.anchorNode.parentElement;
+            if (parent) {
+                const cur = parseInt(window.getComputedStyle(parent).fontSize) || 14;
+                parent.style.fontSize = Math.max(10, Math.min(36, cur + delta)) + 'px';
+            }
+        }
+
         function setAppMode(mode) {
             currentAppMode = mode;
             const btnPreview = document.getElementById('btn-mode-preview');
@@ -1615,9 +1683,15 @@
             const toolbar = document.getElementById('format-toolbar');
 
             const isEdit = (mode === 'edit');
-            btnPreview.classList.toggle('active', !isEdit);
-            btnEdit.classList.toggle('active', isEdit);
-            toolbar.classList.toggle('show', isEdit);
+            if (btnPreview) btnPreview.classList.toggle('active', !isEdit);
+            if (btnEdit) btnEdit.classList.toggle('active', isEdit);
+            if (toolbar) {
+                toolbar.style.display = isEdit ? 'flex' : 'none';
+                toolbar.classList.toggle('show', isEdit);
+            }
+
+            document.body.classList.toggle('app-mode-edit', isEdit);
+            document.body.classList.toggle('app-mode-preview', !isEdit);
 
             // Toggle editable attributes on targeted elements
             const editables = document.querySelectorAll('[contenteditable]');
@@ -1625,18 +1699,16 @@
                 el.contentEditable = isEdit ? 'true' : 'false';
                 if (isEdit) {
                     el.style.outline = '1px dashed #3b82f6';
-                    el.style.background = '#fefce8';
                 } else {
                     el.style.outline = 'none';
-                    el.style.background = '';
                 }
             });
 
             if (isEdit) {
-                showToast("เปิดโหมดแก้ไขข้อความแล้ว คลิกที่ข้อความเพื่อแก้ไข");
+                showToast("เข้าสู่โหมดแก้ไขข้อความ (คลิกข้อความบนการ์ดเพื่อแก้ไข)");
             } else {
                 applyQuarterData(activeQuarter);
-                showToast("กลับสู่โหมดนำเสนอ (Preview)");
+                showToast("เข้าสู่โหมดนำเสนอ (Preview)");
             }
         }
 
@@ -1740,6 +1812,27 @@
             t.innerText = message;
             t.className = 'show';
             setTimeout(() => { t.className = t.className.replace('show', ''); }, 3200);
+        }
+
+        
+        /* Function aliases for standard unified toolbar */
+        function saveDashboardChanges(showFeedback = true) {
+            saveCustomData();
+        }
+        function copyDashboardImage() {
+            copyDashboardToClipboard();
+        }
+        function saveCurrentQuarter(showFeedback = true) {
+            saveCustomData();
+        }
+        function copyImageToClipboard() {
+            copyDashboardToClipboard();
+        }
+        function exportToImage() {
+            exportDashboardPNG();
+        }
+        function exportToPDF() {
+            exportDashboardPDF();
         }
 
         /* Initial Setup */
