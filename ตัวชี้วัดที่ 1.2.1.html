@@ -1257,6 +1257,13 @@
             color: #0a4480;
         }
 
+    
+        #btn-toggle-chart.active {
+            background: #e0f2fe !important;
+            color: #0284c7 !important;
+            border-color: #38bdf8 !important;
+            font-weight: 700 !important;
+        }
     </style>
 </head>
 <body class="app-mode-preview">
@@ -2058,6 +2065,65 @@
             return { labels, data, targetData };
         }
 
+        
+        // -------------------------------------------------------------
+        // TOGGLE MONTHLY CHART (ซ่อน / แสดง ส่วนกราฟแนวโน้มรายเดือน)
+        // -------------------------------------------------------------
+        let isChartHidden = false;
+
+        function syncChartVisibility() {
+            const chartCard = document.querySelector('.graph-card') || document.querySelector('.chart-card');
+            if (!chartCard) return;
+
+            if (isChartHidden) {
+                chartCard.style.display = 'none';
+            } else {
+                chartCard.style.display = '';
+            }
+            updateChartButtonUI();
+        }
+
+        function updateChartButtonUI() {
+            const txt = document.getElementById('txt-toggle-chart');
+            const btn = document.getElementById('btn-toggle-chart');
+            if (!txt || !btn) return;
+
+            if (isChartHidden) {
+                txt.innerText = 'แสดงกราฟ';
+                btn.title = 'แสดงส่วนกราฟแนวโน้มรายเดือน';
+                btn.classList.add('active');
+                const svg = btn.querySelector('svg');
+                if (svg) {
+                    svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+                }
+            } else {
+                txt.innerText = 'ซ่อนกราฟ';
+                btn.title = 'ซ่อนหรือแสดงส่วนกราฟแนวโน้มรายเดือน';
+                btn.classList.remove('active');
+                const svg = btn.querySelector('svg');
+                if (svg) {
+                    svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+                }
+            }
+        }
+
+        function toggleMonthlyChart() {
+            const chartCard = document.querySelector('.graph-card') || document.querySelector('.chart-card');
+            if (!chartCard) return;
+
+            isChartHidden = !isChartHidden;
+            syncChartVisibility();
+
+            if (!isChartHidden) {
+                if (typeof monthlyChartInstance !== 'undefined' && monthlyChartInstance && typeof monthlyChartInstance.resize === 'function') {
+                    monthlyChartInstance.resize();
+                }
+                showToast('📈 แสดงส่วนกราฟเรียบร้อยแล้ว');
+            } else {
+                showToast('👁️ ซ่อนส่วนกราฟเรียบร้อยแล้ว');
+            }
+        }
+
         function initMonthlyChart() {
             const canvasEl = document.getElementById('monthlyLineChart');
             if (!canvasEl) return;
@@ -2331,6 +2397,7 @@
             `;
             renderMonthChips();
             initMonthlyChart();
+            syncChartVisibility();
             showToast(`📂 สลับข้อมูลเป็น ไตรมาส ${activeQuarter}`);
         }
 
